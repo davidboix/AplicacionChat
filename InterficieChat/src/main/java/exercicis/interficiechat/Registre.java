@@ -1,8 +1,9 @@
 package exercicis.interficiechat;
 
-import java.awt.Color;
+import java.awt.Image;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -19,6 +20,7 @@ public class Registre extends javax.swing.JFrame {
     public Registre() {
         initComponents();
         inicialitzarTextInputs();
+        afegirIcono();
     }
 
     /**
@@ -50,11 +52,13 @@ public class Registre extends javax.swing.JFrame {
         inputPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Registre");
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         botoAltaUsuari.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         botoAltaUsuari.setText("Donat d'Alta");
+        botoAltaUsuari.setPreferredSize(new java.awt.Dimension(180, 26));
         botoAltaUsuari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botoAltaUsuariActionPerformed(evt);
@@ -64,47 +68,59 @@ public class Registre extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_END);
 
-        titolRegistre.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        titolRegistre.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         titolRegistre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         titolRegistre.setText("Registre");
         jPanel3.add(titolRegistre);
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_START);
 
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel4.setLayout(null);
 
         etiquetaNom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaNom.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         etiquetaNom.setText("Nom");
-        jPanel4.add(etiquetaNom, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, -1, -1));
+        jPanel4.add(etiquetaNom);
+        etiquetaNom.setBounds(260, 20, 30, 20);
 
         etiquetaCognom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaCognom.setText("Cognoms");
-        jPanel4.add(etiquetaCognom, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, -1, -1));
+        jPanel4.add(etiquetaCognom);
+        etiquetaCognom.setBounds(260, 80, 59, 20);
 
         etiquetaEdat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaEdat.setText("Edat");
-        jPanel4.add(etiquetaEdat, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, -1, -1));
+        jPanel4.add(etiquetaEdat);
+        etiquetaEdat.setBounds(260, 140, 27, 20);
 
         etiquetaCorreu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaCorreu.setText("Correu");
-        jPanel4.add(etiquetaCorreu, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, -1, -1));
+        jPanel4.add(etiquetaCorreu);
+        etiquetaCorreu.setBounds(260, 200, 42, 20);
 
         etiquetaUsuari.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaUsuari.setText("Usuari");
-        jPanel4.add(etiquetaUsuari, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 140, -1, -1));
+        jPanel4.add(etiquetaUsuari);
+        etiquetaUsuari.setBounds(260, 260, 39, 20);
 
         etiquetaPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaPassword.setText("Contrasenya");
-        jPanel4.add(etiquetaPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, -1, -1));
-        jPanel4.add(inputNom, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 170, -1));
-        jPanel4.add(inputCognom, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 50, 170, -1));
+        jPanel4.add(etiquetaPassword);
+        etiquetaPassword.setBounds(260, 320, 77, 20);
+        jPanel4.add(inputNom);
+        inputNom.setBounds(260, 50, 170, 22);
+        jPanel4.add(inputCognom);
+        inputCognom.setBounds(260, 110, 170, 22);
 
         inputEdat.setForeground(new java.awt.Color(140, 140, 140));
-        jPanel4.add(inputEdat, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 170, -1));
-        jPanel4.add(inputCorreu, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 110, 170, -1));
-        jPanel4.add(inputUsuari, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, 170, -1));
-        jPanel4.add(inputPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, 170, -1));
+        jPanel4.add(inputEdat);
+        inputEdat.setBounds(260, 170, 170, 22);
+        jPanel4.add(inputCorreu);
+        inputCorreu.setBounds(260, 230, 170, 22);
+        jPanel4.add(inputUsuari);
+        inputUsuari.setBounds(260, 290, 170, 22);
+        jPanel4.add(inputPassword);
+        inputPassword.setBounds(260, 350, 170, 22);
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -112,11 +128,11 @@ public class Registre extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
         );
 
         pack();
@@ -129,13 +145,13 @@ public class Registre extends javax.swing.JFrame {
      * utilitzant el ratoli o el teclat
      */
     private void botoAltaUsuariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoAltaUsuariActionPerformed
-
+        
         boolean isNomValid = validarInputs(this.inputNom, this.etiquetaNom);
         boolean isCognomValid = validarInputs(this.inputCognom, this.etiquetaCognom);
         boolean isEdatValid = validarInputs(this.inputEdat, this.etiquetaEdat);
-
+        
         boolean isCorreuValid = validarInputs(this.inputCorreu, this.etiquetaCorreu);
-
+        
         if (isCorreuValid) {
             boolean correuValidat = validarEmail(this.inputCorreu);
             if (correuValidat) {
@@ -146,18 +162,18 @@ public class Registre extends javax.swing.JFrame {
                 System.out.println("El email es incorrecte");
             }
         }
-
+        
         boolean isUsuariValid = validarInputs(this.inputUsuari, this.etiquetaUsuari);
         // TODO: Validar el password amb una funcio diferent
         // 
         //boolean isPasswordValid = validarInputs(this.inputPassword, this.etiquetaPassword);
         char[] prova = this.inputPassword.getPassword();
         String password = "";
-
+        
         for (char msg : prova) {
             password += msg;
         }
-
+        
         if (isCognomValid && isNomValid && isEdatValid && isCorreuValid && isUsuariValid) {
             System.out.println("Tot esta correcte!");
         }
@@ -173,7 +189,7 @@ public class Registre extends javax.swing.JFrame {
      * missatge i retornara cert si el JTextField ha quedat emplenat.
      */
     private boolean validarInputs(JTextField jtf, JLabel etiqueta) {
-
+        
         if (jtf.getText().isEmpty()) {
             //TODO: Faltara afegir un JOptionPane per avisar al usuari de que el input NO pot quedar buit
             System.out.println("No pot quedar buit -> " + etiqueta.getText());
@@ -187,22 +203,22 @@ public class Registre extends javax.swing.JFrame {
      * personalitzat per cada un de ells
      */
     private void inicialitzarTextInputs() {
-
+        
         this.inputNom.setPlaceHolder("Introdueix el nom...");
         this.inputNom.setText(this.inputNom.getPlaceHolder());
-
+        
         this.inputCognom.setPlaceHolder("Introdueix el cognom...");
         this.inputCognom.setText(this.inputCognom.getPlaceHolder());
-
+        
         this.inputEdat.setPlaceHolder("Introdueix la edat...");
         this.inputEdat.setText(this.inputEdat.getPlaceHolder());
-
+        
         this.inputCorreu.setPlaceHolder("Introdueix el correu...");
         this.inputCorreu.setText(this.inputCorreu.getPlaceHolder());
-
+        
         this.inputUsuari.setPlaceHolder("Introdueix el usuari...");
         this.inputUsuari.setText(this.inputUsuari.getPlaceHolder());
-
+        
     }
 
     /**
@@ -222,6 +238,13 @@ public class Registre extends javax.swing.JFrame {
             return false;
         }
         return true;
+    }
+    
+    private void afegirIcono() {
+        ImageIcon iconoUsuari = new ImageIcon("src\\main\\java\\img\\iconoUsuari.png");
+        Image iconoUsuariModificar = iconoUsuari.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
+        ImageIcon iconoBuscar = new ImageIcon(iconoUsuariModificar);
+        this.botoAltaUsuari.setIcon(iconoBuscar);
     }
 
     /**
