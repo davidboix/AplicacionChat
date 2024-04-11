@@ -7,6 +7,7 @@ package exercicis.interficiechat;
 public class InterficieChat {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        Login l = new Login();
+        l.setVisible(true);
     }
 }
