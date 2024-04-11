@@ -1,5 +1,8 @@
 package exercicis.interficiechat;
 
+import java.awt.Color;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -15,6 +18,7 @@ public class Registre extends javax.swing.JFrame {
      */
     public Registre() {
         initComponents();
+        inicialitzarTextInputs();
     }
 
     /**
@@ -37,12 +41,12 @@ public class Registre extends javax.swing.JFrame {
         etiquetaEdat = new javax.swing.JLabel();
         etiquetaCorreu = new javax.swing.JLabel();
         etiquetaUsuari = new javax.swing.JLabel();
-        inputCorreu = new javax.swing.JTextField();
-        inputUsuari = new javax.swing.JTextField();
         etiquetaPassword = new javax.swing.JLabel();
-        inputNom = new javax.swing.JTextField();
-        inputCognom = new javax.swing.JTextField();
-        inputEdat = new javax.swing.JTextField();
+        inputNom = new componentsPersonalitzats.JTextFieldPersonalitzat();
+        inputCognom = new componentsPersonalitzats.JTextFieldPersonalitzat();
+        inputEdat = new componentsPersonalitzats.JTextFieldPersonalitzat();
+        inputCorreu = new componentsPersonalitzats.JTextFieldPersonalitzat();
+        inputUsuari = new componentsPersonalitzats.JTextFieldPersonalitzat();
         inputPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -72,35 +76,35 @@ public class Registre extends javax.swing.JFrame {
         etiquetaNom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaNom.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         etiquetaNom.setText("Nom");
-        jPanel4.add(etiquetaNom, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, -1, -1));
+        jPanel4.add(etiquetaNom, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, -1, -1));
 
         etiquetaCognom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaCognom.setText("Cognoms");
-        jPanel4.add(etiquetaCognom, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 30, -1, -1));
+        jPanel4.add(etiquetaCognom, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, -1, -1));
 
         etiquetaEdat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaEdat.setText("Edat");
-        jPanel4.add(etiquetaEdat, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, -1, -1));
+        jPanel4.add(etiquetaEdat, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, -1, -1));
 
         etiquetaCorreu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaCorreu.setText("Correu");
-        jPanel4.add(etiquetaCorreu, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, -1, -1));
+        jPanel4.add(etiquetaCorreu, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, -1, -1));
 
         etiquetaUsuari.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaUsuari.setText("Usuari");
-        jPanel4.add(etiquetaUsuari, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, -1, -1));
-        jPanel4.add(inputCorreu, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, 110, -1));
-        jPanel4.add(inputUsuari, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 120, 110, -1));
+        jPanel4.add(etiquetaUsuari, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 140, -1, -1));
 
         etiquetaPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaPassword.setText("Contrasenya");
-        jPanel4.add(etiquetaPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 150, -1, -1));
-        jPanel4.add(inputNom, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 0, 110, -1));
+        jPanel4.add(etiquetaPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, -1, -1));
+        jPanel4.add(inputNom, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 170, -1));
+        jPanel4.add(inputCognom, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 50, 170, -1));
 
-        inputCognom.setToolTipText("");
-        jPanel4.add(inputCognom, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 110, -1));
-        jPanel4.add(inputEdat, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 60, 110, -1));
-        jPanel4.add(inputPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 110, -1));
+        inputEdat.setForeground(new java.awt.Color(140, 140, 140));
+        jPanel4.add(inputEdat, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 170, -1));
+        jPanel4.add(inputCorreu, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 110, 170, -1));
+        jPanel4.add(inputUsuari, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, 170, -1));
+        jPanel4.add(inputPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, 170, -1));
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -108,11 +112,11 @@ public class Registre extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
         );
 
         pack();
@@ -125,11 +129,24 @@ public class Registre extends javax.swing.JFrame {
      * utilitzant el ratoli o el teclat
      */
     private void botoAltaUsuariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoAltaUsuariActionPerformed
+
         boolean isNomValid = validarInputs(this.inputNom, this.etiquetaNom);
         boolean isCognomValid = validarInputs(this.inputCognom, this.etiquetaCognom);
         boolean isEdatValid = validarInputs(this.inputEdat, this.etiquetaEdat);
-        // TODO: Validar el correu amb una funcio diferent
+
         boolean isCorreuValid = validarInputs(this.inputCorreu, this.etiquetaCorreu);
+
+        if (isCorreuValid) {
+            boolean correuValidat = validarEmail(this.inputCorreu);
+            if (correuValidat) {
+                System.out.println("El email es correcte");
+            } else {
+//                TODO: Quan el correu sigui invalid, hem de mostrar un 
+                // missatge avisant al usuari en que ha fallat.
+                System.out.println("El email es incorrecte");
+            }
+        }
+
         boolean isUsuariValid = validarInputs(this.inputUsuari, this.etiquetaUsuari);
         // TODO: Validar el password amb una funcio diferent
         // 
@@ -160,6 +177,48 @@ public class Registre extends javax.swing.JFrame {
         if (jtf.getText().isEmpty()) {
             //TODO: Faltara afegir un JOptionPane per avisar al usuari de que el input NO pot quedar buit
             System.out.println("No pot quedar buit -> " + etiqueta.getText());
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Funcio que utilitzarem per inicialitzar els inputs amb un text
+     * personalitzat per cada un de ells
+     */
+    private void inicialitzarTextInputs() {
+
+        this.inputNom.setPlaceHolder("Introdueix el nom...");
+        this.inputNom.setText(this.inputNom.getPlaceHolder());
+
+        this.inputCognom.setPlaceHolder("Introdueix el cognom...");
+        this.inputCognom.setText(this.inputCognom.getPlaceHolder());
+
+        this.inputEdat.setPlaceHolder("Introdueix la edat...");
+        this.inputEdat.setText(this.inputEdat.getPlaceHolder());
+
+        this.inputCorreu.setPlaceHolder("Introdueix el correu...");
+        this.inputCorreu.setText(this.inputCorreu.getPlaceHolder());
+
+        this.inputUsuari.setPlaceHolder("Introdueix el usuari...");
+        this.inputUsuari.setText(this.inputUsuari.getPlaceHolder());
+
+    }
+
+    /**
+     * Funcio que utilitzarem per poder validar el email mitjançant una
+     * expressio regular per a que, d'aquesta manera el email compleixi unes
+     * condicions
+     *
+     * @param email El email que farem servir per validar
+     * @return Retornarem cert si el email compleix amb les condicions de la
+     * expressio regular, si es el cas contrari retornarem fals
+     */
+    private boolean validarEmail(JTextField email) {
+        String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z.-]+\\.[a-zA-Z]{2,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email.getText().trim());
+        if (!matcher.matches()) {
             return false;
         }
         return true;
@@ -208,12 +267,12 @@ public class Registre extends javax.swing.JFrame {
     private javax.swing.JLabel etiquetaNom;
     private javax.swing.JLabel etiquetaPassword;
     private javax.swing.JLabel etiquetaUsuari;
-    private javax.swing.JTextField inputCognom;
-    private javax.swing.JTextField inputCorreu;
-    private javax.swing.JTextField inputEdat;
-    private javax.swing.JTextField inputNom;
+    private componentsPersonalitzats.JTextFieldPersonalitzat inputCognom;
+    private componentsPersonalitzats.JTextFieldPersonalitzat inputCorreu;
+    private componentsPersonalitzats.JTextFieldPersonalitzat inputEdat;
+    private componentsPersonalitzats.JTextFieldPersonalitzat inputNom;
     private javax.swing.JPasswordField inputPassword;
-    private javax.swing.JTextField inputUsuari;
+    private componentsPersonalitzats.JTextFieldPersonalitzat inputUsuari;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
