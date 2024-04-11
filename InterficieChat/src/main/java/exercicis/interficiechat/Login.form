@@ -113,11 +113,11 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="usuariText" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                          <Component id="usuariText" alignment="0" pref="196" max="32767" attributes="0"/>
-                          <Component id="contraText" alignment="0" max="32767" attributes="0"/>
+                          <Component id="contraText" alignment="0" min="-2" pref="196" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="98" max="32767" attributes="0"/>
                   </Group>
@@ -128,9 +128,9 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                       <Component id="usuariText" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="contraText" min="-2" max="-2" attributes="0"/>
@@ -156,8 +156,6 @@
                 <Property name="text" type="java.lang.String" value="Contrasenya"/>
               </Properties>
             </Component>
-            <Component class="componentsPersonalitzats.JTextFieldPersonalitzat" name="usuariText">
-            </Component>
             <Component class="javax.swing.JPasswordField" name="contraText">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -166,6 +164,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="contraTextActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="componentsPersonalitzats.JTextFieldPersonalitzat" name="usuariText">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="jTextFieldPersonalitzat1"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="usuariTextActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
