@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>exercicis.interficiechat</groupId>
     <artifactId>InterficieChat</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <repositories>
         <repository>
             <id>unknown-jars-temp-repo</id>
@@ -16,6 +16,11 @@
             <groupId>org.netbeans.external</groupId>
             <artifactId>AbsoluteLayout</artifactId>
             <version>RELEASE130</version>
+        </dependency>
+        <dependency>
+            <groupId>unknown.binary</groupId>
+            <artifactId>ProjecteDesenvoluparBotons</artifactId>
+            <version>SNAPSHOT</version>
         </dependency>
     </dependencies>
     <properties>
