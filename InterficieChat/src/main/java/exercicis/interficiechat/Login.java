@@ -3,20 +3,37 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package exercicis.interficiechat;
-
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import javax.swing.JOptionPane;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 /**
  *
  * @author Oleh Plechiy Tupis Andriyovech
  * @version 1.0
  */
 public class Login extends javax.swing.JFrame {
-
+    private MongoClient mongoClient;
+    private MongoDatabase database;
+    private MongoCollection<Document> cuentasCollection;
     /**
      * Creates new form Login
      */
+    
+
     public Login() {
         initComponents();
         inicialitzarTextInputs();
+
+        mongoClient = new MongoClient("localhost", 27017);
+        database = mongoClient.getDatabase("Cuentas");
+        MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
+        
+        
     }
 
     private void inicialitzarTextInputs(){
@@ -36,7 +53,7 @@ public class Login extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        loginButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -59,10 +76,15 @@ public class Login extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(203, 219, 242));
 
-        jButton2.setBackground(new java.awt.Color(125, 165, 221));
-        jButton2.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
-        jButton2.setText("Login");
-        jPanel3.add(jButton2);
+        loginButton.setBackground(new java.awt.Color(125, 165, 221));
+        loginButton.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
+        loginButton.setText("Login");
+        loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                loginButtonMouseClicked(evt);
+            }
+        });
+        jPanel3.add(loginButton);
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
@@ -139,6 +161,24 @@ public class Login extends javax.swing.JFrame {
         usuariText.setFont(new java.awt.Font("Noto Sans", 0, 12));
     }//GEN-LAST:event_usuariTextActionPerformed
 
+    private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
+        MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
+        String username = usuariText.getText();
+        String password = new String(contraText.getPassword());
+
+        Bson query = Filters.and(
+            Filters.eq("usuari", username),
+            Filters.eq("contrasenya", password)
+        );
+        Document result = cuentasCollection.find(query).first();
+
+        if (result != null) {
+            System.out.println("Success");
+        } else {
+            System.out.println("Failure");
+        }
+    }//GEN-LAST:event_loginButtonMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -176,7 +216,6 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPasswordField contraText;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -184,6 +223,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JButton loginButton;
     private componentsPersonalitzats.JTextFieldPersonalitzat usuariText;
     // End of variables declaration//GEN-END:variables
 }

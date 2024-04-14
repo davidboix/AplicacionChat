@@ -22,6 +22,11 @@
             <artifactId>ProjecteDesenvoluparBotons</artifactId>
             <version>SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>mongodb</groupId>
+            <artifactId>mongodb</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
