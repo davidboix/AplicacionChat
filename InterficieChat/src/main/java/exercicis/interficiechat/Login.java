@@ -61,6 +61,7 @@ public class Login extends javax.swing.JFrame {
         usuariText = new componentsPersonalitzats.JTextFieldPersonalitzat();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Login");
         setBackground(new java.awt.Color(228, 178, 141));
 
         jPanel1.setBackground(new java.awt.Color(239, 210, 185));
@@ -95,6 +96,8 @@ public class Login extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
         jLabel5.setText("Contrasenya");
+
+        usuariText.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
 
         contraText.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
         contraText.addActionListener(new java.awt.event.ActionListener() {
@@ -134,7 +137,7 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(contraText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.CENTER);
@@ -147,7 +150,7 @@ public class Login extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
         );
 
         pack();
