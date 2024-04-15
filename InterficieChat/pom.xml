@@ -23,9 +23,9 @@
             <version>SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>mongodb</groupId>
-            <artifactId>mongodb</artifactId>
-            <version>1.0</version>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.12.14</version>
         </dependency>
     </dependencies>
     <properties>
