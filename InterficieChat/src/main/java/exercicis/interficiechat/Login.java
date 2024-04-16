@@ -53,13 +53,13 @@ public class Login extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         headerVista = new javax.swing.JPanel();
         titolVista = new javax.swing.JLabel();
-        footerVista = new javax.swing.JPanel();
-        botoLogin = new javax.swing.JButton();
         mainVista = new javax.swing.JPanel();
         etiquetaUsuari = new javax.swing.JLabel();
         etiquetaPassword = new javax.swing.JLabel();
         usuariText = new componentsPersonalitzats.JTextFieldPersonalitzat();
         inputPassword = new componentsPersonalitzats.JPasswordPlaceholder();
+        footerVista = new javax.swing.JPanel();
+        botoLogin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
@@ -75,20 +75,6 @@ public class Login extends javax.swing.JFrame {
         headerVista.add(titolVista);
 
         jPanel1.add(headerVista, java.awt.BorderLayout.PAGE_START);
-
-        footerVista.setBackground(new java.awt.Color(203, 219, 242));
-
-        botoLogin.setBackground(new java.awt.Color(125, 165, 221));
-        botoLogin.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
-        botoLogin.setText("Login");
-        botoLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botoLoginActionPerformed(evt);
-            }
-        });
-        footerVista.add(botoLogin);
-
-        jPanel1.add(footerVista, java.awt.BorderLayout.PAGE_END);
 
         mainVista.setBackground(new java.awt.Color(203, 219, 242));
 
@@ -128,6 +114,20 @@ public class Login extends javax.swing.JFrame {
         );
 
         jPanel1.add(mainVista, java.awt.BorderLayout.CENTER);
+
+        footerVista.setBackground(new java.awt.Color(203, 219, 242));
+
+        botoLogin.setBackground(new java.awt.Color(125, 165, 221));
+        botoLogin.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
+        botoLogin.setText("Login");
+        botoLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botoLoginActionPerformed(evt);
+            }
+        });
+        footerVista.add(botoLogin);
+
+        jPanel1.add(footerVista, java.awt.BorderLayout.PAGE_END);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
