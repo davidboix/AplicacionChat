@@ -1,6 +1,7 @@
 package componentsPersonalitzats;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.JTextField;
@@ -19,6 +20,7 @@ public class JTextFieldPersonalitzat extends JTextField implements FocusListener
     public JTextFieldPersonalitzat() {
         this.setForeground(Color.GRAY);
         this.setText(getPlaceHolder());
+        this.setFont(new Font("Noto Sans",Font.PLAIN,12));
         this.addFocusListener(this);
     }
 
