@@ -1,9 +1,11 @@
 package exercicis.interficiechat;
 
-import java.awt.Color;
+import java.awt.Image;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /**
@@ -19,6 +21,7 @@ public class Registre extends javax.swing.JFrame {
     public Registre() {
         initComponents();
         inicialitzarTextInputs();
+        afegirIcono();
     }
 
     /**
@@ -30,12 +33,12 @@ public class Registre extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        vistaGeneral = new javax.swing.JPanel();
+        footerVista = new javax.swing.JPanel();
         botoAltaUsuari = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        headerVista = new javax.swing.JPanel();
         titolRegistre = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
+        mainVista = new javax.swing.JPanel();
         etiquetaNom = new javax.swing.JLabel();
         etiquetaCognom = new javax.swing.JLabel();
         etiquetaEdat = new javax.swing.JLabel();
@@ -47,76 +50,107 @@ public class Registre extends javax.swing.JFrame {
         inputEdat = new componentsPersonalitzats.JTextFieldPersonalitzat();
         inputCorreu = new componentsPersonalitzats.JTextFieldPersonalitzat();
         inputUsuari = new componentsPersonalitzats.JTextFieldPersonalitzat();
-        inputPassword = new javax.swing.JPasswordField();
+        inputPassword = new componentsPersonalitzats.JPasswordPlaceholder();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Registre");
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        vistaGeneral.setLayout(new java.awt.BorderLayout());
 
-        botoAltaUsuari.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        footerVista.setBackground(new java.awt.Color(203, 219, 242));
+
+        botoAltaUsuari.setBackground(new java.awt.Color(125, 165, 221));
         botoAltaUsuari.setText("Donat d'Alta");
+        botoAltaUsuari.setToolTipText("Donar-te de alta en el nostre chat");
+        botoAltaUsuari.setPreferredSize(new java.awt.Dimension(180, 26));
         botoAltaUsuari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botoAltaUsuariActionPerformed(evt);
             }
         });
-        jPanel2.add(botoAltaUsuari);
+        footerVista.add(botoAltaUsuari);
 
-        jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_END);
+        vistaGeneral.add(footerVista, java.awt.BorderLayout.PAGE_END);
 
-        titolRegistre.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        headerVista.setBackground(new java.awt.Color(203, 219, 242));
+
+        titolRegistre.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         titolRegistre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         titolRegistre.setText("Registre");
-        jPanel3.add(titolRegistre);
+        titolRegistre.setToolTipText("Titol del registre en el nostre chat");
+        headerVista.add(titolRegistre);
 
-        jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_START);
+        vistaGeneral.add(headerVista, java.awt.BorderLayout.PAGE_START);
 
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        mainVista.setBackground(new java.awt.Color(203, 219, 242));
+        mainVista.setLayout(null);
 
         etiquetaNom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaNom.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         etiquetaNom.setText("Nom");
-        jPanel4.add(etiquetaNom, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, -1, -1));
+        mainVista.add(etiquetaNom);
+        etiquetaNom.setBounds(260, 20, 30, 20);
 
         etiquetaCognom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaCognom.setText("Cognoms");
-        jPanel4.add(etiquetaCognom, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, -1, -1));
+        mainVista.add(etiquetaCognom);
+        etiquetaCognom.setBounds(260, 80, 59, 20);
 
         etiquetaEdat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaEdat.setText("Edat");
-        jPanel4.add(etiquetaEdat, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, -1, -1));
+        mainVista.add(etiquetaEdat);
+        etiquetaEdat.setBounds(260, 140, 27, 20);
 
         etiquetaCorreu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaCorreu.setText("Correu");
-        jPanel4.add(etiquetaCorreu, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, -1, -1));
+        mainVista.add(etiquetaCorreu);
+        etiquetaCorreu.setBounds(260, 200, 42, 20);
 
         etiquetaUsuari.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaUsuari.setText("Usuari");
-        jPanel4.add(etiquetaUsuari, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 140, -1, -1));
+        mainVista.add(etiquetaUsuari);
+        etiquetaUsuari.setBounds(260, 260, 39, 20);
 
         etiquetaPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaPassword.setText("Contrasenya");
-        jPanel4.add(etiquetaPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, -1, -1));
-        jPanel4.add(inputNom, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 170, -1));
-        jPanel4.add(inputCognom, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 50, 170, -1));
+        mainVista.add(etiquetaPassword);
+        etiquetaPassword.setBounds(260, 320, 77, 20);
 
-        inputEdat.setForeground(new java.awt.Color(140, 140, 140));
-        jPanel4.add(inputEdat, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 170, -1));
-        jPanel4.add(inputCorreu, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 110, 170, -1));
-        jPanel4.add(inputUsuari, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, 170, -1));
-        jPanel4.add(inputPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, 170, -1));
+        inputNom.setToolTipText("Escriu el teu nom");
+        mainVista.add(inputNom);
+        inputNom.setBounds(260, 40, 170, 30);
 
-        jPanel1.add(jPanel4, java.awt.BorderLayout.CENTER);
+        inputCognom.setToolTipText("Escriu el teu cognom");
+        mainVista.add(inputCognom);
+        inputCognom.setBounds(260, 102, 170, 30);
+
+        inputEdat.setToolTipText("Introdueix la teva edat");
+        mainVista.add(inputEdat);
+        inputEdat.setBounds(260, 162, 170, 30);
+
+        inputCorreu.setToolTipText("Introdueix el teu correu");
+        mainVista.add(inputCorreu);
+        inputCorreu.setBounds(260, 222, 170, 30);
+
+        inputUsuari.setToolTipText("Introdueix el nom del teu usuari");
+        mainVista.add(inputUsuari);
+        inputUsuari.setBounds(260, 282, 170, 30);
+
+        inputPassword.setToolTipText("Introdueix la contrasenya la qual faras servir per poder iniciar sessio");
+        mainVista.add(inputPassword);
+        inputPassword.setBounds(260, 342, 170, 30);
+
+        vistaGeneral.add(mainVista, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
+            .addComponent(vistaGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
+            .addComponent(vistaGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
         );
 
         pack();
@@ -141,26 +175,33 @@ public class Registre extends javax.swing.JFrame {
             if (correuValidat) {
                 System.out.println("El email es correcte");
             } else {
-//                TODO: Quan el correu sigui invalid, hem de mostrar un 
+                // TODO: Quan el correu sigui invalid, hem de mostrar un 
                 // missatge avisant al usuari en que ha fallat.
                 System.out.println("El email es incorrecte");
             }
         }
 
         boolean isUsuariValid = validarInputs(this.inputUsuari, this.etiquetaUsuari);
-        // TODO: Validar el password amb una funcio diferent
-        // 
-        //boolean isPasswordValid = validarInputs(this.inputPassword, this.etiquetaPassword);
-        char[] prova = this.inputPassword.getPassword();
-        String password = "";
 
-        for (char msg : prova) {
-            password += msg;
+        String password = tractarPassword(this.inputPassword);
+
+        if (!password.isEmpty()) {
+            boolean isPasswordValid = validarPassword(password);
+
+            if (isPasswordValid) {
+                System.out.println("La contrasenya es correcta");
+            } else {
+                System.out.println("Siusplau, introdueix una contraenya que estigui entre 8 caracters i 20 caracters");
+            }
+
+            if (isCognomValid && isNomValid && isEdatValid && isCorreuValid && isUsuariValid) {
+                System.out.println("Tot esta correcte!");
+            }
+        } else {
+            System.out.println("Esta buit");
         }
 
-        if (isCognomValid && isNomValid && isEdatValid && isCorreuValid && isUsuariValid) {
-            System.out.println("Tot esta correcte!");
-        }
+
     }//GEN-LAST:event_botoAltaUsuariActionPerformed
     /**
      * Funcio desenvolupada per poder validar que un JTextField no pugui quedar
@@ -188,25 +229,27 @@ public class Registre extends javax.swing.JFrame {
      */
     private void inicialitzarTextInputs() {
 
-        this.inputNom.setPlaceHolder("Introdueix el nom...");
+        this.inputNom.setPlaceHolder("Introdueix el teu nom");
         this.inputNom.setText(this.inputNom.getPlaceHolder());
 
-        this.inputCognom.setPlaceHolder("Introdueix el cognom...");
+        this.inputCognom.setPlaceHolder("Introdueix el teu cognom");
         this.inputCognom.setText(this.inputCognom.getPlaceHolder());
 
-        this.inputEdat.setPlaceHolder("Introdueix la edat...");
+        this.inputEdat.setPlaceHolder("Introdueix la teva edat");
         this.inputEdat.setText(this.inputEdat.getPlaceHolder());
 
-        this.inputCorreu.setPlaceHolder("Introdueix el correu...");
+        this.inputCorreu.setPlaceHolder("Introdueix el teu correu");
         this.inputCorreu.setText(this.inputCorreu.getPlaceHolder());
 
-        this.inputUsuari.setPlaceHolder("Introdueix el usuari...");
+        this.inputUsuari.setPlaceHolder("Introdueix el nom de l'usuari");
         this.inputUsuari.setText(this.inputUsuari.getPlaceHolder());
 
+        this.inputPassword.setPlaceHolder("Introdueix la contrasenya");
+        this.inputPassword.setText(this.inputPassword.getPlaceHolder());
     }
 
     /**
-     * Funcio que utilitzarem per poder validar el email mitjançant una
+     * Funcio que utilitzarem per poder validar el email utilitzant una
      * expressio regular per a que, d'aquesta manera el email compleixi unes
      * condicions
      *
@@ -218,10 +261,65 @@ public class Registre extends javax.swing.JFrame {
         String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z.-]+\\.[a-zA-Z]{2,}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email.getText().trim());
-        if (!matcher.matches()) {
-            return false;
+        if (matcher.matches()) {
+            return true;
         }
-        return true;
+        return false;
+    }
+
+    /**
+     * Funcio que farem servir per poder validar una contrasenya amb uns certs
+     * parametres utilitzant expressions regulars per a que el usuari
+     * introdueixi una contrasenya amb unes condicions
+     *
+     * @param password La contrasenya passant-la com a text pla.
+     * @return Retorna cert si s'ha introduit una contrasenya que compleixi les
+     * condicions establertes i si es el contrari, retornara fals i no
+     * s'introduira la contrasenya correctament
+     */
+    private boolean validarPassword(String password) {
+        String expressioRegular = "^[a-zA-Z0-9._!?-]{8,20}$";
+        Pattern pattern = Pattern.compile(expressioRegular);
+        Matcher matcher = pattern.matcher(password);
+        if (matcher.matches()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Funcio que farem servir per poder afegir una icona al boto de alta de
+     * usuari per a que el usuari tingui una idea de el que fa aquell boto
+     */
+    private void afegirIcono() {
+        ImageIcon iconoUsuari = new ImageIcon("src\\main\\java\\img\\altaUsuari.png");
+        Image iconoUsuariModificar = iconoUsuari.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
+        ImageIcon iconoBuscar = new ImageIcon(iconoUsuariModificar);
+        this.botoAltaUsuari.setIcon(iconoBuscar);
+    }
+
+    /**
+     * Funcio creada per poder passar la contrasenya que s'introdueix dins de un
+     * component JPasswordField a una cadena de text
+     *
+     * @param jpe Per parametres passarem el component que volem tractar
+     * @return Retornarem la contrasenya com una cadena de text si la cadena ha
+     * estat inicialitzada i el cas contrari si la cadena de text no ha estat
+     * inicialitzada
+     */
+    private String tractarPassword(JPasswordField jpe) {
+        String password = "";
+
+        char[] arrayPassword = jpe.getPassword();
+        
+        for (char msg : arrayPassword) {
+            password += msg;
+        }
+        if (!password.isEmpty()) {
+            return password;
+        }
+
+        return "";
     }
 
     /**
@@ -267,16 +365,16 @@ public class Registre extends javax.swing.JFrame {
     private javax.swing.JLabel etiquetaNom;
     private javax.swing.JLabel etiquetaPassword;
     private javax.swing.JLabel etiquetaUsuari;
+    private javax.swing.JPanel footerVista;
+    private javax.swing.JPanel headerVista;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputCognom;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputCorreu;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputEdat;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputNom;
-    private javax.swing.JPasswordField inputPassword;
+    private componentsPersonalitzats.JPasswordPlaceholder inputPassword;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputUsuari;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel mainVista;
     private javax.swing.JLabel titolRegistre;
+    private javax.swing.JPanel vistaGeneral;
     // End of variables declaration//GEN-END:variables
 }

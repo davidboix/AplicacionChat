@@ -1,45 +1,46 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package exercicis.interficiechat;
+
 import com.mongodb.MongoClient;
-import com.mongodb.client.MongoClients;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import javax.swing.JOptionPane;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JPasswordField;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+
 /**
  *
  * @author Oleh Plechiy Tupis Andriyovech
  * @version 1.0
  */
 public class Login extends javax.swing.JFrame {
+
     private MongoClient mongoClient;
     private MongoDatabase database;
     private MongoCollection<Document> cuentasCollection;
+
     /**
      * Creates new form Login
      */
-    
-
     public Login() {
         initComponents();
         inicialitzarTextInputs();
+        amagarInfoWarnings();
+        //mongoClient = new MongoClient("localhost", 27017);
+        //database = mongoClient.getDatabase("Cuentas");
+        //MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
 
-        mongoClient = new MongoClient("localhost", 27017);
-        database = mongoClient.getDatabase("Cuentas");
-        MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
-        
-        
     }
 
-    private void inicialitzarTextInputs(){
-        this.usuariText.setPlaceHolder("Introdueix l'usuari");
+    private void inicialitzarTextInputs() {
+        this.usuariText.setPlaceHolder("Introdueix el nom de l'usuari");
         this.usuariText.setText(this.usuariText.getPlaceHolder());
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -50,15 +51,15 @@ public class Login extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        loginButton = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        contraText = new javax.swing.JPasswordField();
+        headerVista = new javax.swing.JPanel();
+        titolVista = new javax.swing.JLabel();
+        mainVista = new javax.swing.JPanel();
+        etiquetaUsuari = new javax.swing.JLabel();
+        etiquetaPassword = new javax.swing.JLabel();
         usuariText = new componentsPersonalitzats.JTextFieldPersonalitzat();
+        inputPassword = new componentsPersonalitzats.JPasswordPlaceholder();
+        footerVista = new javax.swing.JPanel();
+        botoLogin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
@@ -67,80 +68,66 @@ public class Login extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(239, 210, 185));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setBackground(new java.awt.Color(203, 219, 242));
+        headerVista.setBackground(new java.awt.Color(203, 219, 242));
 
-        jLabel3.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
-        jLabel3.setText("Inicia sessió");
-        jPanel2.add(jLabel3);
+        titolVista.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
+        titolVista.setText("Inicia sessió");
+        headerVista.add(titolVista);
 
-        jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_START);
+        jPanel1.add(headerVista, java.awt.BorderLayout.PAGE_START);
 
-        jPanel3.setBackground(new java.awt.Color(203, 219, 242));
+        mainVista.setBackground(new java.awt.Color(203, 219, 242));
 
-        loginButton.setBackground(new java.awt.Color(125, 165, 221));
-        loginButton.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
-        loginButton.setText("Login");
-        loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                loginButtonMouseClicked(evt);
-            }
-        });
-        jPanel3.add(loginButton);
+        etiquetaUsuari.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
+        etiquetaUsuari.setText("Usuari");
 
-        jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_END);
+        etiquetaPassword.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
+        etiquetaPassword.setText("Contrasenya");
 
-        jPanel4.setBackground(new java.awt.Color(203, 219, 242));
+        inputPassword.setText("jPasswordPlaceholder1");
 
-        jLabel4.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
-        jLabel4.setText("Usuari");
-
-        jLabel5.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
-        jLabel5.setText("Contrasenya");
-
-        usuariText.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
-
-        contraText.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
-        contraText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                contraTextActionPerformed(evt);
-            }
-        });
-
-        usuariText.setText("jTextFieldPersonalitzat1");
-        usuariText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                usuariTextActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(99, 99, 99)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(usuariText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(contraText, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(98, Short.MAX_VALUE))
+        javax.swing.GroupLayout mainVistaLayout = new javax.swing.GroupLayout(mainVista);
+        mainVista.setLayout(mainVistaLayout);
+        mainVistaLayout.setHorizontalGroup(
+            mainVistaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainVistaLayout.createSequentialGroup()
+                .addContainerGap(161, Short.MAX_VALUE)
+                .addGroup(mainVistaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(usuariText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(etiquetaPassword)
+                    .addComponent(etiquetaUsuari)
+                    .addComponent(inputPassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(119, 119, 119))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(jLabel4)
-                .addGap(8, 8, 8)
+        mainVistaLayout.setVerticalGroup(
+            mainVistaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainVistaLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(etiquetaUsuari)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(usuariText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(contraText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(etiquetaPassword)
+                .addGap(18, 18, 18)
+                .addComponent(inputPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel4, java.awt.BorderLayout.CENTER);
+        jPanel1.add(mainVista, java.awt.BorderLayout.CENTER);
+
+        footerVista.setBackground(new java.awt.Color(203, 219, 242));
+
+        botoLogin.setBackground(new java.awt.Color(125, 165, 221));
+        botoLogin.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
+        botoLogin.setText("Login");
+        botoLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botoLoginActionPerformed(evt);
+            }
+        });
+        footerVista.add(botoLogin);
+
+        jPanel1.add(footerVista, java.awt.BorderLayout.PAGE_END);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -150,28 +137,50 @@ public class Login extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void contraTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contraTextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_contraTextActionPerformed
-
     private void usuariTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuariTextActionPerformed
-        usuariText.setFont(new java.awt.Font("Noto Sans", 0, 12));
+        this.usuariText.setFont(new java.awt.Font("Noto Sans", 0, 12));
     }//GEN-LAST:event_usuariTextActionPerformed
 
     private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
+
+
+    }//GEN-LAST:event_loginButtonMouseClicked
+
+    private void botoLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoLoginActionPerformed
+        final String URLCONNEXIO = "mongodb://localhost:27017";
+        MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
+
+        try ( MongoClient mongoClient = new MongoClient(uri)) {
+            String nomUsuari = this.usuariText.getText();
+            consultaActual(nomUsuari);
+        } catch (Exception e) {
+            System.out.println("Hem entrat al error... \nREVISAR CODI...");
+        }
+    }//GEN-LAST:event_botoLoginActionPerformed
+    private void inicialitzarInput() {
+        String psw = new String(this.inputPassword.getPassword());
+        this.inputPassword.setPlaceHolder("Introdueix el nom...");
+        this.inputPassword.setText(this.inputPassword.getPlaceHolder());
+    }
+
+    /**
+     * Funcio creada utilitzant CHATGPT
+     */
+    private void consultaAntiga() {
+        String password = new String(this.inputPassword.getPassword());
+
         MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
         String username = usuariText.getText();
-        String password = new String(contraText.getPassword());
 
         Bson query = Filters.and(
-            Filters.eq("usuari", username),
-            Filters.eq("contrasenya", password)
+                Filters.eq("usuari", username),
+                Filters.eq("contrasenya", password)
         );
         Document result = cuentasCollection.find(query).first();
 
@@ -180,7 +189,53 @@ public class Login extends javax.swing.JFrame {
         } else {
             System.out.println("Failure");
         }
-    }//GEN-LAST:event_loginButtonMouseClicked
+    }
+
+    /**
+     * Funcio creada sense utilitzar CHATGPT
+     */
+    private void consultaActual(String nomUsuari) {
+        MongoDatabase database = mongoClient.getDatabase("Cuentas");
+        MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
+
+        long numUsuaris = cuentasCollection.countDocuments(Filters.eq("usuari", nomUsuari));
+
+        if (numUsuaris > 0) {
+            String password = tractarPassword(this.inputPassword);
+//            TODO: Revisar aquesta consulta ja que nomes estem buscant la contrasenya sense tenir en compte el usuari
+            FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.eq("contrasenya", password));
+            for (Document infoUsuaris : resultatUsuaris) {
+                System.out.print("\nNom Usuari: " + infoUsuaris.getString("usuari"));
+                System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenya"));
+            }
+        } else {
+            System.out.println("El usuari que estas intentant introduir, no existeix en la nostra base de dades");
+        }
+    }
+
+    /**
+     *
+     */
+    private String tractarPassword(JPasswordField jpe) {
+        char[] arrayPassword = jpe.getPassword();
+
+        String password = "";
+
+        for (char msg : arrayPassword) {
+            password += msg;
+        }
+
+        if (!password.isEmpty()) {
+            return password;
+        }
+        return "";
+    }
+
+    private void amagarInfoWarnings() {
+        Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
+        mongoLogger.setLevel(Level.WARNING);
+        mongoLogger.setUseParentHandlers(false);
+    }
 
     /**
      * @param args the command line arguments
@@ -218,15 +273,15 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPasswordField contraText;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JButton botoLogin;
+    private javax.swing.JLabel etiquetaPassword;
+    private javax.swing.JLabel etiquetaUsuari;
+    private javax.swing.JPanel footerVista;
+    private javax.swing.JPanel headerVista;
+    private componentsPersonalitzats.JPasswordPlaceholder inputPassword;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JButton loginButton;
+    private javax.swing.JPanel mainVista;
+    private javax.swing.JLabel titolVista;
     private componentsPersonalitzats.JTextFieldPersonalitzat usuariText;
     // End of variables declaration//GEN-END:variables
 }
