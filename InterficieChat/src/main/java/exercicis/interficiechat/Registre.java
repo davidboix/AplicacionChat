@@ -58,7 +58,6 @@ public class Registre extends javax.swing.JFrame {
         inputCorreu = new componentsPersonalitzats.JTextFieldPersonalitzat();
         inputUsuari = new componentsPersonalitzats.JTextFieldPersonalitzat();
         inputPassword = new componentsPersonalitzats.JPasswordPlaceholder();
-        jPasswordField1 = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registre");
@@ -135,10 +134,6 @@ public class Registre extends javax.swing.JFrame {
         inputUsuari.setBounds(260, 290, 64, 23);
         mainVista.add(inputPassword);
         inputPassword.setBounds(260, 350, 150, 22);
-
-        jPasswordField1.setText("jPasswordField1");
-        mainVista.add(jPasswordField1);
-        jPasswordField1.setBounds(570, 100, 90, 22);
 
         vistaGeneral.add(mainVista, java.awt.BorderLayout.CENTER);
 
@@ -420,7 +415,6 @@ public class Registre extends javax.swing.JFrame {
     private componentsPersonalitzats.JTextFieldPersonalitzat inputNom;
     private componentsPersonalitzats.JPasswordPlaceholder inputPassword;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputUsuari;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JPanel mainVista;
     private javax.swing.JLabel titolRegistre;
     private javax.swing.JPanel vistaGeneral;
