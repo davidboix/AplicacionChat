@@ -13,6 +13,15 @@ import javax.swing.JPasswordField;
 public class JPasswordPlaceholder extends JPasswordField implements FocusListener {
 
     private String placeHolder;
+    private String pt;
+
+    public String getPt() {
+        return pt;
+    }
+
+    public void setPt(String pt) {
+        this.pt = pt;
+    }
 
     /**
      *
@@ -20,6 +29,8 @@ public class JPasswordPlaceholder extends JPasswordField implements FocusListene
     private void JPasswordPlaceholder() {
         this.setForeground(Color.GRAY);
         this.setText(getPlaceHolder());
+        String cadena = "u0000";
+        this.setEchoChar(cadenaACaracter(cadena));
         this.addFocusListener(this);
     }
 
@@ -55,6 +66,7 @@ public class JPasswordPlaceholder extends JPasswordField implements FocusListene
 
         if (password.equalsIgnoreCase(getPlaceHolder())) {
             this.setText("");
+            this.setEchoChar('@');
             this.setBackground(Color.WHITE);
             this.setForeground(Color.BLACK);
         }
@@ -79,4 +91,16 @@ public class JPasswordPlaceholder extends JPasswordField implements FocusListene
             this.setForeground(Color.GRAY);
         }
     }
+
+    private char cadenaACaracter(String cadena) {
+        char retorn = '\\';
+        for (int i = 0; i < cadena.length(); i++) {
+            retorn += cadena.charAt(i);
+        }
+
+        System.out.println(retorn);
+
+        return retorn;
+    }
+
 }

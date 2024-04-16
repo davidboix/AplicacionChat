@@ -19,9 +19,6 @@ import org.bson.conversions.Bson;
  */
 public class Login extends javax.swing.JFrame {
 
-    private MongoClient mongoClient;
-    private MongoDatabase database;
-    private MongoCollection<Document> cuentasCollection;
 
     /**
      * Creates new form Login
@@ -30,6 +27,7 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         inicialitzarTextInputs();
         amagarInfoWarnings();
+        inicialitzarInput();
         //mongoClient = new MongoClient("localhost", 27017);
         //database = mongoClient.getDatabase("Cuentas");
         //MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
@@ -84,14 +82,16 @@ public class Login extends javax.swing.JFrame {
         etiquetaPassword.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
         etiquetaPassword.setText("Contrasenya");
 
-        inputPassword.setText("jPasswordPlaceholder1");
+        inputPassword.setToolTipText("");
+        inputPassword.setEchoChar('\u0000');
+        inputPassword.setFocusCycleRoot(true);
 
         javax.swing.GroupLayout mainVistaLayout = new javax.swing.GroupLayout(mainVista);
         mainVista.setLayout(mainVistaLayout);
         mainVistaLayout.setHorizontalGroup(
             mainVistaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainVistaLayout.createSequentialGroup()
-                .addContainerGap(161, Short.MAX_VALUE)
+                .addContainerGap(210, Short.MAX_VALUE)
                 .addGroup(mainVistaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(usuariText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(etiquetaPassword)
@@ -149,7 +149,6 @@ public class Login extends javax.swing.JFrame {
 
     private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
 
-
     }//GEN-LAST:event_loginButtonMouseClicked
 
     private void botoLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoLoginActionPerformed
@@ -158,11 +157,37 @@ public class Login extends javax.swing.JFrame {
 
         try ( MongoClient mongoClient = new MongoClient(uri)) {
             String nomUsuari = this.usuariText.getText();
-            consultaActual(nomUsuari);
-        } catch (Exception e) {
-            System.out.println("Hem entrat al error... \nREVISAR CODI...");
-        }
+            //consultaActual(nomUsuari);
+            MongoDatabase database = mongoClient.getDatabase("Cuentas");
+            MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
+
+            long numUsuaris = cuentasCollection.countDocuments(Filters.eq("usuari", nomUsuari));
+
+            if (numUsuaris > 0) {
+                String password = tractarPassword(this.inputPassword);
+                //long numContra = cuentasCollection.countDocuments(Filters.eq("contrasenya", password));
+                long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("usuari", nomUsuari),Filters.eq("contrasenya", password)));
+                
+                        //TODO: investigar alternativa a la consulta actual
+                //FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.eq("contrasenya", password));
+                if(numContra > 0){
+                    FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("usuari", nomUsuari),Filters.eq("contrasenya", password)));
+                    for (Document infoUsuaris : resultatUsuaris) {
+                        System.out.print("\nNom Usuari: " + infoUsuaris.getString("usuari"));
+                        System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenya"));
+                    }
+                } else {
+                    System.out.println("Thy introduced password is nonexistent in our archives");
+                }
+            } else {
+                System.out.println("El usuari que estas intentant introduir, no existeix en la nostra base de dades");
+            }
+            } catch (Exception e) {
+                System.out.println("Hem entrat al error... \nREVISAR CODI...");
+                e.printStackTrace();
+            }
     }//GEN-LAST:event_botoLoginActionPerformed
+    
     private void inicialitzarInput() {
         String psw = new String(this.inputPassword.getPassword());
         this.inputPassword.setPlaceHolder("Introdueix el nom...");
@@ -170,9 +195,9 @@ public class Login extends javax.swing.JFrame {
     }
 
     /**
-     * Funcio creada utilitzant CHATGPT
+     * Funcio obsoleta
      */
-    private void consultaAntiga() {
+    /*private void consultaAntiga() {
         String password = new String(this.inputPassword.getPassword());
 
         MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
@@ -189,12 +214,12 @@ public class Login extends javax.swing.JFrame {
         } else {
             System.out.println("Failure");
         }
-    }
+    }*/
 
     /**
-     * Funcio creada sense utilitzar CHATGPT
+     * Funcio obsoleta
      */
-    private void consultaActual(String nomUsuari) {
+    /*private void consultaActual(String nomUsuari) {
         MongoDatabase database = mongoClient.getDatabase("Cuentas");
         MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
 
@@ -203,7 +228,8 @@ public class Login extends javax.swing.JFrame {
         if (numUsuaris > 0) {
             String password = tractarPassword(this.inputPassword);
 //            TODO: Revisar aquesta consulta ja que nomes estem buscant la contrasenya sense tenir en compte el usuari
-            FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.eq("contrasenya", password));
+            //FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.eq("contrasenya", password));
+            FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("usuari", nomUsuari),Filters.eq("contrasenya", password)));
             for (Document infoUsuaris : resultatUsuaris) {
                 System.out.print("\nNom Usuari: " + infoUsuaris.getString("usuari"));
                 System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenya"));
@@ -211,7 +237,7 @@ public class Login extends javax.swing.JFrame {
         } else {
             System.out.println("El usuari que estas intentant introduir, no existeix en la nostra base de dades");
         }
-    }
+    }*/
 
     /**
      *
@@ -232,8 +258,9 @@ public class Login extends javax.swing.JFrame {
     }
 
     private void amagarInfoWarnings() {
-        Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
-        mongoLogger.setLevel(Level.WARNING);
+        //Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
+        Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
+        mongoLogger.setLevel(Level.SEVERE);
         mongoLogger.setUseParentHandlers(false);
     }
 
