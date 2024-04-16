@@ -1,12 +1,19 @@
 package exercicis.interficiechat;
 
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import java.awt.Image;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import org.bson.Document;
 
 /**
  *
@@ -23,7 +30,7 @@ public class Registre extends javax.swing.JFrame {
         inicialitzarTextInputs();
         afegirIcono();
     }
-
+// /u0000
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -51,6 +58,7 @@ public class Registre extends javax.swing.JFrame {
         inputCorreu = new componentsPersonalitzats.JTextFieldPersonalitzat();
         inputUsuari = new componentsPersonalitzats.JTextFieldPersonalitzat();
         inputPassword = new componentsPersonalitzats.JPasswordPlaceholder();
+        jPasswordField1 = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registre");
@@ -115,30 +123,22 @@ public class Registre extends javax.swing.JFrame {
         etiquetaPassword.setText("Contrasenya");
         mainVista.add(etiquetaPassword);
         etiquetaPassword.setBounds(260, 320, 77, 20);
-
-        inputNom.setToolTipText("Escriu el teu nom");
         mainVista.add(inputNom);
-        inputNom.setBounds(260, 40, 170, 30);
-
-        inputCognom.setToolTipText("Escriu el teu cognom");
+        inputNom.setBounds(260, 50, 64, 23);
         mainVista.add(inputCognom);
-        inputCognom.setBounds(260, 102, 170, 30);
-
-        inputEdat.setToolTipText("Introdueix la teva edat");
+        inputCognom.setBounds(260, 110, 64, 23);
         mainVista.add(inputEdat);
-        inputEdat.setBounds(260, 162, 170, 30);
-
-        inputCorreu.setToolTipText("Introdueix el teu correu");
+        inputEdat.setBounds(260, 170, 64, 23);
         mainVista.add(inputCorreu);
-        inputCorreu.setBounds(260, 222, 170, 30);
-
-        inputUsuari.setToolTipText("Introdueix el nom del teu usuari");
+        inputCorreu.setBounds(260, 230, 64, 23);
         mainVista.add(inputUsuari);
-        inputUsuari.setBounds(260, 282, 170, 30);
-
-        inputPassword.setToolTipText("Introdueix la contrasenya la qual faras servir per poder iniciar sessio");
+        inputUsuari.setBounds(260, 290, 64, 23);
         mainVista.add(inputPassword);
-        inputPassword.setBounds(260, 342, 170, 30);
+        inputPassword.setBounds(260, 350, 150, 22);
+
+        jPasswordField1.setText("jPasswordField1");
+        mainVista.add(jPasswordField1);
+        jPasswordField1.setBounds(570, 100, 90, 22);
 
         vistaGeneral.add(mainVista, java.awt.BorderLayout.CENTER);
 
@@ -163,7 +163,7 @@ public class Registre extends javax.swing.JFrame {
      * utilitzant el ratoli o el teclat
      */
     private void botoAltaUsuariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoAltaUsuariActionPerformed
-
+        System.out.println(this.inputNom.getText());
         boolean isNomValid = validarInputs(this.inputNom, this.etiquetaNom);
         boolean isCognomValid = validarInputs(this.inputCognom, this.etiquetaCognom);
         boolean isEdatValid = validarInputs(this.inputEdat, this.etiquetaEdat);
@@ -196,12 +196,12 @@ public class Registre extends javax.swing.JFrame {
 
             if (isCognomValid && isNomValid && isEdatValid && isCorreuValid && isUsuariValid) {
                 System.out.println("Tot esta correcte!");
+
+                inicialitzarDades(this.inputNom.getText(), this.inputCognom.getText(), Integer.valueOf(this.inputEdat.getText()), this.inputCorreu.getText(), this.inputUsuari.getText(), this.inputPassword.getText());
             }
         } else {
             System.out.println("Esta buit");
         }
-
-
     }//GEN-LAST:event_botoAltaUsuariActionPerformed
     /**
      * Funcio desenvolupada per poder validar que un JTextField no pugui quedar
@@ -278,7 +278,8 @@ public class Registre extends javax.swing.JFrame {
      * s'introduira la contrasenya correctament
      */
     private boolean validarPassword(String password) {
-        String expressioRegular = "^[a-zA-Z0-9._!?-]{8,20}$";
+        //String expressioRegular = "^[a-zA-Z0-9._!?-]{8,20}$";
+        String expressioRegular = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
         Pattern pattern = Pattern.compile(expressioRegular);
         Matcher matcher = pattern.matcher(password);
         if (matcher.matches()) {
@@ -311,7 +312,7 @@ public class Registre extends javax.swing.JFrame {
         String password = "";
 
         char[] arrayPassword = jpe.getPassword();
-        
+
         for (char msg : arrayPassword) {
             password += msg;
         }
@@ -320,6 +321,52 @@ public class Registre extends javax.swing.JFrame {
         }
 
         return "";
+    }
+
+    /**
+     * Funcio que farem servir per poder inserir els nous usuaris al nostre
+     * sistema gestor de bases de dades
+     *
+     * @param nom Nom de l'usuari propietari del compte
+     * @param cognom Congom de l'usuari propietari del compte.
+     * @param edat Edat de l'usuari propietari del compte.
+     * @param correuUsuari Correu personal del usuari propietari del compte.
+     * @param nomUsuari Nom usuari que fara servir per poder logejar-se dins de
+     * l'aplicacio del xat.
+     * @param password Contrasenya del usuari que fara servir per poder
+     * logejar-se dins de l'aplicacio del xat.
+     */
+    private void inicialitzarDades(String nom, String cognom, int edat, String correuUsuari, String nomUsuari, String password) {
+        amagarInfoWarnings();
+        final String URLCONNEXIO = "mongodb://localhost:27017";
+
+        MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
+
+        try ( MongoClient mongoClient = new MongoClient(uri)) {
+            MongoDatabase database = mongoClient.getDatabase("Cuentas");
+            MongoCollection<Document> comptes = database.getCollection("comptes");
+
+            //TODO: Haurem de verificar que poden haver mes de un usuari amb el meu mateix nom i per tant no farem el insert a la base de dades.
+            Document nouUsuari = new Document("nomUsuari", nom)
+                    .append("cognomUsuari", cognom)
+                    .append("edatUsuari", edat)
+                    .append("edatUsuari", edat)
+                    .append("correuUsuari", correuUsuari)
+                    .append("nomUser", nomUsuari)
+                    .append("contrasenyaUsuari", password);
+
+            comptes.insertOne(nouUsuari);
+            System.out.println("Hem introduit un nou usuari...");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void amagarInfoWarnings() {
+        Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
+        mongoLogger.setLevel(Level.WARNING);
+        mongoLogger.setUseParentHandlers(false);
     }
 
     /**
@@ -373,6 +420,7 @@ public class Registre extends javax.swing.JFrame {
     private componentsPersonalitzats.JTextFieldPersonalitzat inputNom;
     private componentsPersonalitzats.JPasswordPlaceholder inputPassword;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputUsuari;
+    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JPanel mainVista;
     private javax.swing.JLabel titolRegistre;
     private javax.swing.JPanel vistaGeneral;
