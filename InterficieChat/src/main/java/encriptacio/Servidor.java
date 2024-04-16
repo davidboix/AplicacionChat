@@ -1,6 +1,9 @@
 package encriptacio;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
@@ -75,14 +78,39 @@ public class Servidor {
 
     /**
      *
-     * @return 
-     * @throws NoSuchAlgorithmException
+     * @return @throws NoSuchAlgorithmException
      */
     public SecretKey generarKeyAES() throws NoSuchAlgorithmException {
         System.out.println("Generem clau simetrica...");
         KeyGenerator keygen = KeyGenerator.getInstance("AES");
         SecretKey clau = keygen.generateKey();
         return clau;
+    }
+
+    public static void main(String[] args) {
+        final String IP = "localhost";
+        final int PORT = 12345;
+        try {
+            ServerSocket server = new ServerSocket();
+            InetSocketAddress addr = new InetSocketAddress(IP, PORT);
+            server.bind(addr);
+            System.out.println("Servidor obert...");
+            while (true) {
+                Socket newSocket = server.accept();
+                InputStream is = newSocket.getInputStream();
+                OutputStream os = newSocket.getOutputStream();
+                byte[] msg = new byte[1000];
+                is.read(msg);
+                String missatge = new String(msg);
+                System.out.println(missatge);
+
+                newSocket.close();
+                System.out.println("Servidor tornant a escoltar...");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
