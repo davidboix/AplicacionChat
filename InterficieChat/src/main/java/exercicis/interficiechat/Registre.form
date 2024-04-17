@@ -193,35 +193,35 @@
             <Component class="componentsPersonalitzats.JTextFieldPersonalitzat" name="inputNom">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="260" y="50" width="-1" height="-1"/>
+                  <AbsoluteConstraints x="260" y="50" width="150" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
             <Component class="componentsPersonalitzats.JTextFieldPersonalitzat" name="inputCognom">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="260" y="110" width="-1" height="-1"/>
+                  <AbsoluteConstraints x="260" y="110" width="150" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
             <Component class="componentsPersonalitzats.JTextFieldPersonalitzat" name="inputEdat">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="260" y="170" width="-1" height="-1"/>
+                  <AbsoluteConstraints x="260" y="170" width="150" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
             <Component class="componentsPersonalitzats.JTextFieldPersonalitzat" name="inputCorreu">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="260" y="230" width="-1" height="-1"/>
+                  <AbsoluteConstraints x="260" y="230" width="150" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
             <Component class="componentsPersonalitzats.JTextFieldPersonalitzat" name="inputUsuari">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="260" y="290" width="-1" height="-1"/>
+                  <AbsoluteConstraints x="260" y="290" width="150" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>

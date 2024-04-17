@@ -4,11 +4,19 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import encriptacio.Servidor;
 import java.awt.Image;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
@@ -29,8 +37,10 @@ public class Registre extends javax.swing.JFrame {
         initComponents();
         inicialitzarTextInputs();
         afegirIcono();
+        //inicialitzarServidor();
     }
 // /u0000
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -123,15 +133,15 @@ public class Registre extends javax.swing.JFrame {
         mainVista.add(etiquetaPassword);
         etiquetaPassword.setBounds(260, 320, 77, 20);
         mainVista.add(inputNom);
-        inputNom.setBounds(260, 50, 64, 23);
+        inputNom.setBounds(260, 50, 150, 23);
         mainVista.add(inputCognom);
-        inputCognom.setBounds(260, 110, 64, 23);
+        inputCognom.setBounds(260, 110, 150, 23);
         mainVista.add(inputEdat);
-        inputEdat.setBounds(260, 170, 64, 23);
+        inputEdat.setBounds(260, 170, 150, 23);
         mainVista.add(inputCorreu);
-        inputCorreu.setBounds(260, 230, 64, 23);
+        inputCorreu.setBounds(260, 230, 150, 23);
         mainVista.add(inputUsuari);
-        inputUsuari.setBounds(260, 290, 64, 23);
+        inputUsuari.setBounds(260, 290, 150, 23);
         mainVista.add(inputPassword);
         inputPassword.setBounds(260, 350, 150, 22);
 
@@ -362,6 +372,14 @@ public class Registre extends javax.swing.JFrame {
         Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
         mongoLogger.setLevel(Level.WARNING);
         mongoLogger.setUseParentHandlers(false);
+    }
+
+    private void inicialitzarServidor() {
+        final String IP = "localhost";
+        final int PORT = 12345;
+        Servidor servidor = new Servidor(IP, PORT);
+        
+        servidor.iniciServidor(servidor.getIpServidor(), servidor.getPortServidor());
     }
 
     /**

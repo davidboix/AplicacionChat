@@ -1,11 +1,12 @@
 package encriptacio;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.net.Socket;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
+import java.util.Scanner;
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 /**
  *
@@ -13,30 +14,34 @@ import javax.crypto.Cipher;
  * @version 1.0
  */
 public class Client {
-
+    
     public static void main(String[] args) {
-
+        Scanner lector = new Scanner(System.in);
         final String IPSERVIDOR = "localhost";
         final int PORT = 12345;
         try {
             Socket cs = new Socket(IPSERVIDOR, PORT);
-            InputStream is = cs.getInputStream();
-            OutputStream os = cs.getOutputStream();
+
+            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            SecretKey clau = keyGen.generateKey();
+
+            DataOutputStream out = new DataOutputStream(cs.getOutputStream());
+            DataInputStream dip = new DataInputStream(cs.getInputStream());
             
-            KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
-            KeyPair keypair = keygen.generateKeyPair();
+            byte[] keyBytes = clau.getEncoded();
+            out.writeInt(keyBytes.length);
+            out.write(keyBytes);
+            System.out.print("Escriu la contrasenya: ");
+            String msg = lector.nextLine();
+            Cipher aesCipher = Cipher.getInstance("AES");
+            aesCipher.init(Cipher.ENCRYPT_MODE, clau);
+            byte[] msgEncriptat = aesCipher.doFinal(msg.getBytes());
             
-            Cipher rsaCipher = Cipher.getInstance("RSA");
-            String msg = "Prova de misatge";
-            rsaCipher.init(Cipher.ENCRYPT_MODE,keypair.getPublic());
-            byte [] msgXifrat = rsaCipher.doFinal(msg.getBytes());
-            
-            
-            String msxXfr = new String(msgXifrat);
-            os.write(msxXfr.getBytes());
-            
-            //String msgClient = IPSERVIDOR + "!" + PORT + "!" + msgXifrat;
-            //os.write(msgClient.getBytes());
+            out.writeInt(msgEncriptat.length);
+            out.write(msgEncriptat);
+        
+            System.out.println("Missatge encriptat i clau enviats al servidor...");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,4 +49,3 @@ public class Client {
     }
 
 }
-
