@@ -52,9 +52,11 @@ public class Login extends javax.swing.JFrame {
         headerVista = new javax.swing.JPanel();
         titolVista = new javax.swing.JLabel();
         mainVista = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         etiquetaUsuari = new javax.swing.JLabel();
-        etiquetaPassword = new javax.swing.JLabel();
         usuariText = new componentsPersonalitzats.JTextFieldPersonalitzat();
+        jPanel3 = new javax.swing.JPanel();
+        etiquetaPassword = new javax.swing.JLabel();
         inputPassword = new componentsPersonalitzats.JPasswordPlaceholder();
         footerVista = new javax.swing.JPanel();
         botoLogin = new javax.swing.JButton();
@@ -75,43 +77,30 @@ public class Login extends javax.swing.JFrame {
         jPanel1.add(headerVista, java.awt.BorderLayout.PAGE_START);
 
         mainVista.setBackground(new java.awt.Color(203, 219, 242));
+        mainVista.setLayout(new java.awt.BorderLayout());
+
+        jPanel2.setBackground(new java.awt.Color(203, 219, 242));
+        jPanel2.setPreferredSize(new java.awt.Dimension(434, 100));
 
         etiquetaUsuari.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
         etiquetaUsuari.setText("Usuari");
+        jPanel2.add(etiquetaUsuari);
+        jPanel2.add(usuariText);
+
+        mainVista.add(jPanel2, java.awt.BorderLayout.CENTER);
+
+        jPanel3.setBackground(new java.awt.Color(203, 219, 242));
 
         etiquetaPassword.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
         etiquetaPassword.setText("Contrasenya");
+        jPanel3.add(etiquetaPassword);
 
         inputPassword.setToolTipText("");
         inputPassword.setEchoChar('\u0000');
         inputPassword.setFocusCycleRoot(true);
+        jPanel3.add(inputPassword);
 
-        javax.swing.GroupLayout mainVistaLayout = new javax.swing.GroupLayout(mainVista);
-        mainVista.setLayout(mainVistaLayout);
-        mainVistaLayout.setHorizontalGroup(
-            mainVistaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainVistaLayout.createSequentialGroup()
-                .addContainerGap(210, Short.MAX_VALUE)
-                .addGroup(mainVistaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(usuariText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(etiquetaPassword)
-                    .addComponent(etiquetaUsuari)
-                    .addComponent(inputPassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(119, 119, 119))
-        );
-        mainVistaLayout.setVerticalGroup(
-            mainVistaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mainVistaLayout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(etiquetaUsuari)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(usuariText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(etiquetaPassword)
-                .addGap(18, 18, 18)
-                .addComponent(inputPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(54, Short.MAX_VALUE))
-        );
+        mainVista.add(jPanel3, java.awt.BorderLayout.PAGE_START);
 
         jPanel1.add(mainVista, java.awt.BorderLayout.CENTER);
 
@@ -307,6 +296,8 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPanel headerVista;
     private componentsPersonalitzats.JPasswordPlaceholder inputPassword;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel mainVista;
     private javax.swing.JLabel titolVista;
     private componentsPersonalitzats.JTextFieldPersonalitzat usuariText;
