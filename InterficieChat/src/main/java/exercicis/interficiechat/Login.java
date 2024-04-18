@@ -6,6 +6,8 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import java.security.MessageDigest;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPasswordField;
@@ -17,7 +19,6 @@ import org.bson.Document;
  * @version 1.0
  */
 public class Login extends javax.swing.JFrame {
-
 
     /**
      * Creates new form Login
@@ -154,12 +155,12 @@ public class Login extends javax.swing.JFrame {
             if (numUsuaris > 0) {
                 String password = tractarPassword(this.inputPassword);
                 //long numContra = cuentasCollection.countDocuments(Filters.eq("contrasenya", password));
-                long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("usuari", nomUsuari),Filters.eq("contrasenya", password)));
-                
-                        //TODO: investigar alternativa a la consulta actual
+                long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("usuari", nomUsuari), Filters.eq("contrasenya", password)));
+
+                //TODO: investigar alternativa a la consulta actual
                 //FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.eq("contrasenya", password));
-                if(numContra > 0){
-                    FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("usuari", nomUsuari),Filters.eq("contrasenya", password)));
+                if (numContra > 0) {
+                    FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("usuari", nomUsuari), Filters.eq("contrasenya", password)));
                     for (Document infoUsuaris : resultatUsuaris) {
                         System.out.print("\nNom Usuari: " + infoUsuaris.getString("usuari"));
                         System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenya"));
@@ -170,16 +171,69 @@ public class Login extends javax.swing.JFrame {
             } else {
                 System.out.println("El usuari que estas intentant introduir, no existeix en la nostra base de dades");
             }
-            } catch (Exception e) {
-                System.out.println("Hem entrat al error... \nREVISAR CODI...");
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            System.out.println("Hem entrat al error... \nREVISAR CODI...");
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_botoLoginActionPerformed
-    
+
     private void inicialitzarInput() {
         String psw = new String(this.inputPassword.getPassword());
         this.inputPassword.setPlaceHolder("Introdueix el nom...");
         this.inputPassword.setText(this.inputPassword.getPlaceHolder());
+    }
+    
+    public String getPassword(String nomUsuari) {
+        String password = "";
+        final String URLCONNEXIO = "mongodb://localhost:27017";
+        MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
+        try ( MongoClient mongoClient = new MongoClient(uri)) {
+            MongoDatabase database = mongoClient.getDatabase("Cuentas");
+            MongoCollection<Document> comptes = database.getCollection("comptes");
+
+            long numUsuari = comptes.countDocuments(Filters.eq("nomUsuari", nomUsuari));
+            if (numUsuari > 0) {
+                FindIterable<Document> resultatUsuaris = comptes.find(Filters.eq("nomUsuari", nomUsuari));
+                for (Document row : resultatUsuaris) {
+                    password = row.getString("contrasenyaUsuari");
+                }
+                if (!password.isEmpty()) {
+                    System.out.println("Passem per aki");
+                    return password;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return password;
+    }
+
+    private void searchPassword() {
+        String password = getPassword("boix");
+        
+        //        codi de exemple per encriptar la password 
+//        fer un trycatch per el error.
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] b2 = password.getBytes();
+        md.update(b2);
+        byte[] resum2 = md.digest();        
+        String passwordComparar = new String(resum2);
+        
+        
+        if (password.equalsIgnoreCase("conltrasenuya")) {
+            
+        }
+        
+//      todo: 1.hauras de agafar la password que esta encriptada del mongodb tal qual,
+//      2.agafaras la password del JPasswordField
+//      3.encriptaras la password
+//      4.compararas la password encriptada que has agafat del mongo amb la que has encriptat del JPasswordField
+        
+//        if (Arrays.equals(resum, resum2)) {
+//            System.out.println("Les contrasenyes son iguasl");
+//        } else {
+//            System.out.println("Diferents!");
+//        }
     }
 
     /**
@@ -203,7 +257,6 @@ public class Login extends javax.swing.JFrame {
             System.out.println("Failure");
         }
     }*/
-
     /**
      * Funcio obsoleta
      */
@@ -226,7 +279,6 @@ public class Login extends javax.swing.JFrame {
             System.out.println("El usuari que estas intentant introduir, no existeix en la nostra base de dades");
         }
     }*/
-
     /**
      *
      */
@@ -246,7 +298,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     private void amagarInfoWarnings() {
-        Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
+        Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
         mongoLogger.setLevel(Level.SEVERE);
         mongoLogger.setUseParentHandlers(false);
     }
