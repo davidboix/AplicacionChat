@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPasswordField;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
 /**
  *
@@ -247,7 +246,6 @@ public class Login extends javax.swing.JFrame {
     }
 
     private void amagarInfoWarnings() {
-        //Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
         Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
         mongoLogger.setLevel(Level.SEVERE);
         mongoLogger.setUseParentHandlers(false);

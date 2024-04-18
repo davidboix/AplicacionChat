@@ -31,8 +31,9 @@ public class Client {
             byte[] keyBytes = clau.getEncoded();
             out.writeInt(keyBytes.length);
             out.write(keyBytes);
-            System.out.print("Escriu la contrasenya: ");
-            String msg = lector.nextLine();
+            //System.out.print("Escriu la contrasenya: ");
+            //String msg = lector.nextLine();
+            String msg = "tu puta madre";
             Cipher aesCipher = Cipher.getInstance("AES");
             aesCipher.init(Cipher.ENCRYPT_MODE, clau);
             byte[] msgEncriptat = aesCipher.doFinal(msg.getBytes());

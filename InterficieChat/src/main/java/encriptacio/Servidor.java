@@ -2,8 +2,10 @@ package encriptacio;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -14,7 +16,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -30,9 +35,11 @@ public class Servidor {
 
     private String ipServidor;
     private int portServidor;
-    public Servidor () {
-        
+
+    public Servidor() {
+
     }
+
     /**
      *
      * @param ipServidor
@@ -135,7 +142,7 @@ public class Servidor {
         }
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String nomUsuari, String password) {
         final String URLCONNEXIO = "mongodb://localhost:27017";
 
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
@@ -145,7 +152,7 @@ public class Servidor {
             MongoCollection<Document> comptes = database.getCollection("comptes");
 
             //TODO: Haurem de verificar que poden haver mes de un usuari amb el meu mateix nom i per tant no farem el insert a la base de dades.
-            Document nouUsuari = new Document("contrasenyaUsuari", password);
+            Document nouUsuari = new Document("nomUsuari", nomUsuari).append("contrasenyaUsuari", password);
 
             comptes.insertOne(nouUsuari);
             System.out.println("Hem introduit un nou usuari...");
@@ -155,10 +162,42 @@ public class Servidor {
         }
     }
 
+    private void amagarInfoWarnings() {
+        Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
+        mongoLogger.setLevel(Level.WARNING);
+        mongoLogger.setUseParentHandlers(false);
+    }
+
+    public String getPassword(String nomUsuari) {
+        String password = "";
+        final String URLCONNEXIO = "mongodb://localhost:27017";
+        MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
+        try ( MongoClient mongoClient = new MongoClient(uri)) {
+            MongoDatabase database = mongoClient.getDatabase("Cuentas");
+            MongoCollection<Document> comptes = database.getCollection("comptes");
+
+            long numUsuari = comptes.countDocuments(Filters.eq("nomUsuari", nomUsuari));
+            if (numUsuari > 0) {
+                FindIterable<Document> resultatUsuaris = comptes.find(Filters.eq("nomUsuari", nomUsuari));
+                for (Document row : resultatUsuaris) {
+                    password = row.getString("contrasenyaUsuari");
+                }
+                if (!password.isEmpty()) {
+                    System.out.println("Passem per aki");
+                    return password;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return password;
+    }
+
     public static void main(String[] args) {
         final String IP = "localhost";
         final int PORT = 12345;
         Servidor servidor = new Servidor();
+        servidor.amagarInfoWarnings();
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             ServerSocket server = new ServerSocket(PORT);
@@ -173,35 +212,43 @@ public class Servidor {
 
                 byte[] keyBytes = new byte[dip.readInt()];
                 dip.readFully(keyBytes);
-                
+
                 SecretKey clau = new SecretKeySpec(keyBytes, "AES");
 
                 int msgLength = dip.readInt();
                 byte[] msgEncriptat = new byte[msgLength];
                 dip.readFully(msgEncriptat);
-                
+
                 Cipher aesCipher = Cipher.getInstance("AES");
                 aesCipher.init(Cipher.DECRYPT_MODE, clau);
-                
+
                 byte[] msgDesencriptat = aesCipher.doFinal(msgEncriptat);
                 String missatge = new String(msgDesencriptat);
-                
+
                 String base64String = Base64.getEncoder().encodeToString(msgEncriptat);
-                servidor.setPassword(base64String);
-                
+                //servidor.setPassword(base64String);
+
                 System.out.println("Missatge desencriptat: " + missatge);
-                byte [] b1 = missatge.getBytes();
-                
+                byte[] b1 = missatge.getBytes();
                 md.update(b1);
+                byte[] resum = md.digest();
+                String base64Stringss = Base64.getEncoder().encodeToString(resum);
+                servidor.setPassword("boix",base64Stringss);
                 
-                System.out.println();
-                
-                byte [] resum = md.digest();
-                
-                System.out.println("RESUMEN " + "SHA-256: " + new String(resum));
-                
+                String password = servidor.getPassword("boix");
+                byte[] b2 = password.getBytes();
+                md.update(b2);
+                byte[] resum2 = md.digest();
+                if (Arrays.equals(resum, resum2)) {
+                    System.out.println("Les contrasenyes son iguasl");
+                } else {
+                    System.out.println("Diferents!");
+                }
+                System.out.println("RESUMEN SHA-256: " + new String(resum));
+
+//                System.out.println("RESUMEN2 SHA-256: " + new String(resum2));
                 socket.close();
-                System.out.println("Servidor tornant a escoltar...");
+                System.out.println("\nServidor tornant a escoltar...");
             }
 
         } catch (Exception e) {
