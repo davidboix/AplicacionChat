@@ -64,10 +64,10 @@ public class Registre extends javax.swing.JFrame {
         etiquetaPassword = new javax.swing.JLabel();
         inputNom = new componentsPersonalitzats.JTextFieldPersonalitzat();
         inputCognom = new componentsPersonalitzats.JTextFieldPersonalitzat();
-        inputEdat = new componentsPersonalitzats.JTextFieldPersonalitzat();
         inputCorreu = new componentsPersonalitzats.JTextFieldPersonalitzat();
         inputUsuari = new componentsPersonalitzats.JTextFieldPersonalitzat();
         inputPassword = new componentsPersonalitzats.JPasswordPlaceholder();
+        inputEdat = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registre");
@@ -136,14 +136,14 @@ public class Registre extends javax.swing.JFrame {
         inputNom.setBounds(260, 50, 150, 23);
         mainVista.add(inputCognom);
         inputCognom.setBounds(260, 110, 150, 23);
-        mainVista.add(inputEdat);
-        inputEdat.setBounds(260, 170, 150, 23);
         mainVista.add(inputCorreu);
         inputCorreu.setBounds(260, 230, 150, 23);
         mainVista.add(inputUsuari);
         inputUsuari.setBounds(260, 290, 150, 23);
         mainVista.add(inputPassword);
         inputPassword.setBounds(260, 350, 150, 22);
+        mainVista.add(inputEdat);
+        inputEdat.setBounds(260, 170, 150, 22);
 
         vistaGeneral.add(mainVista, java.awt.BorderLayout.CENTER);
 
@@ -171,7 +171,7 @@ public class Registre extends javax.swing.JFrame {
         System.out.println(this.inputNom.getText());
         boolean isNomValid = validarInputs(this.inputNom, this.etiquetaNom);
         boolean isCognomValid = validarInputs(this.inputCognom, this.etiquetaCognom);
-        boolean isEdatValid = validarInputs(this.inputEdat, this.etiquetaEdat);
+//        boolean isEdatValid = validarInputs(this.inputEdat, this.etiquetaEdat);
 
         boolean isCorreuValid = validarInputs(this.inputCorreu, this.etiquetaCorreu);
 
@@ -199,11 +199,11 @@ public class Registre extends javax.swing.JFrame {
                 System.out.println("Siusplau, introdueix una contraenya que estigui entre 8 caracters i 20 caracters");
             }
 
-            if (isCognomValid && isNomValid && isEdatValid && isCorreuValid && isUsuariValid) {
+//            if (isCognomValid && isNomValid && isEdatValid && isCorreuValid && isUsuariValid) {
                 System.out.println("Tot esta correcte!");
 
-                inicialitzarDades(this.inputNom.getText(), this.inputCognom.getText(), Integer.valueOf(this.inputEdat.getText()), this.inputCorreu.getText(), this.inputUsuari.getText(), this.inputPassword.getText());
-            }
+//                inicialitzarDades(this.inputNom.getText(), this.inputCognom.getText(), Integer.valueOf(this.inputEdat.getText()), this.inputCorreu.getText(), this.inputUsuari.getText(), this.inputPassword.getText());
+//            }
         } else {
             System.out.println("Esta buit");
         }
@@ -239,9 +239,8 @@ public class Registre extends javax.swing.JFrame {
 
         this.inputCognom.setPlaceHolder("Introdueix el teu cognom");
         this.inputCognom.setText(this.inputCognom.getPlaceHolder());
-
-        this.inputEdat.setPlaceHolder("Introdueix la teva edat");
-        this.inputEdat.setText(this.inputEdat.getPlaceHolder());
+//        this.inputEdat.setPlaceHolder("Introdueix la teva edat");
+//        this.inputEdat.setText(this.inputEdat.getPlaceHolder());
 
         this.inputCorreu.setPlaceHolder("Introdueix el teu correu");
         this.inputCorreu.setText(this.inputCorreu.getPlaceHolder());
@@ -429,7 +428,7 @@ public class Registre extends javax.swing.JFrame {
     private javax.swing.JPanel headerVista;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputCognom;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputCorreu;
-    private componentsPersonalitzats.JTextFieldPersonalitzat inputEdat;
+    private com.toedter.calendar.JDateChooser inputEdat;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputNom;
     private componentsPersonalitzats.JPasswordPlaceholder inputPassword;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputUsuari;
