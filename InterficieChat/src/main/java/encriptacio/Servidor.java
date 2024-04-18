@@ -235,16 +235,16 @@ public class Servidor {
                 String base64Stringss = Base64.getEncoder().encodeToString(resum);
                 servidor.setPassword("boix",base64Stringss);
                 
-                String password = servidor.getPassword("boix");
-                byte[] b2 = password.getBytes();
-                md.update(b2);
-                byte[] resum2 = md.digest();
-                if (Arrays.equals(resum, resum2)) {
-                    System.out.println("Les contrasenyes son iguasl");
-                } else {
-                    System.out.println("Diferents!");
-                }
-                System.out.println("RESUMEN SHA-256: " + new String(resum));
+//                String password = servidor.getPassword("boix");
+//                byte[] b2 = password.getBytes();
+//                md.update(b2);
+//                byte[] resum2 = md.digest();
+//                if (Arrays.equals(resum, resum2)) {
+//                    System.out.println("Les contrasenyes son iguasl");
+//                } else {
+//                    System.out.println("Diferents!");
+//                }
+//                System.out.println("RESUMEN SHA-256: " + new String(resum));
 
 //                System.out.println("RESUMEN2 SHA-256: " + new String(resum2));
                 socket.close();

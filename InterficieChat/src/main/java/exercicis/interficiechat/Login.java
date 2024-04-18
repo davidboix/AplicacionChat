@@ -7,7 +7,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPasswordField;
@@ -133,7 +135,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void usuariTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuariTextActionPerformed
-        this.usuariText.setFont(new java.awt.Font("Noto Sans", 0, 12));
+
     }//GEN-LAST:event_usuariTextActionPerformed
 
     private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
@@ -150,10 +152,17 @@ public class Login extends javax.swing.JFrame {
             MongoDatabase database = mongoClient.getDatabase("Cuentas");
             MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
 
-            long numUsuaris = cuentasCollection.countDocuments(Filters.eq("usuari", nomUsuari));
+            long numUsuaris = cuentasCollection.countDocuments(Filters.eq("nomUsuari", nomUsuari));
 
             if (numUsuaris > 0) {
                 String password = tractarPassword(this.inputPassword);
+                boolean isTrue = searchPassword(password);
+                if (isTrue) {
+                    System.out.println("esta be");
+                } else {
+                    System.out.println("malmaent");
+                }
+                
                 //long numContra = cuentasCollection.countDocuments(Filters.eq("contrasenya", password));
                 long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("usuari", nomUsuari), Filters.eq("contrasenya", password)));
 
@@ -207,22 +216,38 @@ public class Login extends javax.swing.JFrame {
         }
         return password;
     }
-
-    private void searchPassword() {
+/**
+ * Funci la qual compare si la contrasenya introduida es igual 
+ * @param searchPassword
+ * @return true si les contrasenyes encriptades son iguals, si no ho son, return false
+ */
+    private boolean searchPassword(String searchPassword) {
         String password = getPassword("boix");
         
-        //        codi de exemple per encriptar la password 
-//        fer un trycatch per el error.
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] b2 = password.getBytes();
-        md.update(b2);
-        byte[] resum2 = md.digest();        
-        String passwordComparar = new String(resum2);
-        
-        
-        if (password.equalsIgnoreCase("conltrasenuya")) {
+        try{
+            //        codi de exemple per encriptar la password 
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] b2 = searchPassword.getBytes();
+            md.update(b2);
+            byte[] resum2 = md.digest();        
+            String passwordComparar = new String(resum2);
             
+            String base64String = Base64.getEncoder().encodeToString(resum2);
+            
+            System.out.println(password +"+"+ base64String);
+            
+            
+            if (password.equalsIgnoreCase(base64String)) {
+                return true;
+            }
+        } catch (NoSuchAlgorithmException nsae){
+            System.out.println("Error encriptacio");
         }
+        
+        return false;
+        
+        
+        
         
 //      todo: 1.hauras de agafar la password que esta encriptada del mongodb tal qual,
 //      2.agafaras la password del JPasswordField
