@@ -35,7 +35,9 @@ public class Login extends javax.swing.JFrame {
         //MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
 
     }
-
+    /**
+     * Posa un placeholder al text input del nom d'usuari
+     */
     private void inicialitzarTextInputs() {
         this.usuariText.setPlaceHolder("Introdueix el nom de l'usuari");
         this.usuariText.setText(this.usuariText.getPlaceHolder());
@@ -141,7 +143,11 @@ public class Login extends javax.swing.JFrame {
     private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
 
     }//GEN-LAST:event_loginButtonMouseClicked
-
+    /**
+     * Comprova si l'usuari i la contrasenya d'usuari són les mateixes que hi ha a la base de dades del mongo, 
+     * i et diu si l'usuari no existeix, si la contrasenya es incorrecta, i si tot està bé et deixa passar
+     * @param evt 
+     */
     private void botoLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoLoginActionPerformed
         final String URLCONNEXIO = "mongodb://localhost:27017";
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
@@ -191,7 +197,11 @@ public class Login extends javax.swing.JFrame {
         this.inputPassword.setPlaceHolder("Introdueix el nom...");
         this.inputPassword.setText(this.inputPassword.getPlaceHolder());
     }
-    
+    /**
+     * Funcio la qual buscara la contrasenya del nom d'usuari que se li passi com a paràmetre
+     * @param nomUsuari
+     * @return La contrasenya de l'usuari
+     */
     public String getPassword(String nomUsuari) {
         String password = "";
         final String URLCONNEXIO = "mongodb://localhost:27017";
@@ -217,7 +227,7 @@ public class Login extends javax.swing.JFrame {
         return password;
     }
 /**
- * Funci la qual compare si la contrasenya introduida es igual 
+ * Funcio la qual compare si la contrasenya encriptada introduida es igual a la que està a la base de dades
  * @param searchPassword
  * @return true si les contrasenyes encriptades son iguals, si no ho son, return false
  */
@@ -305,7 +315,9 @@ public class Login extends javax.swing.JFrame {
         }
     }*/
     /**
-     *
+     * Converteix la password de char a String per a poder trballar més facilment amb ella
+     * @param jpe
+     * @return Password convertida a string
      */
     private String tractarPassword(JPasswordField jpe) {
         char[] arrayPassword = jpe.getPassword();
@@ -321,7 +333,10 @@ public class Login extends javax.swing.JFrame {
         }
         return "";
     }
-
+    
+    /**
+     * Amague els missatges del mongoDB que surten a la consola quan fas anar l'aplicació
+     */
     private void amagarInfoWarnings() {
         Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
         mongoLogger.setLevel(Level.SEVERE);

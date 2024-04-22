@@ -196,6 +196,7 @@ public class Servidor {
     public static void main(String[] args) {
         final String IP = "localhost";
         final int PORT = 12345;
+        int clientCount = 0;
         Servidor servidor = new Servidor();
         servidor.amagarInfoWarnings();
         try {
@@ -204,8 +205,9 @@ public class Servidor {
             System.out.println("Servidor obert...");
 
             while (true) {
+                clientCount++;
                 Socket socket = server.accept();
-                System.out.println("Client connectat...");
+                System.out.println("Client connectat..." + clientCount);
 
                 DataOutputStream out = new DataOutputStream(socket.getOutputStream());
                 DataInputStream dip = new DataInputStream(socket.getInputStream());
@@ -229,11 +231,12 @@ public class Servidor {
                 //servidor.setPassword(base64String);
 
                 System.out.println("Missatge desencriptat: " + missatge);
-                byte[] b1 = missatge.getBytes();
+                //Comentat per fer proves
+                /*byte[] b1 = missatge.getBytes();
                 md.update(b1);
                 byte[] resum = md.digest();
                 String base64Stringss = Base64.getEncoder().encodeToString(resum);
-                servidor.setPassword("boix",base64Stringss);
+                servidor.setPassword("boix",base64Stringss);*/
                 
 //                String password = servidor.getPassword("boix");
 //                byte[] b2 = password.getBytes();

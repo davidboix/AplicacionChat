@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
 package encriptacio;
 
 import java.io.DataInputStream;
@@ -10,11 +14,13 @@ import javax.crypto.SecretKey;
 
 /**
  *
- * @author David Boix Sanchez
- * @version 1.0
+ * @author dam
  */
-public class Client {
-    
+public class Client2 {
+
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         Scanner lector = new Scanner(System.in);
         final String IPSERVIDOR = "localhost";
@@ -33,7 +39,7 @@ public class Client {
             out.write(keyBytes);
             //System.out.print("Escriu la contrasenya: ");
             //String msg = lector.nextLine();
-            String msg = "tu santa madre";
+            String msg = "tu santissima madre";
             Cipher aesCipher = Cipher.getInstance("AES");
             aesCipher.init(Cipher.ENCRYPT_MODE, clau);
             byte[] msgEncriptat = aesCipher.doFinal(msg.getBytes());
@@ -48,5 +54,5 @@ public class Client {
         }
 
     }
-
+    
 }
