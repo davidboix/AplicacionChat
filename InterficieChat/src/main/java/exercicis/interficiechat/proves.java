@@ -1,10 +1,12 @@
 package exercicis.interficiechat;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
  *
  * @author David Boix Sanchez
+ * @version 1.0
  *
  */
 public class proves extends javax.swing.JFrame {
@@ -105,31 +107,90 @@ public class proves extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Funcio que farem servir per utilitzar com guardarem el dia que s'ha
+     * enviat un missatge
+     *
+     * @param evt
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        String dataString = this.inputData.getDateFormatString();
-        System.out.println("Utilitzant getDateFormatString: " + dataString);
+
         Date data = this.inputData.getDate();
-        String diaSeleccionat = "";
+        
+        Calendar dataActual = Calendar.getInstance();
+        int diaActual = dataActual.get(Calendar.DAY_OF_MONTH);
+        int mesActual = dataActual.get(Calendar.MONTH);
+        int anyActual = dataActual.get(Calendar.YEAR);
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(data);
+        int diaSemana = cal.get(Calendar.DAY_OF_WEEK) - 1;
+        int diaCalendari = cal.get(Calendar.DAY_OF_MONTH);
+        int mesCalendari = cal.get(Calendar.MONTH);
+        int anyCalendari = cal.get(Calendar.YEAR);
+
+        String diaSetmana = "";
         String mesSeleccionat = "";
-        String[] dies = {"Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte", "Diumenge"};
-        String[] mesos = {"Gener", "Febrer", "Març", "Abril", "Mai", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"};
+        String mesActuals = "";
+        String[] dies = {"Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"};
+
+        String[] mesos = {"Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"};
+
         for (int i = 0; i < dies.length; i++) {
-            if (data.getDay() - 1 == i) {
-                diaSeleccionat = dies[i];
+            if (diaSemana == i) {
+                diaSetmana = dies[i];
             }
         }
+
         for (int i = 0; i < mesos.length; i++) {
-            if (data.getMonth() == i) {
+            if (mesCalendari == i) {
                 mesSeleccionat = mesos[i];
             }
+            if (mesActual == i) {
+                mesActuals = mesos[i];
+            }
         }
-        
-        int any = data.getYear() + 1900;
-        System.out.println("\nDia: " + diaSeleccionat + "\nMes: " + mesSeleccionat + "\nAny: " + any);
-        
+
+        /**
+         * TODO:Investigar i revisar que si el usuari, introdueix una data menor
+         * que la de avui, la seva edat sera de 23 anys, si la data que
+         * introdueix el usuari es major o igual que la data de avui, tindra 24
+         *
+         * Exemple cumpleanys: 28/04/2000
+         */
+        if (diaCalendari == diaActual && mesCalendari >= mesActual) {
+            /**
+             * TODO: Introduim que el usuari ja ha fet el cumpleanys i per tant
+             */
+            setEdat(anyActual);
+        } else {
+            /**
+             * TODO: Realitzem aquesta operacio degut a que el cumpleanys no
+             * coincideix amb la data de avui i per tant la seva edat es menor
+             */
+            setEdat(anyActual - 1);
+        }
+
+        System.out.println(diaSetmana + ", " + diaCalendari + " de " + mesSeleccionat + " de " + anyCalendari);
+
     }//GEN-LAST:event_jButton1ActionPerformed
+    /**
+     * TODO: Funcio inacabada 
+     * Funcio que farem servir per poder calcular la edat
+     * del usuari, on per parametres li passarem el any de naixement i
+     * realitzarem el calcul per obtenir la seva edat actual per quan es registri en
+     * la aplicacio de missatgeria de xat
+     *
+     * @param anyActual : Any de naixement en format enter en el qual el usuari
+     * va neixer per poder calcular la edat
+     */
+    private void setEdat(int anyActual) {
+        Date data = this.inputData.getDate();
+        Calendar cal = Calendar.getInstance();
+        int any = data.getYear() + 1900;
+        int edatUser = anyActual - any;
+        System.out.println("Edat: " + edatUser);
+    }
 
     /**
      * @param args the command line arguments
