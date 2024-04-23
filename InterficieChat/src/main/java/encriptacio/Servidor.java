@@ -9,14 +9,10 @@ import com.mongodb.client.model.Filters;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +24,7 @@ import org.bson.Document;
 
 /**
  *
- * @author David Boix Sanchez provisional : i Oleh Plechiy Tupis Andriyovech
+ * @author David Boix Sanchez provisional i Oleh Plechiy Tupis Andriyovech
  * @version 1.0
  */
 public class Servidor {
@@ -196,7 +192,7 @@ public class Servidor {
     public static void main(String[] args) {
         final String IP = "localhost";
         final int PORT = 12345;
-        int clientCount = 0;
+        int contadorClients = 0;
         Servidor servidor = new Servidor();
         servidor.amagarInfoWarnings();
         try {
@@ -205,9 +201,9 @@ public class Servidor {
             System.out.println("Servidor obert...");
 
             while (true) {
-                clientCount++;
+                contadorClients++;
                 Socket socket = server.accept();
-                System.out.println("Client connectat..." + clientCount);
+                System.out.println("Client connectat..." + contadorClients);
 
                 DataOutputStream out = new DataOutputStream(socket.getOutputStream());
                 DataInputStream dip = new DataInputStream(socket.getInputStream());
@@ -223,21 +219,29 @@ public class Servidor {
 
                 Cipher aesCipher = Cipher.getInstance("AES");
                 aesCipher.init(Cipher.DECRYPT_MODE, clau);
-
+                
                 byte[] msgDesencriptat = aesCipher.doFinal(msgEncriptat);
                 String missatge = new String(msgDesencriptat);
-
                 String base64String = Base64.getEncoder().encodeToString(msgEncriptat);
-                //servidor.setPassword(base64String);
-
                 System.out.println("Missatge desencriptat: " + missatge);
-                //Comentat per fer proves
-                /*byte[] b1 = missatge.getBytes();
-                md.update(b1);
-                byte[] resum = md.digest();
-                String base64Stringss = Base64.getEncoder().encodeToString(resum);
-                servidor.setPassword("boix",base64Stringss);*/
                 
+                byte[] keyByte = clau.getEncoded();
+                out.write(keyByte.length);
+                out.write(keyByte);
+                
+                aesCipher.init(Cipher.ENCRYPT_MODE, clau);
+                byte [] msgAEncriptar = aesCipher.doFinal(missatge.getBytes());
+                
+                out.writeInt(msgAEncriptar.length);
+                out.write(msgAEncriptar);
+                
+//                Comentat per fer proves
+//                byte[] b1 = missatge.getBytes();
+//                md.update(b1);
+//                byte[] resum = md.digest();
+//                String base64Stringss = Base64.getEncoder().encodeToString(resum);
+//                servidor.setPassword("boix",base64Stringss);*/
+//                
 //                String password = servidor.getPassword("boix");
 //                byte[] b2 = password.getBytes();
 //                md.update(b2);
@@ -248,9 +252,13 @@ public class Servidor {
 //                    System.out.println("Diferents!");
 //                }
 //                System.out.println("RESUMEN SHA-256: " + new String(resum));
-
 //                System.out.println("RESUMEN2 SHA-256: " + new String(resum2));
+
                 socket.close();
+                out.close();
+                dip.close();
+                System.out.println("Numero de clients actual: " + contadorClients);
+                contadorClients--;
                 System.out.println("\nServidor tornant a escoltar...");
             }
 
