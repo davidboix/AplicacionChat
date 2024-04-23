@@ -253,7 +253,7 @@ public class Servidor {
 //                }
 //                System.out.println("RESUMEN SHA-256: " + new String(resum));
 //                System.out.println("RESUMEN2 SHA-256: " + new String(resum2));
-
+    
                 socket.close();
                 out.close();
                 dip.close();
