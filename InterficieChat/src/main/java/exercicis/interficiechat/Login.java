@@ -189,11 +189,11 @@ public class Login extends javax.swing.JFrame {
             MongoDatabase database = mongoClient.getDatabase("Cuentas");
             MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
 
-            long numUsuaris = cuentasCollection.countDocuments(Filters.eq("nomUser", nomUsuari));
+            long numUsuaris = cuentasCollection.countDocuments(Filters.eq("nomUsuari", nomUsuari));
 
             if (numUsuaris > 0) {
                 String password = tractarPassword(this.inputPassword);
-                boolean isTrue = searchPassword(this.usuariText.getText(),password);
+                boolean isTrue = searchPassword(password);
                 if (isTrue) {
                     InterficieXat ix = new InterficieXat();
                     ix.setVisible(true);
@@ -219,11 +219,10 @@ public class Login extends javax.swing.JFrame {
                 }
                 
                 //long numContra = cuentasCollection.countDocuments(Filters.eq("contrasenya", password));
-                long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
+                long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("usuari", nomUsuari), Filters.eq("contrasenya", password)));
 
                 //TODO: investigar alternativa a la consulta actual || Funcio obsoleta
                 //FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.eq("contrasenya", password));
-<<<<<<< HEAD
 //                if (numContra > 0) {
 //                    FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("usuari", nomUsuari), Filters.eq("contrasenya", password)));
 //                    for (Document infoUsuaris : resultatUsuaris) {
@@ -233,17 +232,6 @@ public class Login extends javax.swing.JFrame {
 //                } else {
 //                    System.out.println("Thy introduced password is nonexistent in our archives");
 //                }
-=======
-                if (numContra > 0) {
-                    FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
-                    for (Document infoUsuaris : resultatUsuaris) {
-                        System.out.print("\nNom Usuari: " + infoUsuaris.getString("nomUser"));
-                        System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenyaUsuari"));
-                    }
-                } else {
-                    System.out.println("Thy introduced password is nonexistent in our archives");
-                }
->>>>>>> origin/main
             } else {
                     JOptionPane jop = new JOptionPane();
 
@@ -285,9 +273,9 @@ public class Login extends javax.swing.JFrame {
             MongoDatabase database = mongoClient.getDatabase("Cuentas");
             MongoCollection<Document> comptes = database.getCollection("comptes");
 
-            long numUsuari = comptes.countDocuments(Filters.eq("nomUser", nomUsuari));
+            long numUsuari = comptes.countDocuments(Filters.eq("nomUsuari", nomUsuari));
             if (numUsuari > 0) {
-                FindIterable<Document> resultatUsuaris = comptes.find(Filters.eq("nomUser", nomUsuari));
+                FindIterable<Document> resultatUsuaris = comptes.find(Filters.eq("nomUsuari", nomUsuari));
                 for (Document row : resultatUsuaris) {
                     password = row.getString("contrasenyaUsuari");
                 }
@@ -306,8 +294,8 @@ public class Login extends javax.swing.JFrame {
  * @param searchPassword
  * @return true si les contrasenyes encriptades son iguals, si no ho son, return false
  */
-    private boolean searchPassword(String nomUsuari,String searchPassword) {
-        String password = getPassword(nomUsuari);
+    private boolean searchPassword(String searchPassword) {
+        String password = getPassword("boix");
         
         try{
             //        codi de exemple per encriptar la password 

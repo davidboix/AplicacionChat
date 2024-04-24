@@ -60,6 +60,7 @@ public class Client {
             String missatge = new String(msgDesencriptat);
 //            String base64String = Base64.getEncoder().encodeToString(msgDesencriptat);
             System.out.println("Quantitat clients connectats: " + missatge);
+            Thread.sleep(10000);
             dip.close();
             out.close();
             cs.close();
