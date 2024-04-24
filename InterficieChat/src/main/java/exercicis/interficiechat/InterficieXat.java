@@ -43,7 +43,6 @@ public class InterficieXat extends javax.swing.JFrame {
         llistatVista = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
         mainVista = new javax.swing.JPanel();
         espaiControlMissatge = new javax.swing.JPanel();
         botoSetttings = new javax.swing.JButton();
@@ -57,20 +56,24 @@ public class InterficieXat extends javax.swing.JFrame {
 
         vistaGeneral.setLayout(new java.awt.BorderLayout());
 
-        headerVista.setLayout(new java.awt.GridBagLayout());
+        headerVista.setBackground(new java.awt.Color(203, 219, 242));
+        headerVista.setLayout(new javax.swing.BoxLayout(headerVista, javax.swing.BoxLayout.LINE_AXIS));
 
+        botoXatPrivat.setBackground(new java.awt.Color(125, 165, 221));
         botoXatPrivat.setToolTipText("Boto que ens serveix per enviar missatges per privat");
-        headerVista.add(botoXatPrivat, new java.awt.GridBagConstraints());
+        headerVista.add(botoXatPrivat);
 
+        botoXatGrupal.setBackground(new java.awt.Color(125, 165, 221));
         botoXatGrupal.setToolTipText("Boto que ens serveix per enviar missatges per al grup general");
-        headerVista.add(botoXatGrupal, new java.awt.GridBagConstraints());
+        headerVista.add(botoXatGrupal);
 
         titolXat.setText("COSTAXAT");
         titolXat.setToolTipText("Titol de la nostra aplicacio de missatgeria");
-        headerVista.add(titolXat, new java.awt.GridBagConstraints());
+        headerVista.add(titolXat);
 
         vistaGeneral.add(headerVista, java.awt.BorderLayout.PAGE_START);
 
+        llistatVista.setBackground(new java.awt.Color(203, 219, 242));
         llistatVista.setLayout(new java.awt.BorderLayout());
 
         jButton3.setText("Client 1");
@@ -79,24 +82,24 @@ public class InterficieXat extends javax.swing.JFrame {
         jLabel2.setText("Llistat usuaris connectats");
         llistatVista.add(jLabel2, java.awt.BorderLayout.PAGE_START);
 
-        jButton5.setText("Client 2");
-        llistatVista.add(jButton5, java.awt.BorderLayout.PAGE_END);
-
         vistaGeneral.add(llistatVista, java.awt.BorderLayout.LINE_START);
 
         mainVista.setLayout(new java.awt.BorderLayout());
 
+        espaiControlMissatge.setBackground(new java.awt.Color(203, 219, 242));
         espaiControlMissatge.setToolTipText("");
         espaiControlMissatge.setLayout(new java.awt.GridBagLayout());
 
+        botoSetttings.setBackground(new java.awt.Color(125, 165, 221));
         botoSetttings.setToolTipText("Boto que no te cap funcio");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 25);
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         espaiControlMissatge.add(botoSetttings, gridBagConstraints);
 
+        botoEnviarMsg.setBackground(new java.awt.Color(125, 165, 221));
         botoEnviarMsg.setText("Enviar ");
         botoEnviarMsg.setToolTipText("Boto que serveix per enviar missatges al xat");
         botoEnviarMsg.addActionListener(new java.awt.event.ActionListener() {
@@ -107,15 +110,19 @@ public class InterficieXat extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 25);
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         espaiControlMissatge.add(botoEnviarMsg, gridBagConstraints);
 
         inputMsg.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 50;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 20);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 100);
         espaiControlMissatge.add(inputMsg, gridBagConstraints);
 
         mainVista.add(espaiControlMissatge, java.awt.BorderLayout.PAGE_END);
@@ -138,7 +145,7 @@ public class InterficieXat extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(vistaGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(vistaGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
         );
 
         pack();
@@ -303,7 +310,6 @@ public class InterficieXat extends javax.swing.JFrame {
     private javax.swing.JPanel headerVista;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputMsg;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel llistatVista;
