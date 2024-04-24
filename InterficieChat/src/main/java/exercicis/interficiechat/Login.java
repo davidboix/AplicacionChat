@@ -51,17 +51,18 @@ public class Login extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
         headerVista = new javax.swing.JPanel();
         titolVista = new javax.swing.JLabel();
         mainVista = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        etiquetaPassword = new javax.swing.JLabel();
+        inputPassword = new componentsPersonalitzats.JPasswordPlaceholder();
         etiquetaUsuari = new javax.swing.JLabel();
         usuariText = new componentsPersonalitzats.JTextFieldPersonalitzat();
         jPanel3 = new javax.swing.JPanel();
-        etiquetaPassword = new javax.swing.JLabel();
-        inputPassword = new componentsPersonalitzats.JPasswordPlaceholder();
         footerVista = new javax.swing.JPanel();
         botoLogin = new javax.swing.JButton();
 
@@ -73,9 +74,11 @@ public class Login extends javax.swing.JFrame {
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         headerVista.setBackground(new java.awt.Color(203, 219, 242));
+        headerVista.setToolTipText("Espai del titol");
 
         titolVista.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
         titolVista.setText("Inicia sessió");
+        titolVista.setToolTipText("Titol del inici de sessio");
         headerVista.add(titolVista);
 
         jPanel1.add(headerVista, java.awt.BorderLayout.PAGE_START);
@@ -84,35 +87,60 @@ public class Login extends javax.swing.JFrame {
         mainVista.setLayout(new java.awt.BorderLayout());
 
         jPanel2.setBackground(new java.awt.Color(203, 219, 242));
+        jPanel2.setToolTipText("Espai d'introducció d'informació");
         jPanel2.setPreferredSize(new java.awt.Dimension(434, 100));
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        etiquetaPassword.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
+        etiquetaPassword.setText("Contrasenya");
+        etiquetaPassword.setToolTipText("Contrasenya");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel2.add(etiquetaPassword, gridBagConstraints);
+
+        inputPassword.setToolTipText("Contrasenya de l'usuari");
+        inputPassword.setEchoChar('\u0000');
+        inputPassword.setFocusCycleRoot(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel2.add(inputPassword, gridBagConstraints);
 
         etiquetaUsuari.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
         etiquetaUsuari.setText("Usuari");
-        jPanel2.add(etiquetaUsuari);
-        jPanel2.add(usuariText);
+        etiquetaUsuari.setToolTipText("Usuari");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel2.add(etiquetaUsuari, gridBagConstraints);
+
+        usuariText.setToolTipText("Nom de l'usuari");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel2.add(usuariText, gridBagConstraints);
 
         mainVista.add(jPanel2, java.awt.BorderLayout.CENTER);
 
         jPanel3.setBackground(new java.awt.Color(203, 219, 242));
-
-        etiquetaPassword.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
-        etiquetaPassword.setText("Contrasenya");
-        jPanel3.add(etiquetaPassword);
-
-        inputPassword.setToolTipText("");
-        inputPassword.setEchoChar('\u0000');
-        inputPassword.setFocusCycleRoot(true);
-        jPanel3.add(inputPassword);
-
         mainVista.add(jPanel3, java.awt.BorderLayout.PAGE_START);
 
         jPanel1.add(mainVista, java.awt.BorderLayout.CENTER);
 
         footerVista.setBackground(new java.awt.Color(203, 219, 242));
+        footerVista.setToolTipText("Espai del boto de login");
 
         botoLogin.setBackground(new java.awt.Color(125, 165, 221));
         botoLogin.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
         botoLogin.setText("Login");
+        botoLogin.setToolTipText("Boto del login");
         botoLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botoLoginActionPerformed(evt);
