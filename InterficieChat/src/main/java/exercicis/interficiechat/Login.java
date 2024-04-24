@@ -38,6 +38,7 @@ public class Login extends javax.swing.JFrame {
         //MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
 
     }
+
     /**
      * Posa un placeholder al text input del nom d'usuari
      */
@@ -175,9 +176,11 @@ public class Login extends javax.swing.JFrame {
 
     }//GEN-LAST:event_loginButtonMouseClicked
     /**
-     * Comprova si l'usuari i la contrasenya d'usuari són les mateixes que hi ha a la base de dades del mongo, 
-     * i et diu si l'usuari no existeix, si la contrasenya es incorrecta, i si tot està bé et deixa passar
-     * @param evt 
+     * Comprova si l'usuari i la contrasenya d'usuari són les mateixes que hi ha
+     * a la base de dades del mongo, i et diu si l'usuari no existeix, si la
+     * contrasenya es incorrecta, i si tot està bé et deixa passar
+     *
+     * @param evt
      */
     private void botoLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoLoginActionPerformed
         final String URLCONNEXIO = "mongodb://localhost:27017";
@@ -193,7 +196,7 @@ public class Login extends javax.swing.JFrame {
 
             if (numUsuaris > 0) {
                 String password = tractarPassword(this.inputPassword);
-                boolean isTrue = searchPassword(this.usuariText.getText(),password);
+                boolean isTrue = searchPassword(this.usuariText.getText(), password);
                 if (isTrue) {
                     InterficieXat ix = new InterficieXat();
                     ix.setVisible(true);
@@ -215,15 +218,13 @@ public class Login extends javax.swing.JFrame {
                             opcions[0]
                     );
 
-
                 }
-                
+
                 //long numContra = cuentasCollection.countDocuments(Filters.eq("contrasenya", password));
-                long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
+                long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenya", password)));
 
                 //TODO: investigar alternativa a la consulta actual || Funcio obsoleta
                 //FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.eq("contrasenya", password));
-<<<<<<< HEAD
 //                if (numContra > 0) {
 //                    FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("usuari", nomUsuari), Filters.eq("contrasenya", password)));
 //                    for (Document infoUsuaris : resultatUsuaris) {
@@ -233,33 +234,22 @@ public class Login extends javax.swing.JFrame {
 //                } else {
 //                    System.out.println("Thy introduced password is nonexistent in our archives");
 //                }
-=======
-                if (numContra > 0) {
-                    FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
-                    for (Document infoUsuaris : resultatUsuaris) {
-                        System.out.print("\nNom Usuari: " + infoUsuaris.getString("nomUser"));
-                        System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenyaUsuari"));
-                    }
-                } else {
-                    System.out.println("Thy introduced password is nonexistent in our archives");
-                }
->>>>>>> origin/main
             } else {
-                    JOptionPane jop = new JOptionPane();
+                JOptionPane jop = new JOptionPane();
 
-                    String[] opcions = {"Acceptar"};
-                    //JLabel imagenLabel = new JLabel(new ImageIcon("src\\main\\java\\img\\passwordErroni.png"));
-                    ImageIcon icon = new ImageIcon("src\\main\\java\\img\\usuariInexistent.png");
-                    jop.showOptionDialog(
-                            null,
-                            "El usuari que estas intentant introduir, no existeix en la nostra base de dades",
-                            "Usuari inexistent",
-                            jop.DEFAULT_OPTION,
-                            jop.WARNING_MESSAGE,
-                            icon,
-                            opcions,
-                            opcions[0]
-                    );
+                String[] opcions = {"Acceptar"};
+                //JLabel imagenLabel = new JLabel(new ImageIcon("src\\main\\java\\img\\passwordErroni.png"));
+                ImageIcon icon = new ImageIcon("src\\main\\java\\img\\usuariInexistent.png");
+                jop.showOptionDialog(
+                        null,
+                        "El usuari que estas intentant introduir, no existeix en la nostra base de dades",
+                        "Usuari inexistent",
+                        jop.DEFAULT_OPTION,
+                        jop.WARNING_MESSAGE,
+                        icon,
+                        opcions,
+                        opcions[0]
+                );
             }
         } catch (Exception e) {
             System.out.println("Hem entrat al error... \nREVISAR CODI...");
@@ -272,8 +262,11 @@ public class Login extends javax.swing.JFrame {
         this.inputPassword.setPlaceHolder("Introdueix el nom...");
         this.inputPassword.setText(this.inputPassword.getPlaceHolder());
     }
+
     /**
-     * Funcio la qual buscara la contrasenya del nom d'usuari que se li passi com a paràmetre
+     * Funcio la qual buscara la contrasenya del nom d'usuari que se li passi
+     * com a paràmetre
+     *
      * @param nomUsuari
      * @return La contrasenya de l'usuari
      */
@@ -301,44 +294,43 @@ public class Login extends javax.swing.JFrame {
         }
         return password;
     }
-/**
- * Funcio la qual compare si la contrasenya encriptada introduida es igual a la que està a la base de dades
- * @param searchPassword
- * @return true si les contrasenyes encriptades son iguals, si no ho son, return false
- */
-    private boolean searchPassword(String nomUsuari,String searchPassword) {
+
+    /**
+     * Funcio la qual compare si la contrasenya encriptada introduida es igual a
+     * la que està a la base de dades
+     *
+     * @param searchPassword
+     * @return true si les contrasenyes encriptades son iguals, si no ho son,
+     * return false
+     */
+    private boolean searchPassword(String nomUsuari, String searchPassword) {
         String password = getPassword(nomUsuari);
-        
-        try{
+
+        try {
             //        codi de exemple per encriptar la password 
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] b2 = searchPassword.getBytes();
             md.update(b2);
-            byte[] resum2 = md.digest();        
+            byte[] resum2 = md.digest();
             String passwordComparar = new String(resum2);
-            
+
             String base64String = Base64.getEncoder().encodeToString(resum2);
-            
-            System.out.println(password +"+"+ base64String);
-            
-            
+
+            System.out.println(password + "+" + base64String);
+
             if (password.equalsIgnoreCase(base64String)) {
                 return true;
             }
-        } catch (NoSuchAlgorithmException nsae){
+        } catch (NoSuchAlgorithmException nsae) {
             System.out.println("Error encriptacio");
         }
-        
+
         return false;
-        
-        
-        
-        
+
 //      todo: 1.hauras de agafar la password que esta encriptada del mongodb tal qual,
 //      2.agafaras la password del JPasswordField
 //      3.encriptaras la password
 //      4.compararas la password encriptada que has agafat del mongo amb la que has encriptat del JPasswordField
-        
 //        if (Arrays.equals(resum, resum2)) {
 //            System.out.println("Les contrasenyes son iguasl");
 //        } else {
@@ -390,7 +382,9 @@ public class Login extends javax.swing.JFrame {
         }
     }*/
     /**
-     * Converteix la password de char a String per a poder trballar més facilment amb ella
+     * Converteix la password de char a String per a poder trballar més
+     * facilment amb ella
+     *
      * @param jpe
      * @return Password convertida a string
      */
@@ -408,9 +402,10 @@ public class Login extends javax.swing.JFrame {
         }
         return "";
     }
-    
+
     /**
-     * Amague els missatges del mongoDB que surten a la consola quan fas anar l'aplicació
+     * Amague els missatges del mongoDB que surten a la consola quan fas anar
+     * l'aplicació
      */
     private void amagarInfoWarnings() {
         Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
