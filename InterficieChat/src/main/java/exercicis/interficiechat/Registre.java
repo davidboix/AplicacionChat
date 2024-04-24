@@ -51,6 +51,7 @@ public class Registre extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         vistaGeneral = new javax.swing.JPanel();
         footerVista = new javax.swing.JPanel();
@@ -102,50 +103,86 @@ public class Registre extends javax.swing.JFrame {
         vistaGeneral.add(headerVista, java.awt.BorderLayout.PAGE_START);
 
         mainVista.setBackground(new java.awt.Color(203, 219, 242));
-        mainVista.setLayout(null);
+        mainVista.setLayout(new java.awt.GridBagLayout());
 
         etiquetaNom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaNom.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         etiquetaNom.setText("Nom");
-        mainVista.add(etiquetaNom);
-        etiquetaNom.setBounds(260, 20, 30, 20);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        mainVista.add(etiquetaNom, gridBagConstraints);
 
         etiquetaCognom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaCognom.setText("Cognoms");
-        mainVista.add(etiquetaCognom);
-        etiquetaCognom.setBounds(260, 80, 59, 20);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        mainVista.add(etiquetaCognom, gridBagConstraints);
 
         etiquetaEdat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaEdat.setText("Edat");
-        mainVista.add(etiquetaEdat);
-        etiquetaEdat.setBounds(260, 140, 27, 20);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        mainVista.add(etiquetaEdat, gridBagConstraints);
 
         etiquetaCorreu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaCorreu.setText("Correu");
-        mainVista.add(etiquetaCorreu);
-        etiquetaCorreu.setBounds(260, 200, 42, 20);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        mainVista.add(etiquetaCorreu, gridBagConstraints);
 
         etiquetaUsuari.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaUsuari.setText("Usuari");
-        mainVista.add(etiquetaUsuari);
-        etiquetaUsuari.setBounds(260, 260, 39, 20);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        mainVista.add(etiquetaUsuari, gridBagConstraints);
 
         etiquetaPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaPassword.setText("Contrasenya");
-        mainVista.add(etiquetaPassword);
-        etiquetaPassword.setBounds(260, 320, 77, 20);
-        mainVista.add(inputNom);
-        inputNom.setBounds(260, 50, 150, 23);
-        mainVista.add(inputCognom);
-        inputCognom.setBounds(260, 110, 150, 23);
-        mainVista.add(inputCorreu);
-        inputCorreu.setBounds(260, 230, 150, 23);
-        mainVista.add(inputUsuari);
-        inputUsuari.setBounds(260, 290, 150, 23);
-        mainVista.add(inputPassword);
-        inputPassword.setBounds(260, 350, 150, 22);
-        mainVista.add(inputEdat);
-        inputEdat.setBounds(260, 170, 150, 22);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        mainVista.add(etiquetaPassword, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        mainVista.add(inputNom, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        mainVista.add(inputCognom, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        mainVista.add(inputCorreu, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        mainVista.add(inputUsuari, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        mainVista.add(inputPassword, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        mainVista.add(inputEdat, gridBagConstraints);
 
         vistaGeneral.add(mainVista, java.awt.BorderLayout.CENTER);
 
@@ -153,7 +190,7 @@ public class Registre extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(vistaGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
+            .addComponent(vistaGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 984, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
