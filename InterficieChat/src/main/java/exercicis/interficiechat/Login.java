@@ -158,11 +158,11 @@ public class Login extends javax.swing.JFrame {
             MongoDatabase database = mongoClient.getDatabase("Cuentas");
             MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
 
-            long numUsuaris = cuentasCollection.countDocuments(Filters.eq("nomUsuari", nomUsuari));
+            long numUsuaris = cuentasCollection.countDocuments(Filters.eq("nomUser", nomUsuari));
 
             if (numUsuaris > 0) {
                 String password = tractarPassword(this.inputPassword);
-                boolean isTrue = searchPassword(password);
+                boolean isTrue = searchPassword(this.usuariText.getText(),password);
                 if (isTrue) {
                     System.out.println("esta be");
                 } else {
@@ -170,15 +170,15 @@ public class Login extends javax.swing.JFrame {
                 }
                 
                 //long numContra = cuentasCollection.countDocuments(Filters.eq("contrasenya", password));
-                long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("usuari", nomUsuari), Filters.eq("contrasenya", password)));
+                long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
 
                 //TODO: investigar alternativa a la consulta actual
                 //FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.eq("contrasenya", password));
                 if (numContra > 0) {
-                    FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("usuari", nomUsuari), Filters.eq("contrasenya", password)));
+                    FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
                     for (Document infoUsuaris : resultatUsuaris) {
-                        System.out.print("\nNom Usuari: " + infoUsuaris.getString("usuari"));
-                        System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenya"));
+                        System.out.print("\nNom Usuari: " + infoUsuaris.getString("nomUser"));
+                        System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenyaUsuari"));
                     }
                 } else {
                     System.out.println("Thy introduced password is nonexistent in our archives");
@@ -210,9 +210,9 @@ public class Login extends javax.swing.JFrame {
             MongoDatabase database = mongoClient.getDatabase("Cuentas");
             MongoCollection<Document> comptes = database.getCollection("comptes");
 
-            long numUsuari = comptes.countDocuments(Filters.eq("nomUsuari", nomUsuari));
+            long numUsuari = comptes.countDocuments(Filters.eq("nomUser", nomUsuari));
             if (numUsuari > 0) {
-                FindIterable<Document> resultatUsuaris = comptes.find(Filters.eq("nomUsuari", nomUsuari));
+                FindIterable<Document> resultatUsuaris = comptes.find(Filters.eq("nomUser", nomUsuari));
                 for (Document row : resultatUsuaris) {
                     password = row.getString("contrasenyaUsuari");
                 }
@@ -231,8 +231,8 @@ public class Login extends javax.swing.JFrame {
  * @param searchPassword
  * @return true si les contrasenyes encriptades son iguals, si no ho son, return false
  */
-    private boolean searchPassword(String searchPassword) {
-        String password = getPassword("boix");
+    private boolean searchPassword(String nomUsuari,String searchPassword) {
+        String password = getPassword(nomUsuari);
         
         try{
             //        codi de exemple per encriptar la password 
