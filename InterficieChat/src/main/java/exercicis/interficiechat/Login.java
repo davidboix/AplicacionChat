@@ -223,6 +223,7 @@ public class Login extends javax.swing.JFrame {
 
                 //TODO: investigar alternativa a la consulta actual || Funcio obsoleta
                 //FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.eq("contrasenya", password));
+<<<<<<< HEAD
 //                if (numContra > 0) {
 //                    FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("usuari", nomUsuari), Filters.eq("contrasenya", password)));
 //                    for (Document infoUsuaris : resultatUsuaris) {
@@ -232,6 +233,17 @@ public class Login extends javax.swing.JFrame {
 //                } else {
 //                    System.out.println("Thy introduced password is nonexistent in our archives");
 //                }
+=======
+                if (numContra > 0) {
+                    FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("usuari", nomUsuari), Filters.eq("contrasenya", password)));
+                    for (Document infoUsuaris : resultatUsuaris) {
+                        System.out.print("\nNom Usuari: " + infoUsuaris.getString("usuari"));
+                        System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenya"));
+                    }
+                } else {
+                    System.out.println("Thy introduced password is nonexistent in our archives");
+                }
+>>>>>>> parent of d69c22e (Afegides funcions en la interficie de Registre per poder registrar-se correctament en el nostre xat, el servidor ha estat adaptat per a que els usuaris que es registrin en el nostre sistema gestor de base de dades puguin fer-ho encriptant la informació, desenvolupada certes funcions provisionals en la interficie general del xat per a que els missatges apareguin en el JTextArea juntament amb la hora,minuts i segons i la data actual en la que s'envia el missatge, adaptació dels canvis produits en el registre a la interficie del login i per ultim, creació de nous fitxers que ens serviran per poder tenir de exemple la creació del servidor utilizant socols i fils juntament amb els clients pertinents.)
             } else {
                     JOptionPane jop = new JOptionPane();
 

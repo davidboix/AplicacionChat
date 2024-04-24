@@ -253,6 +253,7 @@ public class Servidor {
                     aesCipher.init(Cipher.DECRYPT_MODE, clau);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                 Cipher aesCipher = Cipher.getInstance("AES");
                 aesCipher.init(Cipher.DECRYPT_MODE, clau);
                 
@@ -297,6 +298,8 @@ public class Servidor {
                 contadorClients--;
                 System.out.println("\nServidor tornant a escoltar...");
 =======
+=======
+>>>>>>> parent of d69c22e (Afegides funcions en la interficie de Registre per poder registrar-se correctament en el nostre xat, el servidor ha estat adaptat per a que els usuaris que es registrin en el nostre sistema gestor de base de dades puguin fer-ho encriptant la informació, desenvolupada certes funcions provisionals en la interficie general del xat per a que els missatges apareguin en el JTextArea juntament amb la hora,minuts i segons i la data actual en la que s'envia el missatge, adaptació dels canvis produits en el registre a la interficie del login i per ultim, creació de nous fitxers que ens serviran per poder tenir de exemple la creació del servidor utilizant socols i fils juntament amb els clients pertinents.)
                     byte[] msgDesencriptat = aesCipher.doFinal(msgEncriptat);
                     String missatge = new String(msgDesencriptat);
                     System.out.println("Missatge desencriptat: " + missatge);
