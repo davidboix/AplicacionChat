@@ -279,11 +279,73 @@ public class Servidor {
                 servidor.encriptarPassword(missatge, socket, servidor, clau, msgEncriptat, aesCipher, out);
                 
                 System.out.println("\nServidor tornant a escoltar...");
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+                Cipher aesCipher = Cipher.getInstance("AES");
+                aesCipher.init(Cipher.DECRYPT_MODE, clau);
+                
+                byte[] msgDesencriptat = aesCipher.doFinal(msgEncriptat);
+                String missatge = new String(msgDesencriptat);
+                String base64String = Base64.getEncoder().encodeToString(msgEncriptat);
+                System.out.println("Missatge desencriptat: " + missatge);
+                
+                byte[] keyByte = clau.getEncoded();
+                out.write(keyByte.length);
+                out.write(keyByte);
+                
+                aesCipher.init(Cipher.ENCRYPT_MODE, clau);
+                byte [] msgAEncriptar = aesCipher.doFinal(missatge.getBytes());
+                
+                out.writeInt(msgAEncriptar.length);
+                out.write(msgAEncriptar);
+                
+//                Comentat per fer proves
+//                byte[] b1 = missatge.getBytes();
+//                md.update(b1);
+//                byte[] resum = md.digest();
+//                String base64Stringss = Base64.getEncoder().encodeToString(resum);
+//                servidor.setPassword("boix",base64Stringss);*/
+//                
+//                String password = servidor.getPassword("boix");
+//                byte[] b2 = password.getBytes();
+//                md.update(b2);
+//                byte[] resum2 = md.digest();
+//                if (Arrays.equals(resum, resum2)) {
+//                    System.out.println("Les contrasenyes son iguasl");
+//                } else {
+//                    System.out.println("Diferents!");
+//                }
+//                System.out.println("RESUMEN SHA-256: " + new String(resum));
+//                System.out.println("RESUMEN2 SHA-256: " + new String(resum2));
+    
+                socket.close();
+                out.close();
+                dip.close();
+                System.out.println("Numero de clients actual: " + contadorClients);
+                contadorClients--;
+                System.out.println("\nServidor tornant a escoltar...");
+=======
+                    byte[] msgDesencriptat = aesCipher.doFinal(msgEncriptat);
+                    String missatge = new String(msgDesencriptat);
+                    System.out.println("Missatge desencriptat: " + missatge);
+                    servidor.informarQtClients(clau, aesCipher, out, String.valueOf(contadorClients));
+//                    servidor.enviarMsgClient(missatge, clau, msgEncriptat, aesCipher, out);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    socket.close();
+                    System.out.println("Numero de clients actual: " + contadorClients);
+                    contadorClients--;
+                    System.out.println("\nServidor tornant a escoltar...");
+                }
                 /*Comentat per fer proves
+=======
                 /**
                  * Codi de exemple per comparar 2 contrasenyes utilitzant hash
                  */
                 /*
+>>>>>>> origin/main
                 byte[] b1 = missatge.getBytes();
                 md.update(b1);
                 byte[] resum = md.digest();
@@ -301,7 +363,7 @@ public class Servidor {
                 System.out.println("RESUMEN SHA-256: " + new String(resum));
                 System.out.println("RESUMEN2 SHA-256: " + new String(resum2));
                  */
-
+>>>>>>> origin/main
             }
         } catch (Exception e) {
             e.printStackTrace();
