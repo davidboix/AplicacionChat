@@ -1,14 +1,20 @@
 package exercicis.interficiechat;
 
 import java.awt.Image;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.ImageIcon;
 
 /**
  *
- * @author David Boix Sanchez i
+ * @author David Boix Sanchez
  * @version 1.0
  */
 public class InterficieXat extends javax.swing.JFrame {
+
+    String resFinal = "";
 
     /**
      * Creates new form InterficieXat
@@ -44,8 +50,8 @@ public class InterficieXat extends javax.swing.JFrame {
         botoEnviarMsg = new javax.swing.JButton();
         inputMsg = new componentsPersonalitzats.JTextFieldPersonalitzat();
         espaiMissatges = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        textAreaMissatge = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        textAreaMissatge = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -116,12 +122,9 @@ public class InterficieXat extends javax.swing.JFrame {
 
         espaiMissatges.setLayout(new java.awt.BorderLayout());
 
-        textAreaMissatge.setColumns(20);
-        textAreaMissatge.setRows(5);
-        textAreaMissatge.setToolTipText("Espai on apareixeran els missatges que enviaran els usuaris conectats al xat");
-        jScrollPane1.setViewportView(textAreaMissatge);
+        jScrollPane2.setViewportView(textAreaMissatge);
 
-        espaiMissatges.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        espaiMissatges.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
         mainVista.add(espaiMissatges, java.awt.BorderLayout.CENTER);
 
@@ -141,11 +144,31 @@ public class InterficieXat extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     /**
-     * 
-     * @param evt 
+     * Event que s'activara quan el usuari hagui polsat el boto d'enviar
+     * utilitzant qualsevol mitja de transmissio per poder activar el boto
+     *
+     * @param evt El event que activara la funcio
      */
     private void botoEnviarMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoEnviarMsgActionPerformed
-        
+
+        String msg = this.inputMsg.getText();
+        if (msg.isEmpty()) {
+            System.out.println("NO pots enviar un missatge en blanc!");
+            return;
+        }
+
+        if (!msg.isEmpty()) {
+            String missatge = this.textAreaMissatge.getText();
+            ArrayList<String> arrayListMsg = new ArrayList<>();
+            arrayListMsg.add(msg);
+            for (String misg : arrayListMsg) {
+                resFinal += misg;
+            }
+            String dataActual = getData();
+            String horaActual = getTemps();
+            this.textAreaMissatge.setText("[" + dataActual + " || " + horaActual + "]: " + msg);
+            this.inputMsg.setText(null);
+        }
     }//GEN-LAST:event_botoEnviarMsgActionPerformed
     /**
      * Funcio creada per inicialitzar el JTextField amb un missatge per defecte
@@ -158,26 +181,77 @@ public class InterficieXat extends javax.swing.JFrame {
     }
 
     /**
+     * Funcio desenvolupada per poder retornar la data la qual ens trobem en
+     * aquell moment en format cadena de text
+     *
+     * @return La data de avui en format cadena de text.
+     */
+    private String getData() {
+        Calendar cal = Calendar.getInstance();
+        int dia = cal.get(Calendar.DAY_OF_MONTH);
+        int mes = cal.get(Calendar.MONTH) + 1;
+        int any = cal.get(Calendar.YEAR);
+        String data = dia + "/" + mes + "/" + any;
+
+        if (!data.isEmpty()) {
+            return data;
+        }
+
+        return "";
+    }
+
+    /**
+     * Funcio desenvolupada per obtenir la hora, minuts i segons actuals en el
+     * moment que fem la crida de la funcio
+     *
+     * @return Hora, Minuts i Segons com una cadena de text.
+     */
+    private String getTemps() {
+        LocalTime myObj = LocalTime.now();
+        String hora = tractarTemps(myObj.getHour());
+        String minuts = tractarTemps(myObj.getMinute());
+        String segons = tractarTemps(myObj.getSecond());
+        String temps = hora + ":" + minuts + ":" + segons;
+        if (!temps.isEmpty()) {
+            return temps;
+        }
+        return "";
+    }
+
+    /**
+     * Funcio desenvolupada per poder passar tipus enters a tipus cadena de text
+     * TODO: Possible canvi de nom de la funcio
+     *
+     * @param temps El valor enter que volem canviar a una cadena de text.
+     * @return El valor enter que hem passat per parametres convertit a cadena
+     * de text
+     */
+    private String tractarTemps(int temps) {
+        String tempsActual = String.valueOf(temps);
+        return tempsActual;
+    }
+
+    /**
      * Funcio creada per poder inicialitzar les icones que apareixeran en la
      * interficie grafica que es visualitzara
      */
     private void inicialitzarIconos() {
-        
+
         ImageIcon iconoXatPrivatAModificar = new ImageIcon("src\\main\\java\\img\\iconoXatPrivat.png");
         ImageIcon iconoXatGrupalAModificar = new ImageIcon("src\\main\\java\\img\\iconoXatGrupal.png");
         ImageIcon iconoSettingAModificar = new ImageIcon("src\\main\\java\\img\\iconoSettings.png");
         ImageIcon iconoEnviarModificar = new ImageIcon("src\\main\\java\\img\\iconoEnviar.png");
-        
+
         Image iconoXatPrivatModificat = iconoXatPrivatAModificar.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
         Image iconoXatGrupalModificat = iconoXatGrupalAModificar.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
         Image iconoSettingsModificat = iconoSettingAModificar.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
         Image iconoEnviarModificat = iconoEnviarModificar.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
-        
+
         ImageIcon iconoXatPrivat = new ImageIcon(iconoXatPrivatModificat);
         ImageIcon iconoXatGrupal = new ImageIcon(iconoXatGrupalModificat);
         ImageIcon iconoSettings = new ImageIcon(iconoSettingsModificat);
         ImageIcon iconoEnviar = new ImageIcon(iconoEnviarModificat);
-        
+
         this.botoXatPrivat.setIcon(iconoXatPrivat);
         this.botoXatGrupal.setIcon(iconoXatGrupal);
         this.botoSetttings.setIcon(iconoSettings);
@@ -231,10 +305,10 @@ public class InterficieXat extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel llistatVista;
     private javax.swing.JPanel mainVista;
-    private javax.swing.JTextArea textAreaMissatge;
+    private javax.swing.JTextPane textAreaMissatge;
     private javax.swing.JLabel titolXat;
     private javax.swing.JPanel vistaGeneral;
     // End of variables declaration//GEN-END:variables

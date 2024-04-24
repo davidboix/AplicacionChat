@@ -213,45 +213,74 @@ public class Servidor {
             byte[] msgAEncriptar = aesCipher.doFinal(missatge.getBytes());
             out.writeInt(msgAEncriptar.length);
             out.write(msgAEncriptar);
+            out.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
+    private void encriptarPassword(String missatge, Socket socket, Servidor servidor, SecretKey clau, byte[] msgEncriptat, Cipher aesCipher, DataOutputStream out) {
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] b1 = missatge.getBytes();
+            md.update(b1);
+            byte[] resum = md.digest();
+            String contrasenyaHash = Base64.getEncoder().encodeToString(resum);
+            /**
+             * Funcio que cridem per a que el servidor envii al client la
+             * contrasenya encriptada
+             */
+            servidor.enviarMsgClient(contrasenyaHash, clau, msgEncriptat, aesCipher, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         final String IP = "localhost";
         final int PORT = 12345;
-        int contadorClients = 0;
+        int qtClients = 0;
 
         Servidor servidor = new Servidor();
         servidor.amagarInfoWarnings();
 
         try ( ServerSocket server = new ServerSocket(PORT);) {
-            InetSocketAddress addr = new InetSocketAddress("localhost", 7878);
-
-            server.bind(addr);
-
             System.out.println("Servidor obert...");
-
             while (true) {
-                contadorClients++;
                 Socket socket = server.accept();
-                System.out.println("Client connectat..." + contadorClients);
-                try ( DataOutputStream out = new DataOutputStream(socket.getOutputStream());  DataInputStream dip = new DataInputStream(socket.getInputStream());) {
+                qtClients++;
+                System.out.println("Clients connectats: " + qtClients);
 
-                    byte[] keyBytes = new byte[dip.readInt()];
-                    dip.readFully(keyBytes);
+                DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+                DataInputStream dip = new DataInputStream(socket.getInputStream());
 
-                    SecretKey clau = new SecretKeySpec(keyBytes, "AES");
+                byte[] keyBytes = new byte[dip.readInt()];
+                dip.readFully(keyBytes);
+                
+                SecretKey clau = new SecretKeySpec(keyBytes, "AES");
 
-                    int msgLength = dip.readInt();
-                    byte[] msgEncriptat = new byte[msgLength];
-                    dip.readFully(msgEncriptat);
+                byte[] msgEncriptat = new byte[dip.readInt()];
+                dip.readFully(msgEncriptat);
 
-                    Cipher aesCipher = Cipher.getInstance("AES");
-                    aesCipher.init(Cipher.DECRYPT_MODE, clau);
+                Cipher aesCipher = Cipher.getInstance("AES");
+                aesCipher.init(Cipher.DECRYPT_MODE, clau);
+                
+                byte[] msgDesencriptat = aesCipher.doFinal(msgEncriptat);
+                String missatge = new String(msgDesencriptat);
+                System.out.println("Missatge desencriptat: " + missatge);
+                
+                /**
+                 * Funcio que cridem per encriptar la contrasenya amb hash un
+                 * cop hem desencriptat la contrasenya que el client ens envia
+                 */
+                
+                servidor.encriptarPassword(missatge, socket, servidor, clau, msgEncriptat, aesCipher, out);
+                
+                System.out.println("\nServidor tornant a escoltar...");
 
+<<<<<<< HEAD
 <<<<<<< HEAD
                 Cipher aesCipher = Cipher.getInstance("AES");
                 aesCipher.init(Cipher.DECRYPT_MODE, clau);
@@ -311,6 +340,12 @@ public class Servidor {
                     System.out.println("\nServidor tornant a escoltar...");
                 }
                 /*Comentat per fer proves
+=======
+                /**
+                 * Codi de exemple per comparar 2 contrasenyes utilitzant hash
+                 */
+                /*
+>>>>>>> origin/main
                 byte[] b1 = missatge.getBytes();
                 md.update(b1);
                 byte[] resum = md.digest();

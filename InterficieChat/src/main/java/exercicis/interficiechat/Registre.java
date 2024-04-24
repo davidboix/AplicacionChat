@@ -8,13 +8,15 @@ import encriptacio.Servidor;
 import java.awt.Image;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.ImageIcon;
@@ -226,20 +228,21 @@ public class Registre extends javax.swing.JFrame {
         boolean isUsuariValid = validarInputs(this.inputUsuari, this.etiquetaUsuari);
 
         String password = tractarPassword(this.inputPassword);
-
+        String contrasenyaEncriptada = "";
         if (!password.isEmpty()) {
             boolean isPasswordValid = validarPassword(password);
 
             if (isPasswordValid) {
-                System.out.println("La contrasenya es correcta");
+//                En aquest punt la contrasenya sera encriptada
+                contrasenyaEncriptada = encriptarPassword(password);
             } else {
                 System.out.println("Siusplau, introdueix una contraenya que estigui entre 8 caracters i 20 caracters");
             }
 
 //            if (isCognomValid && isNomValid && isEdatValid && isCorreuValid && isUsuariValid) {
-                System.out.println("Tot esta correcte!");
-
-//                inicialitzarDades(this.inputNom.getText(), this.inputCognom.getText(), Integer.valueOf(this.inputEdat.getText()), this.inputCorreu.getText(), this.inputUsuari.getText(), this.inputPassword.getText());
+            int edat = tractarEdat();
+            inicialitzarDades(this.inputNom.getText(), this.inputCognom.getText(), edat, this.inputCorreu.getText(), this.inputUsuari.getText(), contrasenyaEncriptada);
+            System.out.println("Hem introduit un nou usuari!");
 //            }
         } else {
             System.out.println("Esta buit");
@@ -276,8 +279,6 @@ public class Registre extends javax.swing.JFrame {
 
         this.inputCognom.setPlaceHolder("Introdueix el teu cognom");
         this.inputCognom.setText(this.inputCognom.getPlaceHolder());
-//        this.inputEdat.setPlaceHolder("Introdueix la teva edat");
-//        this.inputEdat.setText(this.inputEdat.getPlaceHolder());
 
         this.inputCorreu.setPlaceHolder("Introdueix el teu correu");
         this.inputCorreu.setText(this.inputCorreu.getPlaceHolder());
@@ -339,7 +340,7 @@ public class Registre extends javax.swing.JFrame {
         ImageIcon iconoBuscar = new ImageIcon(iconoUsuariModificar);
         this.botoAltaUsuari.setIcon(iconoBuscar);
     }
-    
+
     /**
      * Funcio creada per poder passar la contrasenya que s'introdueix dins de un
      * component JPasswordField a una cadena de text
@@ -404,20 +405,93 @@ public class Registre extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Funcio desenvolupada per amagar els missatges que apareixen en la consola
+     * a causa de la connexio que realitzem al servidor de MongoDB
+     *
+     */
     private void amagarInfoWarnings() {
         Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
         mongoLogger.setLevel(Level.WARNING);
         mongoLogger.setUseParentHandlers(false);
     }
 
+    /**
+     * Funcio obsoleta
+     */
     private void inicialitzarServidor() {
         final String IP = "localhost";
         final int PORT = 12345;
         Servidor servidor = new Servidor(IP, PORT);
         servidor.iniciServidor(servidor.getIpServidor(), servidor.getPortServidor());
     }
-    private void encriptarPassword () {
-        final String
+
+    /**
+     * Funcio que ens servira per poder emmagatzemar la contrasenya encriptada
+     * utilitzant HASH del usuari dins del nostre sistema gestor de base de
+     * dades.
+     */
+    private String encriptarPassword(String password) {
+        final String IP = "localhost";
+        final int PORT = 12345;
+        try ( Socket cs = new Socket(IP, PORT)) {
+            DataOutputStream out = new DataOutputStream(cs.getOutputStream());
+            DataInputStream dip = new DataInputStream(cs.getInputStream());
+
+            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            SecretKey clau = keyGen.generateKey();
+
+            byte[] keyBytes = clau.getEncoded();
+            out.writeInt(keyBytes.length);
+            out.write(keyBytes);
+
+            Cipher aesCipher = Cipher.getInstance("AES");
+            aesCipher.init(Cipher.ENCRYPT_MODE, clau);
+            byte[] msgEncriptat = aesCipher.doFinal(password.getBytes());
+
+            out.writeInt(msgEncriptat.length);
+            out.write(msgEncriptat);
+
+            System.out.println("Missatge encriptat i clau enviats al servidor...");
+            /**
+             * A partir de aqui encriptem rebem la contrasenya encriptada i amb
+             * el hash posat.
+             */
+            byte[] keyBytesServ = new byte[dip.readInt()];
+            dip.readFully(keyBytesServ);
+            SecretKey clauServidor = new SecretKeySpec(keyBytesServ, "AES");
+            byte[] msgEncriptats = new byte[dip.readInt()];
+            dip.readFully(msgEncriptats);
+            Cipher aesCipher2 = Cipher.getInstance("AES");
+            aesCipher2.init(Cipher.DECRYPT_MODE, clau);
+            byte[] msgDesencriptat = aesCipher2.doFinal(msgEncriptats);
+            String missatge = new String(msgDesencriptat);
+            System.out.println("Aquesta es la contrasenya desencriptada amb el hash: " + missatge);
+            return missatge;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+    /**
+     * TODO: Revisar fitxer 'proves' per acabar de perfilar l'edat del usuari.
+     *
+     * @return Edat de l'usuari.
+     */
+    private int tractarEdat() {
+        Date data = this.inputEdat.getDate();
+        Calendar cal = Calendar.getInstance();
+        Calendar dataActual = Calendar.getInstance();
+        cal.setTime(data);
+        int diaSemana = cal.get(Calendar.DAY_OF_WEEK) - 1;
+        int diaCalendari = cal.get(Calendar.DAY_OF_MONTH);
+        int mesCalendari = cal.get(Calendar.MONTH);
+        int anyCalendari = cal.get(Calendar.YEAR);
+        int anyActual = dataActual.get(Calendar.YEAR);
+        return anyActual - anyCalendari;
     }
 
     /**
