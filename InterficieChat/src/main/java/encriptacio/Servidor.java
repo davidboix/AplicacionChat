@@ -9,6 +9,7 @@ import com.mongodb.client.model.Filters;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.MessageDigest;
@@ -130,7 +131,7 @@ public class Servidor {
                 String missatge = new String(msgDesencriptat);
                 System.out.println("Missatge desencriptat: " + missatge);
 
-                socket.close();
+                //socket.close();
                 System.out.println("Servidor tornant a escoltar...");
             }
         } catch (Exception e) {
@@ -189,34 +190,69 @@ public class Servidor {
         return password;
     }
 
+    public void informarQtClients(SecretKey clau, Cipher aesCipher, DataOutputStream out, String contadorClients) {
+        try {
+            byte[] keyByte = clau.getEncoded();
+            out.writeInt(keyByte.length);
+            out.write(keyByte);
+            aesCipher.init(Cipher.ENCRYPT_MODE, clau);
+            byte[] msgAEncriptar = aesCipher.doFinal(contadorClients.getBytes());
+            out.writeInt(msgAEncriptar.length);
+            out.write(msgAEncriptar);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void enviarMsgClient(String missatge, SecretKey clau, byte[] msgEncriptat, Cipher aesCipher, DataOutputStream out) {
+        try {
+            byte[] keyByte = clau.getEncoded();
+            out.writeInt(keyByte.length);
+            out.write(keyByte);
+            aesCipher.init(Cipher.ENCRYPT_MODE, clau);
+            byte[] msgAEncriptar = aesCipher.doFinal(missatge.getBytes());
+            out.writeInt(msgAEncriptar.length);
+            out.write(msgAEncriptar);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static void main(String[] args) {
         final String IP = "localhost";
         final int PORT = 12345;
         int contadorClients = 0;
+
         Servidor servidor = new Servidor();
         servidor.amagarInfoWarnings();
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            ServerSocket server = new ServerSocket(PORT);
+
+        try ( ServerSocket server = new ServerSocket(PORT);) {
+            InetSocketAddress addr = new InetSocketAddress("localhost", 7878);
+
+            server.bind(addr);
+
             System.out.println("Servidor obert...");
 
             while (true) {
                 contadorClients++;
                 Socket socket = server.accept();
                 System.out.println("Client connectat..." + contadorClients);
+                try ( DataOutputStream out = new DataOutputStream(socket.getOutputStream());  DataInputStream dip = new DataInputStream(socket.getInputStream());) {
 
-                DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-                DataInputStream dip = new DataInputStream(socket.getInputStream());
+                    byte[] keyBytes = new byte[dip.readInt()];
+                    dip.readFully(keyBytes);
 
-                byte[] keyBytes = new byte[dip.readInt()];
-                dip.readFully(keyBytes);
+                    SecretKey clau = new SecretKeySpec(keyBytes, "AES");
 
-                SecretKey clau = new SecretKeySpec(keyBytes, "AES");
+                    int msgLength = dip.readInt();
+                    byte[] msgEncriptat = new byte[msgLength];
+                    dip.readFully(msgEncriptat);
 
-                int msgLength = dip.readInt();
-                byte[] msgEncriptat = new byte[msgLength];
-                dip.readFully(msgEncriptat);
+                    Cipher aesCipher = Cipher.getInstance("AES");
+                    aesCipher.init(Cipher.DECRYPT_MODE, clau);
 
+<<<<<<< HEAD
                 Cipher aesCipher = Cipher.getInstance("AES");
                 aesCipher.init(Cipher.DECRYPT_MODE, clau);
                 
@@ -260,8 +296,40 @@ public class Servidor {
                 System.out.println("Numero de clients actual: " + contadorClients);
                 contadorClients--;
                 System.out.println("\nServidor tornant a escoltar...");
+=======
+                    byte[] msgDesencriptat = aesCipher.doFinal(msgEncriptat);
+                    String missatge = new String(msgDesencriptat);
+                    System.out.println("Missatge desencriptat: " + missatge);
+                    servidor.informarQtClients(clau, aesCipher, out, String.valueOf(contadorClients));
+//                    servidor.enviarMsgClient(missatge, clau, msgEncriptat, aesCipher, out);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    socket.close();
+                    System.out.println("Numero de clients actual: " + contadorClients);
+                    contadorClients--;
+                    System.out.println("\nServidor tornant a escoltar...");
+                }
+                /*Comentat per fer proves
+                byte[] b1 = missatge.getBytes();
+                md.update(b1);
+                byte[] resum = md.digest();
+                String base64Stringss = Base64.getEncoder().encodeToString(resum);
+                servidor.setPassword("boix",base64Stringss);
+                String password = servidor.getPassword("boix");
+                byte[] b2 = password.getBytes();
+                md.update(b2);
+                byte[] resum2 = md.digest();
+                if (Arrays.equals(resum, resum2)) {
+                    System.out.println("Les contrasenyes son iguasl");
+                } else {
+                    System.out.println("Diferents!");
+                }
+                System.out.println("RESUMEN SHA-256: " + new String(resum));
+                System.out.println("RESUMEN2 SHA-256: " + new String(resum2));
+                 */
+>>>>>>> origin/main
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

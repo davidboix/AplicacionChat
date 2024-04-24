@@ -339,7 +339,7 @@ public class Registre extends javax.swing.JFrame {
         ImageIcon iconoBuscar = new ImageIcon(iconoUsuariModificar);
         this.botoAltaUsuari.setIcon(iconoBuscar);
     }
-
+    
     /**
      * Funcio creada per poder passar la contrasenya que s'introdueix dins de un
      * component JPasswordField a una cadena de text
@@ -414,8 +414,10 @@ public class Registre extends javax.swing.JFrame {
         final String IP = "localhost";
         final int PORT = 12345;
         Servidor servidor = new Servidor(IP, PORT);
-        
         servidor.iniciServidor(servidor.getIpServidor(), servidor.getPortServidor());
+    }
+    private void encriptarPassword () {
+        final String
     }
 
     /**
