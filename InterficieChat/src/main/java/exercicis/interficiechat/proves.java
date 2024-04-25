@@ -116,7 +116,7 @@ public class proves extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         Date data = this.inputData.getDate();
-        
+
         Calendar dataActual = Calendar.getInstance();
         int diaActual = dataActual.get(Calendar.DAY_OF_MONTH);
         int mesActual = dataActual.get(Calendar.MONTH);
@@ -158,37 +158,45 @@ public class proves extends javax.swing.JFrame {
          *
          * Exemple cumpleanys: 28/04/2000
          */
-        if (diaCalendari == diaActual && mesCalendari >= mesActual) {
+        System.out.println("Data actual: " + diaActual + "/" + (mesActual + 1) + "/" + anyActual);
+        System.out.println("Data calendari: " + diaCalendari + "/" + (mesCalendari + 1) + "/" + anyCalendari);
+
+        if (diaCalendari >= diaActual && (mesCalendari + 1) >= (mesActual + 1) && anyCalendari <= anyActual) {
             /**
-             * TODO: Introduim que el usuari ja ha fet el cumpleanys i per tant
+             * TODO: Introduim que el usuari ja ha fet el cumpleanys i per tant,
+             * tindra la edat que li pertoca.
              */
-            setEdat(anyActual);
+            setEdat(anyCalendari, anyActual);
+        } else if (anyCalendari > anyActual && (diaCalendari >= diaActual || diaCalendari <= diaActual) && ((mesCalendari + 1) >= (mesActual + 1) || (mesCalendari + 1) <= (mesActual + 1))) {
+            System.out.println("No pots haver nascut en el futur");
         } else {
             /**
              * TODO: Realitzem aquesta operacio degut a que el cumpleanys no
              * coincideix amb la data de avui i per tant la seva edat es menor
              */
-            setEdat(anyActual - 1);
+            System.out.println("Encara no ha complert els anys!");
+            setEdat(anyCalendari, anyActual);
         }
 
         System.out.println(diaSetmana + ", " + diaCalendari + " de " + mesSeleccionat + " de " + anyCalendari);
 
     }//GEN-LAST:event_jButton1ActionPerformed
     /**
-     * TODO: Funcio inacabada 
-     * Funcio que farem servir per poder calcular la edat
+     * TODO: Funcio inacabada Funcio que farem servir per poder calcular la edat
      * del usuari, on per parametres li passarem el any de naixement i
-     * realitzarem el calcul per obtenir la seva edat actual per quan es registri en
-     * la aplicacio de missatgeria de xat
+     * realitzarem el calcul per obtenir la seva edat actual per quan es
+     * registri en la aplicacio de missatgeria de xat
      *
      * @param anyActual : Any de naixement en format enter en el qual el usuari
      * va neixer per poder calcular la edat
      */
-    private void setEdat(int anyActual) {
-        Date data = this.inputData.getDate();
-        Calendar cal = Calendar.getInstance();
-        int any = data.getYear() + 1900;
-        int edatUser = anyActual - any;
+    private void setEdat(int anyCalendari, int anyActual) {
+//        Date data = this.inputData.getDate();
+//        Calendar cal = Calendar.getInstance();
+//        int any = data.getYear() + 1900;
+        System.out.println("Any calendari: " + anyCalendari);
+        System.out.println("Any actual: " + anyActual);
+        int edatUser = anyActual - anyCalendari;
         System.out.println("Edat: " + edatUser);
     }
 
