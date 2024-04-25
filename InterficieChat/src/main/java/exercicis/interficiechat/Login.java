@@ -29,6 +29,7 @@ public class Login extends javax.swing.JFrame {
         inicialitzarTextInputs();
         amagarInfoWarnings();
         inicialitzarInput();
+        //this.setExtendedState(MAXIMIZED_BOTH);
         //mongoClient = new MongoClient("localhost", 27017);
         //database = mongoClient.getDatabase("Cuentas");
         //MongoCollection<Document> cuentasCollection = database.getCollection("comptes");

@@ -39,6 +39,7 @@ public class Registre extends javax.swing.JFrame {
         initComponents();
         inicialitzarTextInputs();
         afegirIcono();
+        this.setExtendedState(MAXIMIZED_BOTH);
         //inicialitzarServidor();
     }
 // /u0000
@@ -78,6 +79,7 @@ public class Registre extends javax.swing.JFrame {
         vistaGeneral.setLayout(new java.awt.BorderLayout());
 
         footerVista.setBackground(new java.awt.Color(203, 219, 242));
+        footerVista.setToolTipText("Espai que l'usuari fara servir per poder donar-se de alta en ");
 
         botoAltaUsuari.setBackground(new java.awt.Color(125, 165, 221));
         botoAltaUsuari.setText("Donat d'Alta");
@@ -93,6 +95,7 @@ public class Registre extends javax.swing.JFrame {
         vistaGeneral.add(footerVista, java.awt.BorderLayout.PAGE_END);
 
         headerVista.setBackground(new java.awt.Color(203, 219, 242));
+        headerVista.setToolTipText("Espai reservat per el titol de la interficie");
 
         titolRegistre.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         titolRegistre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -103,17 +106,20 @@ public class Registre extends javax.swing.JFrame {
         vistaGeneral.add(headerVista, java.awt.BorderLayout.PAGE_START);
 
         mainVista.setBackground(new java.awt.Color(203, 219, 242));
+        mainVista.setToolTipText("Espai de la interficie grafica on s'hi anotara les dades del usuari.");
         mainVista.setLayout(new java.awt.GridBagLayout());
 
         etiquetaNom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaNom.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         etiquetaNom.setText("Nom");
+        etiquetaNom.setToolTipText("Titol del JTextField del nom per donar un context al usuari.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         mainVista.add(etiquetaNom, gridBagConstraints);
 
         etiquetaCognom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaCognom.setText("Cognoms");
+        etiquetaCognom.setToolTipText("Titol del JTextField del cognom per donar un context al usuari.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -122,14 +128,16 @@ public class Registre extends javax.swing.JFrame {
 
         etiquetaEdat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaEdat.setText("Edat");
+        etiquetaEdat.setToolTipText("Titol del JDateChooser per donar un context al usuari.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         mainVista.add(etiquetaEdat, gridBagConstraints);
 
         etiquetaCorreu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaCorreu.setText("Correu");
+        etiquetaCorreu.setToolTipText("Titol del JTextField del correu per donar un context al usuari.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -138,19 +146,23 @@ public class Registre extends javax.swing.JFrame {
 
         etiquetaUsuari.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaUsuari.setText("Usuari");
+        etiquetaUsuari.setToolTipText("Titol del JTextField del usuari per donar un context al usuari.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         mainVista.add(etiquetaUsuari, gridBagConstraints);
 
         etiquetaPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         etiquetaPassword.setText("Contrasenya");
+        etiquetaPassword.setToolTipText("Titol del JTextField del password per donar un context al usuari.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         mainVista.add(etiquetaPassword, gridBagConstraints);
+
+        inputNom.setToolTipText("Espai on s'anotara el nom real de l'usuari");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -158,29 +170,39 @@ public class Registre extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         mainVista.add(inputNom, gridBagConstraints);
+
+        inputCognom.setToolTipText("Espai on anira anotat el cognom real del usuari.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         mainVista.add(inputCognom, gridBagConstraints);
+
+        inputCorreu.setToolTipText("Correu de l'usuari que es vol registrar ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         mainVista.add(inputCorreu, gridBagConstraints);
+
+        inputUsuari.setToolTipText("Nom de l'usuari que s'utilitzara per realitzar el inici de sessió.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         mainVista.add(inputUsuari, gridBagConstraints);
+
+        inputPassword.setToolTipText("Contrasenya que s'utilitzara per iniciar sessio.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 16;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         mainVista.add(inputPassword, gridBagConstraints);
+
+        inputEdat.setToolTipText("Calendari desplegable on s'indicara la data de naixement.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         mainVista.add(inputEdat, gridBagConstraints);
 
