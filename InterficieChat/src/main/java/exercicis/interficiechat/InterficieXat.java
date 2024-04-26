@@ -61,19 +61,26 @@ public class InterficieXat extends javax.swing.JFrame {
         headerVista.setBackground(new java.awt.Color(203, 219, 242));
         headerVista.setLayout(new java.awt.BorderLayout());
 
+        espaiSeleccioXat.setBackground(new java.awt.Color(203, 219, 242));
         espaiSeleccioXat.setLayout(new java.awt.GridBagLayout());
 
         botoXatPrivat.setBackground(new java.awt.Color(125, 165, 221));
         botoXatPrivat.setToolTipText("");
-        espaiSeleccioXat.add(botoXatPrivat, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 15);
+        espaiSeleccioXat.add(botoXatPrivat, gridBagConstraints);
 
         botoXatGrupal.setBackground(new java.awt.Color(125, 165, 221));
-        espaiSeleccioXat.add(botoXatGrupal, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 15);
+        espaiSeleccioXat.add(botoXatGrupal, gridBagConstraints);
 
         headerVista.add(espaiSeleccioXat, java.awt.BorderLayout.LINE_START);
 
-        espaiTitolXat.setLayout(new java.awt.GridLayout());
+        espaiTitolXat.setBackground(new java.awt.Color(203, 219, 242));
+        espaiTitolXat.setLayout(new java.awt.GridLayout(1, 0));
 
+        titolXat.setBackground(new java.awt.Color(203, 219, 242));
         titolXat.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         titolXat.setText("COSTAXAT (NOM PROVISIONAL)");
         titolXat.setToolTipText("");
@@ -260,8 +267,8 @@ public class InterficieXat extends javax.swing.JFrame {
         ImageIcon iconoSettingAModificar = new ImageIcon("src\\main\\java\\img\\iconoSettings.png");
         ImageIcon iconoEnviarModificar = new ImageIcon("src\\main\\java\\img\\iconoEnviar.png");
 
-        Image iconoXatPrivatModificat = iconoXatPrivatAModificar.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
-        Image iconoXatGrupalModificat = iconoXatGrupalAModificar.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
+        Image iconoXatPrivatModificat = iconoXatPrivatAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        Image iconoXatGrupalModificat = iconoXatGrupalAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         Image iconoSettingsModificat = iconoSettingAModificar.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
         Image iconoEnviarModificat = iconoEnviarModificar.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
 
