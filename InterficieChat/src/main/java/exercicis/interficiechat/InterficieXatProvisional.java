@@ -4,7 +4,6 @@ import java.awt.Image;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import javax.swing.ImageIcon;
 
 /**
@@ -12,14 +11,17 @@ import javax.swing.ImageIcon;
  * @author David Boix Sanchez
  * @version 1.0
  */
-public class InterficieXat extends javax.swing.JFrame {
+public class InterficieXatProvisional extends javax.swing.JFrame {
 
+    /**
+     * TODO: Variable global que sera provisional
+     */
     String resFinal = "";
 
     /**
-     * Creates new form InterficieXat
+     * Creates new form InterficieXatProvisional
      */
-    public InterficieXat() {
+    public InterficieXatProvisional() {
         initComponents();
         inicialitzarInputs();
         inicialitzarIconos();
@@ -33,142 +35,118 @@ public class InterficieXat extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
-        vistaGeneral = new javax.swing.JPanel();
-        headerVista = new javax.swing.JPanel();
-        espaiSeleccioXat = new javax.swing.JPanel();
-        botoXatPrivat = new javax.swing.JButton();
-        botoXatGrupal = new javax.swing.JButton();
-        espaiTitolXat = new javax.swing.JPanel();
-        titolXat = new javax.swing.JLabel();
-        mainVista = new javax.swing.JPanel();
-        espaiControlMissatge = new javax.swing.JPanel();
-        botoSetttings = new javax.swing.JButton();
-        botoEnviarMsg = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         inputMsg = new componentsPersonalitzats.JTextFieldPersonalitzat();
-        espaiMissatges = new javax.swing.JPanel();
+        botoSettings = new javax.swing.JButton();
+        botoEnviarMsg = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        botoXatGrupal = new javax.swing.JButton();
+        botoXatPrivat = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        textLlistatUsuarisConectats = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jButton4 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         textAreaMissatge = new javax.swing.JTextArea();
-        llistatVista = new javax.swing.JPanel();
-        llistatClient = new javax.swing.JButton();
-        textLlistatUsuarisConectats = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        vistaGeneral.setLayout(new java.awt.BorderLayout());
+        jPanel1.setLayout(new java.awt.BorderLayout());
 
-        headerVista.setBackground(new java.awt.Color(203, 219, 242));
-        headerVista.setLayout(new java.awt.BorderLayout());
+        jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        espaiSeleccioXat.setLayout(new java.awt.GridBagLayout());
+        inputMsg.setToolTipText("");
+        jPanel2.add(inputMsg, new java.awt.GridBagConstraints());
 
-        botoXatPrivat.setBackground(new java.awt.Color(125, 165, 221));
-        botoXatPrivat.setToolTipText("");
-        espaiSeleccioXat.add(botoXatPrivat, new java.awt.GridBagConstraints());
-
-        botoXatGrupal.setBackground(new java.awt.Color(125, 165, 221));
-        espaiSeleccioXat.add(botoXatGrupal, new java.awt.GridBagConstraints());
-
-        headerVista.add(espaiSeleccioXat, java.awt.BorderLayout.LINE_START);
-
-        espaiTitolXat.setLayout(new java.awt.GridLayout());
-
-        titolXat.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        titolXat.setText("COSTAXAT (NOM PROVISIONAL)");
-        titolXat.setToolTipText("");
-        espaiTitolXat.add(titolXat);
-
-        headerVista.add(espaiTitolXat, java.awt.BorderLayout.CENTER);
-
-        vistaGeneral.add(headerVista, java.awt.BorderLayout.PAGE_START);
-
-        mainVista.setLayout(new java.awt.BorderLayout());
-
-        espaiControlMissatge.setBackground(new java.awt.Color(203, 219, 242));
-        espaiControlMissatge.setToolTipText("");
-        espaiControlMissatge.setLayout(new java.awt.GridBagLayout());
-
-        botoSetttings.setBackground(new java.awt.Color(125, 165, 221));
-        botoSetttings.setToolTipText("Boto que no te cap funcio");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        espaiControlMissatge.add(botoSetttings, gridBagConstraints);
+        botoSettings.setBackground(new java.awt.Color(125, 165, 221));
+        botoSettings.setToolTipText("Boto que no te cap funcio");
+        jPanel2.add(botoSettings, new java.awt.GridBagConstraints());
 
         botoEnviarMsg.setBackground(new java.awt.Color(125, 165, 221));
-        botoEnviarMsg.setText("Enviar ");
-        botoEnviarMsg.setToolTipText("Boto que serveix per enviar missatges al xat");
+        botoEnviarMsg.setText("Enviar");
+        botoEnviarMsg.setToolTipText("Botó que serveix per enviar missatges al xat.");
         botoEnviarMsg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botoEnviarMsgActionPerformed(evt);
             }
         });
-        espaiControlMissatge.add(botoEnviarMsg, new java.awt.GridBagConstraints());
+        jPanel2.add(botoEnviarMsg, new java.awt.GridBagConstraints());
 
-        inputMsg.setToolTipText("");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 150;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 97);
-        espaiControlMissatge.add(inputMsg, gridBagConstraints);
+        jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_END);
 
-        mainVista.add(espaiControlMissatge, java.awt.BorderLayout.PAGE_END);
+        jPanel3.setLayout(new java.awt.BorderLayout());
 
-        espaiMissatges.setLayout(new java.awt.BorderLayout());
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+        jPanel5.add(botoXatGrupal, new java.awt.GridBagConstraints());
+        jPanel5.add(botoXatPrivat, new java.awt.GridBagConstraints());
 
-        textAreaMissatge.setEditable(false);
+        jPanel3.add(jPanel5, java.awt.BorderLayout.LINE_START);
+
+        jPanel7.setLayout(new java.awt.GridLayout(1, 0));
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("COSTAXAT (NOM PROVISIONAL)");
+        jPanel7.add(jLabel1);
+
+        jPanel3.add(jPanel7, java.awt.BorderLayout.CENTER);
+
+        jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_START);
+
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
+        jPanel8.setLayout(new java.awt.GridLayout(1, 0));
+
+        textLlistatUsuarisConectats.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        textLlistatUsuarisConectats.setText("Llistat usuaris connectats");
+        jPanel8.add(textLlistatUsuarisConectats);
+
+        jPanel4.add(jPanel8, java.awt.BorderLayout.PAGE_START);
+
+        jPanel9.setLayout(new java.awt.GridBagLayout());
+
+        jButton4.setText("Client 1");
+        jPanel9.add(jButton4, new java.awt.GridBagConstraints());
+
+        jButton3.setText("Client 2");
+        jPanel9.add(jButton3, new java.awt.GridBagConstraints());
+
+        jPanel4.add(jPanel9, java.awt.BorderLayout.PAGE_END);
+
+        jPanel1.add(jPanel4, java.awt.BorderLayout.LINE_START);
+
+        jPanel6.setLayout(new java.awt.GridLayout(1, 0));
+
         textAreaMissatge.setColumns(20);
         textAreaMissatge.setRows(5);
         jScrollPane1.setViewportView(textAreaMissatge);
-        textAreaMissatge.setLineWrap(true);
-        textAreaMissatge.setWrapStyleWord(true);
 
-        espaiMissatges.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jPanel6.add(jScrollPane1);
 
-        mainVista.add(espaiMissatges, java.awt.BorderLayout.CENTER);
-
-        vistaGeneral.add(mainVista, java.awt.BorderLayout.CENTER);
-
-        llistatVista.setBackground(new java.awt.Color(203, 219, 242));
-        llistatVista.setLayout(new java.awt.BorderLayout());
-
-        llistatClient.setText("Client 1");
-        llistatVista.add(llistatClient, java.awt.BorderLayout.CENTER);
-
-        textLlistatUsuarisConectats.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        textLlistatUsuarisConectats.setText("Llistat usuaris connectats");
-        llistatVista.add(textLlistatUsuarisConectats, java.awt.BorderLayout.PAGE_START);
-
-        vistaGeneral.add(llistatVista, java.awt.BorderLayout.LINE_START);
+        jPanel1.add(jPanel6, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(vistaGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(vistaGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    /**
-     * Event que s'activara quan el usuari hagui polsat el boto d'enviar
-     * utilitzant qualsevol mitja de transmissio per poder activar el boto
-     *
-     * @param evt El event que activara la funcio
-     */
-    private void botoEnviarMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoEnviarMsgActionPerformed
 
+    private void botoEnviarMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoEnviarMsgActionPerformed
         String msg = this.inputMsg.getText();
         if (msg.isEmpty()) {
             System.out.println("NO pots enviar un missatge en blanc!");
@@ -188,6 +166,7 @@ public class InterficieXat extends javax.swing.JFrame {
             this.inputMsg.setText(null);
         }
     }//GEN-LAST:event_botoEnviarMsgActionPerformed
+
     /**
      * Funcio creada per inicialitzar el JTextField amb un missatge per defecte
      * per a que el usuari sapigui on ha de escriure un missatge que enviara per
@@ -272,7 +251,7 @@ public class InterficieXat extends javax.swing.JFrame {
 
         this.botoXatPrivat.setIcon(iconoXatPrivat);
         this.botoXatGrupal.setIcon(iconoXatGrupal);
-        this.botoSetttings.setIcon(iconoSettings);
+        this.botoSettings.setIcon(iconoSettings);
         this.botoEnviarMsg.setIcon(iconoEnviar);
     }
 
@@ -293,42 +272,44 @@ public class InterficieXat extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InterficieXat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterficieXatProvisional.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InterficieXat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterficieXatProvisional.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InterficieXat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterficieXatProvisional.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InterficieXat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterficieXatProvisional.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InterficieXat().setVisible(true);
+                new InterficieXatProvisional().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botoEnviarMsg;
-    private javax.swing.JButton botoSetttings;
+    private javax.swing.JButton botoSettings;
     private javax.swing.JButton botoXatGrupal;
     private javax.swing.JButton botoXatPrivat;
-    private javax.swing.JPanel espaiControlMissatge;
-    private javax.swing.JPanel espaiMissatges;
-    private javax.swing.JPanel espaiSeleccioXat;
-    private javax.swing.JPanel espaiTitolXat;
-    private javax.swing.JPanel headerVista;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputMsg;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton llistatClient;
-    private javax.swing.JPanel llistatVista;
-    private javax.swing.JPanel mainVista;
     private javax.swing.JTextArea textAreaMissatge;
     private javax.swing.JLabel textLlistatUsuarisConectats;
-    private javax.swing.JLabel titolXat;
-    private javax.swing.JPanel vistaGeneral;
     // End of variables declaration//GEN-END:variables
 }
