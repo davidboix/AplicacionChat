@@ -1,5 +1,6 @@
 package exercicis.interficiechat;
 
+import java.awt.Font;
 import java.awt.Image;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class InterficieXat extends javax.swing.JFrame {
         titolXat = new javax.swing.JLabel();
         mainVista = new javax.swing.JPanel();
         espaiControlMissatge = new javax.swing.JPanel();
-        botoSetttings = new javax.swing.JButton();
+        botoLogout = new javax.swing.JButton();
         botoEnviarMsg = new javax.swing.JButton();
         inputMsg = new componentsPersonalitzats.JTextFieldPersonalitzat();
         espaiMissatges = new javax.swing.JPanel();
@@ -96,13 +97,18 @@ public class InterficieXat extends javax.swing.JFrame {
         espaiControlMissatge.setToolTipText("");
         espaiControlMissatge.setLayout(new java.awt.GridBagLayout());
 
-        botoSetttings.setBackground(new java.awt.Color(125, 165, 221));
-        botoSetttings.setToolTipText("Boto que no te cap funcio");
+        botoLogout.setBackground(new java.awt.Color(125, 165, 221));
+        botoLogout.setToolTipText("Boto que no te cap funcio");
+        botoLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botoLogoutActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        espaiControlMissatge.add(botoSetttings, gridBagConstraints);
+        espaiControlMissatge.add(botoLogout, gridBagConstraints);
 
         botoEnviarMsg.setBackground(new java.awt.Color(125, 165, 221));
         botoEnviarMsg.setText("Enviar ");
@@ -149,7 +155,7 @@ public class InterficieXat extends javax.swing.JFrame {
         llistatClient.setText("Client 1");
         llistatVista.add(llistatClient, java.awt.BorderLayout.CENTER);
 
-        textLlistatUsuarisConectats.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        textLlistatUsuarisConectats.setFont(new Font("Segoe UI",Font.PLAIN,12));
         textLlistatUsuarisConectats.setText("Llistat usuaris connectats");
         llistatVista.add(textLlistatUsuarisConectats, java.awt.BorderLayout.PAGE_START);
 
@@ -195,6 +201,13 @@ public class InterficieXat extends javax.swing.JFrame {
             this.inputMsg.setText(null);
         }
     }//GEN-LAST:event_botoEnviarMsgActionPerformed
+    /**
+     * 
+     * @param evt 
+     */
+    private void botoLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoLogoutActionPerformed
+        
+    }//GEN-LAST:event_botoLogoutActionPerformed
     /**
      * Funcio creada per inicialitzar el JTextField amb un missatge per defecte
      * per a que el usuari sapigui on ha de escriure un missatge que enviara per
@@ -279,7 +292,7 @@ public class InterficieXat extends javax.swing.JFrame {
 
         this.botoXatPrivat.setIcon(iconoXatPrivat);
         this.botoXatGrupal.setIcon(iconoXatGrupal);
-        this.botoSetttings.setIcon(iconoSettings);
+        this.botoLogout.setIcon(iconoSettings);
         this.botoEnviarMsg.setIcon(iconoEnviar);
     }
 
@@ -320,7 +333,7 @@ public class InterficieXat extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botoEnviarMsg;
-    private javax.swing.JButton botoSetttings;
+    private javax.swing.JButton botoLogout;
     private javax.swing.JButton botoXatGrupal;
     private javax.swing.JButton botoXatPrivat;
     private javax.swing.JPanel espaiControlMissatge;
