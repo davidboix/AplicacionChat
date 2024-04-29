@@ -21,49 +21,64 @@ public class Client {
         Scanner lector = new Scanner(System.in);
         final String IPSERVIDOR = "localhost";
         final int PORT = 12345;
-        try ( Socket cs = new Socket(IPSERVIDOR, PORT);
-                DataOutputStream out = new DataOutputStream(cs.getOutputStream());
-                DataInputStream dip = new DataInputStream(cs.getInputStream());) {
+        boolean seguir = true;
+        try ( Socket cs = new Socket(IPSERVIDOR, PORT);  DataOutputStream out = new DataOutputStream(cs.getOutputStream());  DataInputStream dip = new DataInputStream(cs.getInputStream());) {
+            while (seguir) {
 
-            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-            SecretKey clau = keyGen.generateKey();
-            
-            byte[] keyBytes = clau.getEncoded();
-            out.writeInt(keyBytes.length);
-            out.write(keyBytes);
+                KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+                SecretKey clau = keyGen.generateKey();
 
-            //System.out.print("Escriu la contrasenya: ");
-            //String msg = lector.nextLine();
-            String msg = "Hola, el meu nom es David";
-            Cipher aesCipher = Cipher.getInstance("AES");
-            aesCipher.init(Cipher.ENCRYPT_MODE, clau);
-            byte[] msgEncriptat = aesCipher.doFinal(msg.getBytes());
-            
-            out.writeInt(msgEncriptat.length);
-            out.write(msgEncriptat);
+                byte[] keyBytes = clau.getEncoded();
+                out.writeInt(keyBytes.length);
+                out.write(keyBytes);
 
-            System.out.println("Missatge encriptat i clau enviats al servidor...");
+                //System.out.print("Escriu la contrasenya: ");
+                //String msg = lector.nextLine();
+                String msg = "Hola, el meu nom es Oleh";
+                Cipher aesCipher = Cipher.getInstance("AES");
+                aesCipher.init(Cipher.ENCRYPT_MODE, clau);
+                byte[] msgEncriptat = aesCipher.doFinal(msg.getBytes());
 
-            byte[] keyBytesServ = new byte[dip.readInt()];
-            dip.readFully(keyBytesServ);
+                out.writeInt(msgEncriptat.length);
+                out.write(msgEncriptat);
 
-            SecretKey clauServidor = new SecretKeySpec(keyBytesServ, "AES");
-            //SecretKey clauServidor = new SecretKeySpec(dip.readNBytes(keyBytes.length), "AES");
+                System.out.println("Missatge encriptat i clau enviats al servidor...");
 
-            byte[] msgEncriptats = new byte[dip.readInt()];
-            dip.readFully(msgEncriptats);
-                        
-            Cipher aesCipher2 = Cipher.getInstance("AES");
-            aesCipher2.init(Cipher.DECRYPT_MODE, clau);
+                byte[] keyBytesServ = new byte[dip.readInt()];
+                dip.readFully(keyBytesServ);
 
-            byte[] msgDesencriptat = aesCipher2.doFinal(msgEncriptats);
-            String missatge = new String(msgDesencriptat);
-//            String base64String = Base64.getEncoder().encodeToString(msgDesencriptat);
-            System.out.println("Quantitat clients connectats: " + missatge);
-            dip.close();
-            out.close();
-            cs.close();
+                SecretKey clauServidor = new SecretKeySpec(keyBytesServ, "AES");
+                //SecretKey clauServidor = new SecretKeySpec(dip.readNBytes(keyBytes.length), "AES");
 
+                byte[] msgEncriptats = new byte[dip.readInt()];
+                dip.readFully(msgEncriptats);
+
+                Cipher aesCipher2 = Cipher.getInstance("AES");
+                aesCipher2.init(Cipher.DECRYPT_MODE, clau);
+
+                byte[] msgDesencriptat = aesCipher2.doFinal(msgEncriptats);
+                String missatge = new String(msgDesencriptat);
+                //            String base64String = Base64.getEncoder().encodeToString(msgDesencriptat);
+                System.out.println("Quantitat clients connectats: " + missatge);
+                Thread.sleep(5000);
+
+                System.out.println("Vol seguir connectat?");
+                String conn = lector.nextLine();
+                byte[] conConn = conn.getBytes();
+                if (conn.equals("si")) {
+                    System.out.println("Continue");
+                } else if (conn.equals("no")) {
+                    out.writeInt(conConn.length);
+                    out.write(conConn);
+                    System.out.println("Disconnect");
+                    System.out.println("Quantitat clients connectats: " + missatge);
+                    dip.close();
+                    out.close();
+                    cs.close();
+                    break;
+                }
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

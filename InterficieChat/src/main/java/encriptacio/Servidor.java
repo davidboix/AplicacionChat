@@ -278,6 +278,12 @@ public class Servidor {
                 
                 servidor.encriptarPassword(missatge, socket, servidor, clau, msgEncriptat, aesCipher, out);
                 
+                byte[] conn = new byte[1000];
+                String connt = new String(conn);
+                if(connt == "no"){
+                    qtClients--;
+                }
+                
                 System.out.println("\nServidor tornant a escoltar...");
 
                 /**
