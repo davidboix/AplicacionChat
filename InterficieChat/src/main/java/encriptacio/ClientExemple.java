@@ -26,7 +26,7 @@ public class ClientExemple {
                 String res = lector.next();
                 //En aquest moment l'hi hem enviat el missatge al client
                 os.write(res.getBytes());
-
+                
                 if (res.equalsIgnoreCase("DESCONNEXIO")) {
                     socket.close();
                     semafor = true;
