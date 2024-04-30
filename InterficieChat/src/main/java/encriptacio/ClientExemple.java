@@ -20,18 +20,18 @@ public class ClientExemple {
 
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
-            while (true) {
+            boolean semafor = false;
+            while (!semafor) {
                 System.out.println("Vol seguir connectat?: ");
                 String res = lector.next();
                 //En aquest moment l'hi hem enviat el missatge al client
                 os.write(res.getBytes());
-                
+
                 if (res.equalsIgnoreCase("DESCONNEXIO")) {
                     socket.close();
-                    break;
+                    semafor = true;
                 }
             }
-
         } catch (IOException ioe) {
             System.err.println("ERROR\nNo estem poden fer la connexio...");
         }

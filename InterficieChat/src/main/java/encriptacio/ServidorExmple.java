@@ -32,19 +32,28 @@ public class ServidorExmple {
                  * TODO: Desde el servidor, hem de rebre el missatge de
                  * desconnexio que ens envia el client per poder desconnectar
                  */
-                Atendre_Clients atendreClientsqtClients = new Atendre_Clients(newSocket);
-                atendreClientsqtClients.start();
-                boolean desconnectar = llegirDesconnexio(newSocket, is, os, DEMANAR_CONNEXIO);
-                if (desconnectar) {
-                    System.out.println("Rebem missatge del cient");
-                    atendreClientsqtClients.setMsgClient(DEMANAR_CONNEXIO);
-                    if (atendreClientsqtClients.getMsgClient().equalsIgnoreCase(DEMANAR_CONNEXIO)) {
-                        atendreClientsqtClients.tancarConnexio(newSocket, DEMANAR_CONNEXIO);
-                        System.out.println("Tanquem connexio");
-                        qtClients--;
-                    }
-                    System.out.println("No ha tancat connexio");
-                }
+                new Atendre_Clients(newSocket).start();
+                llegirDesconnexio(newSocket, is, os, DEMANAR_CONNEXIO);
+//                Atendre_Clients atendreClientsqtClients = new Atendre_Clients(newSocket);
+//                atendreClientsqtClients.run();
+//                atendreClientsqtClients.start();
+//                
+//                boolean desconnectar = llegirDesconnexio(newSocket, is, os, DEMANAR_CONNEXIO);
+//                if (desconnectar) {
+//                    System.out.println("Rebem missatge del cient");
+//
+//                    atendreClientsqtClients.setMsgClient(DEMANAR_CONNEXIO);
+////                    byte[] msg = new byte[500];
+////                    is.read(msg);
+////                    String prova = new String();
+//                    if (atendreClientsqtClients.getMsgClient().equalsIgnoreCase(DEMANAR_CONNEXIO)) {
+//                        atendreClientsqtClients.tancarConnexio(newSocket, DEMANAR_CONNEXIO);
+//                        System.out.println("Tanquem connexio");
+//                        qtClients--;
+//                    } else {
+//                        System.out.println("No ha tancat connexio");
+//                    }
+//                }
 
             }
         } catch (Exception e) {
@@ -52,19 +61,20 @@ public class ServidorExmple {
         }
     }
 
-    private static boolean llegirDesconnexio(Socket socket, InputStream is, OutputStream os, String msgDesconnexio) throws Exception {
+    private static void llegirDesconnexio(Socket socket, InputStream is, OutputStream os, String msgDesconnexio) throws Exception {
         try {
             byte[] msg = new byte[500];
             is.read(msg);
             String desconnexio = new String(msg);
             System.out.println(desconnexio);
             if (desconnexio.equalsIgnoreCase(desconnexio)) {
-                return true;
+//                return true;
             }
-            return false;
+//            return false;
         } catch (Exception e) {
-            System.err.println("ERROR!\n El metode valoraNom ha petat :( ");
+            e.printStackTrace();
+            System.err.println("\nERROR!\n El metode valoraNom ha petat :( ");
         }
-        return false;
+//        return false;
     }
 }

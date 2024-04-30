@@ -4,19 +4,20 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
- * 
+ *
  * @author David Boix Sanchez
  * @version 1.0
- * 
+ *
  */
 public class Atendre_Clients extends Thread {
 
     private Socket newSocket;
     private String msgClient;
-    
-    public Atendre_Clients (Socket cs) {
+
+    public Atendre_Clients(Socket cs) {
         newSocket = cs;
     }
+
     public Atendre_Clients(Socket cs, String msgClient) {
         newSocket = cs;
         this.msgClient = msgClient;
@@ -29,8 +30,8 @@ public class Atendre_Clients extends Thread {
     public String getMsgClient() {
         return this.msgClient;
     }
-
-    public void run() {
+    
+    public void run(String nom) {
         try {
             /**
              * TODO: El servidor llegira un missatge de desconnexio per part del
@@ -39,11 +40,14 @@ public class Atendre_Clients extends Thread {
              *
              */
             boolean semafor = false;
-            final String MISSATGE_DESCONNEXIO = getMsgClient();
+            final String MISSATGE_DESCONNEXIO = "DESCONNEXIO";
             while (!semafor) {
-                Thread.sleep(60000);
+//                Thread.sleep(60000);
+
+//                String msgDesconnexio = demanarDesconnexio(MISSATGE_DESCONNEXIO);
                 
-                String msgDesconnexio = demanarDesconnexio(MISSATGE_DESCONNEXIO);
+                    String msgDesconnexio = "DESCONNEXIO";
+                
                 if (msgDesconnexio.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
                     //Arriba el missatge de desconnexio i retornar true
                     System.out.println("\nArribem dins del condicional de Atendre_Client");

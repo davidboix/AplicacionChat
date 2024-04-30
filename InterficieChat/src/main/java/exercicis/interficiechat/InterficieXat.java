@@ -277,7 +277,7 @@ public class InterficieXat extends javax.swing.JFrame {
 
         ImageIcon iconoXatPrivatAModificar = new ImageIcon("src\\main\\java\\img\\iconoXatPrivat.png");
         ImageIcon iconoXatGrupalAModificar = new ImageIcon("src\\main\\java\\img\\iconoXatGrupal.png");
-        ImageIcon iconoSettingAModificar = new ImageIcon("src\\main\\java\\img\\iconoSettings.png");
+        ImageIcon iconoSettingAModificar = new ImageIcon("src\\main\\java\\img\\iconoLogout.png");
         ImageIcon iconoEnviarModificar = new ImageIcon("src\\main\\java\\img\\iconoEnviar.png");
 
         Image iconoXatPrivatModificat = iconoXatPrivatAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
