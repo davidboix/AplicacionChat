@@ -19,27 +19,28 @@ public class ClassMain extends javax.swing.JFrame {
     public ClassMain() {
         initComponents();
         inicialitzarIcons();
+        this.setExtendedState(MAXIMIZED_BOTH);
     }
 
     /**
      *
      */
     private void inicialitzarIcons() {
-        ImageIcon iconoClientAModificar = new ImageIcon("src\\main\\java\\img\\iconoClient.png");
+        ImageIcon iconoClientAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
         ImageIcon iconoServidorAModificar = new ImageIcon("src\\main\\java\\img\\iconoServidor.png");
-        ImageIcon iconoPrincipalAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
+        //ImageIcon iconoPrincipalAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
         
         Image iconoServidorModificat = iconoServidorAModificar.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         Image iconoClientModificat = iconoClientAModificar.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-        Image iconoPrincipalModificat = iconoPrincipalAModificar.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        //Image iconoPrincipalModificat = iconoPrincipalAModificar.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
 
         ImageIcon iconoServidor = new ImageIcon(iconoServidorModificat);
         ImageIcon iconoClients = new ImageIcon(iconoClientModificat);
-        ImageIcon iconoPrincipal = new ImageIcon(iconoPrincipalModificat);
+        //ImageIcon iconoPrincipal = new ImageIcon(iconoPrincipalModificat);
         
         this.jButton3.setIcon(iconoServidor);
         this.jButton4.setIcon(iconoClients);
-        this.jLabel2.setIcon(iconoPrincipal);
+        //this.jLabel2.setIcon(iconoPrincipal);
     }
 
     /**
@@ -50,16 +51,14 @@ public class ClassMain extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         panelGeneral = new javax.swing.JPanel();
         header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        partDreta = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
         main = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        partEsquerra = new javax.swing.JPanel();
         jButton4 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         footer = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -73,12 +72,25 @@ public class ClassMain extends javax.swing.JFrame {
 
         header.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("jLabel1");
+        jLabel1.setFont(new java.awt.Font("Noto Sans", 0, 24)); // NOI18N
+        jLabel1.setText("CostaXat");
         header.add(jLabel1, new java.awt.GridBagConstraints());
 
         panelGeneral.add(header, java.awt.BorderLayout.PAGE_START);
 
-        partDreta.setLayout(new java.awt.GridLayout());
+        main.setLayout(new java.awt.GridBagLayout());
+
+        jButton4.setContentAreaFilled(false);
+        jButton4.setOpaque(true);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 100);
+        main.add(jButton4, gridBagConstraints);
 
         jButton3.setBorder(null);
         jButton3.setContentAreaFilled(false);
@@ -87,24 +99,12 @@ public class ClassMain extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        partDreta.add(jButton3);
-
-        panelGeneral.add(partDreta, java.awt.BorderLayout.LINE_END);
-
-        main.setLayout(new java.awt.GridBagLayout());
-
-        jLabel2.setText("jLabel2");
-        main.add(jLabel2, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 100);
+        main.add(jButton3, gridBagConstraints);
 
         panelGeneral.add(main, java.awt.BorderLayout.CENTER);
-
-        partEsquerra.setLayout(new java.awt.GridBagLayout());
-
-        jButton4.setContentAreaFilled(false);
-        jButton4.setOpaque(true);
-        partEsquerra.add(jButton4, new java.awt.GridBagConstraints());
-
-        panelGeneral.add(partEsquerra, java.awt.BorderLayout.LINE_START);
 
         footer.setLayout(new java.awt.GridBagLayout());
 
@@ -132,16 +132,39 @@ public class ClassMain extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        System.out.println("Entrem aqui...");
+        tancarFinestra();
+        IniciServidor serv = new IniciServidor();
+        serv.setVisible(true);
+        /**
+         * TODO: En aquest moment ho deixarem comentat perque estem preparant la
+         * interficie
+         *
+         */
+        serv.setExtendedState(MAXIMIZED_BOTH);
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        tancarFinestra();
+        VistaPrincipal xat = new VistaPrincipal();
+        xat.setVisible(true);
+        /**
+         * TODO: En aquest moment ho deixarem comentat perque estem preparant la
+         * interficie
+         *
+         */
+        xat.setExtendedState(MAXIMIZED_BOTH);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void tancarFinestra() {
+        this.setVisible(false);
+    }
     /**
      * @param args the command line arguments
      */
@@ -185,13 +208,10 @@ public class ClassMain extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel main;
     private javax.swing.JPanel panelGeneral;
-    private javax.swing.JPanel partDreta;
-    private javax.swing.JPanel partEsquerra;
     // End of variables declaration//GEN-END:variables
 }
