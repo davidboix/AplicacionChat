@@ -11,15 +11,19 @@ import java.net.Socket;
  * @version 1.0
  *
  */
-//public class Atendre_Clients extends Thread {
-//
-//    private Socket newSocket;
-//    private String msgClient;
-//
-//    public Atendre_Clients(Socket cs) {
-//        newSocket = cs;
-//    }
-//
+public class Atendre_Clients extends Thread {
+
+    private Socket newSocket;
+    private String msgClient;
+
+    public Atendre_Clients(Socket cs) {
+        newSocket = cs;
+    }
+
+    /**
+     * TODO: Necessitem utilitzar aquestos metodes per poder inicialitzar un
+     * missatge de un client pero ns sabem com.
+     */
 //    public Atendre_Clients(Socket cs, String msgClient) {
 //        newSocket = cs;
 //        this.msgClient = msgClient;
@@ -32,26 +36,27 @@ import java.net.Socket;
 //    public String getMsgClient() {
 //        return this.msgClient;
 //    }
-//
-//    public void run(String nom) {
-//        try {
-//            /**
-//             * TODO: El servidor llegira un missatge de desconnexio per part del
-//             * client que sera DESCONNEXIO quan el client premi al boto de
-//             * desconnexio de la interficie
-//             *
-//             */
-//            boolean semafor = false;
-//            final String MISSATGE_DESCONNEXIO = "DESCONNEXIO";
-//            InputStream is = newSocket.getInputStream();
-//            OutputStream os = newSocket.getOutputStream();
-//            while (!semafor) {
-////                Thread.sleep(60000);
+    public void run(String nom) {
+        try {
+            /**
+             * TODO: El servidor llegira un missatge de desconnexio per part del
+             * client que sera DESCONNEXIO quan el client premi al boto de
+             * desconnexio de la interficie
+             */
+            boolean semafor = false;
+            final String MISSATGE_DESCONNEXIO = "DESCONNEXIO";
+            InputStream is = newSocket.getInputStream();
+            OutputStream os = newSocket.getOutputStream();
+            while (true) {
+                Thread.sleep(5000);
+                System.out.println("Hem tancat sessio");
+                newSocket.close();
+
 //                byte[] buffer = new byte[500];
 //                is.read(buffer);
-//                String msgDesconnexio = new String(buffer).trim();
-////                String msgDesconnexio = demanarDesconnexio(MISSATGE_DESCONNEXIO);
-//                //String msgDesconnexio = "DESCONNEXIO";
+////                String msgDesconnexio = new String(buffer).trim();
+//                String msgDesconnexio = demanarDesconnexio(MISSATGE_DESCONNEXIO);
+////                String msgDesconnexio = "DESCONNEXIO";
 //
 //                if (msgDesconnexio.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
 //                    //Arriba el missatge de desconnexio i retornar true
@@ -60,30 +65,30 @@ import java.net.Socket;
 //                    System.out.println("\nTanquem nou socket...");
 //                }
 //                System.out.println("\nSeguim amb la connexio...");
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            System.err.println("ERROR!\n Hem entrat en un error...");
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//            System.err.println("ERROR!\nHi ha hagut un error de interrupcio");
-//        } catch (Exception e) {
-//            System.err.println("ERROR!\nHi ha un metode que no ha funcionat correctament");
-//        }
-//    }
-//
-//    /**
-//     * Funcio que farem servir per poder desconnectar el client del servidor
-//     * quan arribi un missatge en clau per poder realitzar l'operacio
-//     *
-//     * @param socket Socket que arribara per part del client per poder indicar
-//     * quin socket volem desconnectar
-//     * @param desconnexio Paraula clau que farem servir per realitzar la
-//     * desconnexio
-//     * @return Retornarem cert en cas de que l'operacio s'hagui realitzat
-//     * correctament i en cas contrari, no es realitzara correctament la
-//     * desconnexio i no es produira
-//     */
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("ERROR!\n Hem entrat en un error...");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.err.println("ERROR!\nHi ha hagut un error de interrupcio");
+        } catch (Exception e) {
+            System.err.println("ERROR!\nHi ha un metode que no ha funcionat correctament");
+        }
+    }
+
+    /**
+     * Funcio que farem servir per poder desconnectar el client del servidor
+     * quan arribi un missatge en clau per poder realitzar l'operacio
+     *
+     * @param socket Socket que arribara per part del client per poder indicar
+     * quin socket volem desconnectar
+     * @param desconnexio Paraula clau que farem servir per realitzar la
+     * desconnexio
+     * @return Retornarem cert en cas de que l'operacio s'hagui realitzat
+     * correctament i en cas contrari, no es realitzara correctament la
+     * desconnexio i no es produira
+     */
 //    public boolean tancarConnexio(Socket socket, String desconnexio) throws Exception {
 //        try {
 //            final String DESCONNEXIO = "DESCONNEXIO";
@@ -107,54 +112,54 @@ import java.net.Socket;
 //    private String demanarDesconnexio(String missatgeClientDesconnexio) {
 //        return "DESCONNEXIO";
 //    }
-//}
-public class Atendre_Clients extends Thread {
-
-    private Socket newSocket;
-    private String DEMANAR_CONNEXIO;
-
-    public Atendre_Clients(Socket newSocket) {
-        this.newSocket = newSocket;
-    }
-    
-
-    public Atendre_Clients(Socket cs, String DEMANAR_CONNEXIO) {
-        newSocket = cs;
-        this.DEMANAR_CONNEXIO = DEMANAR_CONNEXIO;
-    }
-
-    public void run() {
-        try {
-            InputStream is = newSocket.getInputStream();
-            OutputStream os = newSocket.getOutputStream();
-            while (true) {
-                boolean cagar = llegirDesconnexio(is, DEMANAR_CONNEXIO);
-                if (cagar) {
-                    System.out.println("Client disconnected");
-                    newSocket.close();
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private boolean llegirDesconnexio(InputStream is, String msgDesconnexio) throws Exception {
-        try {
-            byte[] msg = new byte[500];
-            is.read(msg);
-            String desconnexio = new String(msg).trim(); // trim() removes leading and trailing whitespaces
-            System.out.println(desconnexio);
-            if (msgDesconnexio.equalsIgnoreCase(desconnexio)) {
-                return true;
-            } else {
-                System.out.println("NO TANQUEM CONNEXIO");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("\nERROR!\n El metode valoraNom ha petat :( ");
-        }
-        return false;
-    }
 }
+//public class Atendre_Clients extends Thread {
+//
+//    private Socket newSocket;
+//    private String DEMANAR_CONNEXIO;
+//
+//    public Atendre_Clients(Socket newSocket) {
+//        this.newSocket = newSocket;
+//    }
+//    
+//
+//    public Atendre_Clients(Socket cs, String DEMANAR_CONNEXIO) {
+//        newSocket = cs;
+//        this.DEMANAR_CONNEXIO = DEMANAR_CONNEXIO;
+//    }
+//
+//    public void run() {
+//        try {
+//            InputStream is = newSocket.getInputStream();
+//            OutputStream os = newSocket.getOutputStream();
+//            while (true) {
+//                boolean cagar = llegirDesconnexio(is, DEMANAR_CONNEXIO);
+//                if (cagar) {
+//                    System.out.println("Client disconnected");
+//                    newSocket.close();
+//                    break;
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    private boolean llegirDesconnexio(InputStream is, String msgDesconnexio) throws Exception {
+//        try {
+//            byte[] msg = new byte[500];
+//            is.read(msg);
+//            String desconnexio = new String(msg).trim(); // trim() removes leading and trailing whitespaces
+//            System.out.println(desconnexio);
+//            if (msgDesconnexio.equalsIgnoreCase(desconnexio)) {
+//                return true;
+//            } else {
+//                System.out.println("NO TANQUEM CONNEXIO");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.err.println("\nERROR!\n El metode valoraNom ha petat :( ");
+//        }
+//        return false;
+//    }
+//}
