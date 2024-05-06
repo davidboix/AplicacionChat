@@ -56,6 +56,7 @@ public class InterficieXat extends javax.swing.JFrame {
         textLlistatUsuarisConectats = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("CostaXat (Provisional)");
 
         vistaGeneral.setLayout(new java.awt.BorderLayout());
 

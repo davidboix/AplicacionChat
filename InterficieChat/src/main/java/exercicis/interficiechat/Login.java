@@ -16,7 +16,7 @@ import org.bson.Document;
 
 /**
  *
- * @author Oleh Plechiy Tupis Andriyovech
+ * @author Oleh Plechiy Tupis Andriyovech i David Boix Sanchez
  * @version 1.0
  */
 public class Login extends javax.swing.JFrame {
@@ -29,10 +29,10 @@ public class Login extends javax.swing.JFrame {
         inicialitzarTextInputs();
         amagarInfoWarnings();
         inicialitzarInput();
+
         //mongoClient = new MongoClient("localhost", 27017);
         //database = mongoClient.getDatabase("Cuentas");
         //MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
-
     }
 
     /**
@@ -179,6 +179,7 @@ public class Login extends javax.swing.JFrame {
      * @param evt
      */
     private void botoLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoLoginActionPerformed
+        String passwordEncriptada = null;
         final String DB_SRV_USR = "grup1";
         final String DB_SRV_PWD = "gat123";
         final String DB_URL = "57.129.5.24";
@@ -189,42 +190,74 @@ public class Login extends javax.swing.JFrame {
 
         try ( MongoClient mongoClient = new MongoClient(uri)) {
             String nomUsuari = this.usuariText.getText();
-            //consultaActual(nomUsuari);
             MongoDatabase database = mongoClient.getDatabase(DB_SRV_USR);
             MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
 
             long numUsuaris = cuentasCollection.countDocuments(Filters.eq("nomUser", nomUsuari));
 
             if (numUsuaris > 0) {
+
                 String password = tractarPassword(this.inputPassword);
                 boolean isTrue = searchPassword(this.usuariText.getText(), password);
+
                 if (isTrue) {
-                    System.out.println("esta be");
+                    /**
+                     * TODO: Revisar el funcionament de aquesta funcio ja que no
+                     * sabem si ho estem fent correctament i ens ha donat
+                     * problemes.
+                     */
+                    passwordEncriptada = getPassword(nomUsuari);
                 } else {
-                    System.out.println("malmaent");
+                    /**
+                     * TODO: Hem de mostrar un JOptionPane amb el seguent
+                     * missatge per informar al usuari que esta passant en
+                     * aquell moment i per tant tenir-lo informat en tot moment
+                     * de que esta passant.
+                     */
+                    System.out.println("La contrasenya no es la mateixa i per tant no podem fer cap tipus de us.");
                 }
-                
+                /**
+                 * TODO: Revisar aquesta proposta de solucio Ho podem borrar ja
+                 * que no ho fem servir JAJA.
+                 */
                 //long numContra = cuentasCollection.countDocuments(Filters.eq("contrasenya", password));
-                FindIterable<Document> resultatUsers = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
-                
-                for (Document row : resultatUsers) {
-                    System.out.println(row.getString("nomUser"));
-                    System.out.println(row.getString("contrasenyaUsuari"));
-                }
+                //TODO: Consulta realitzada incorrectament i per tant ho podem borrar mes endavant.
+                //long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
+                long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", passwordEncriptada)));
 
-                long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
-
-                if (numContra > 0) {
-                    FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
+                if (numContra > 0 && passwordEncriptada != null) {
+                    /**
+                     * TODO: Mes endavant, haurem de borrar les dades que es
+                     * mostren per pantalla, incluida la consulta que estem
+                     * realitzant degut a que es innecessari i nomes ho estem
+                     * fent servir per poder assegurar-nos de que les dades son
+                     * correctes.
+                     */
+                    //TODO: Borrar consulta ja que ho estem fent malament.
+                    //FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
+                    FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", passwordEncriptada)));
                     for (Document infoUsuaris : resultatUsuaris) {
                         System.out.print("\nNom Usuari: " + infoUsuaris.getString("nomUser"));
                         System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenyaUsuari"));
                     }
+                    this.mostrarInterficieXat();
                 } else {
+                    /**
+                     * TODO: Mostrar en un JOptionPane el seguent error per tal
+                     * de que el usuari client pugui saber que esta passant i
+                     * pugui solucionar la incidencia ell mateix ja que es un
+                     * problema extern que no podem controlar com a
+                     * programadors.
+                     */
                     System.out.println("La contrasenya es incorrecta, siusplau, introdueix la contrasenya correcta!");
                 }
 
             } else {
+                /**
+                 * TODO: Printar en un JOptionPane el seguent missatge per poder
+                 * informar al usuari del error el qual s'esta produint i per
+                 * tant el erroni funcionament de la nostra aplicacio.
+                 */
                 System.out.println("El usuari que estas intentant introduir, no existeix en la nostra base de dades");
             }
         } catch (Exception e) {
@@ -232,7 +265,12 @@ public class Login extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_botoLoginActionPerformed
-
+    /**
+     * Funcio creada per poder inicialitzar els diferents inputs de la nostra
+     * interficie grafica i que,d'aquesta manera, el usuari pugui saber quin
+     * tipus de dades ha de introduir en els diferents components que podra
+     * utilitzar per poder iniciar sessio.
+     */
     private void inicialitzarInput() {
         String psw = new String(this.inputPassword.getPassword());
         this.inputPassword.setPlaceHolder("Introdueix el nom...");
@@ -267,7 +305,13 @@ public class Login extends javax.swing.JFrame {
                 }
 
                 if (!password.isEmpty()) {
-                    System.out.println("Passem per aki");
+                    /**
+                     * TODO: Missatge informatiu que hem afegit per saber si
+                     * realment estem passant dins del condicional i no ens esta
+                     * donant error per qualsevol causa i poguer solucionar de
+                     * la millor manera possible.
+                     */
+                    System.out.println("La contrasenya NO es buida i per tant, la contrasenya ha sigut retornada correctament.");
                     return password;
                 }
             }
@@ -278,30 +322,46 @@ public class Login extends javax.swing.JFrame {
     }
 
     /**
+     * TODO: Hem de revisar la funcio ja que en aquest moment no estem comparant
+     * de la manera mes idonea les contrasenyes i per tant no ho estem fent be
+     *
      * Funcio la qual compare si la contrasenya encriptada introduida es igual a
      * la que està a la base de dades
      *
+     *
      * @param searchPassword
      * @return true si les contrasenyes encriptades son iguals, si no ho son,
-     * return false
+     * returna fals i per tant, arribariem a la conclusio de que les
+     * contrasenyes NO son iguals
      */
     private boolean searchPassword(String nomUsuari, String searchPassword) {
+
         String password = getPassword(nomUsuari);
 
         try {
-            //        codi de exemple per encriptar la password 
+            /**
+             * TODO: Codi de exemple per encriptar la password
+             */
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] b2 = searchPassword.getBytes();
             md.update(b2);
             byte[] resum2 = md.digest();
-            String passwordComparar = new String(resum2);
-
             String base64String = Base64.getEncoder().encodeToString(resum2);
-
-            System.out.println(password + "\n" + base64String);
-
             if (password.equalsIgnoreCase(base64String)) {
+                /**
+                 * TODO: Hem de treure aquest missatge de consola per poder
+                 * continuar amb la desenvolupacio del programa.
+                 */
+                System.out.println("La contrasenya es la mateixa!");
                 return true;
+            } else {
+                /**
+                 * TODO: Podem treure aquest else ja que no ens fa falta, nomes
+                 * deixant el return false en tindriam suficient, pero en aquest
+                 * moment ho fem aixi per poder veure si entra en el else o no.
+                 */
+                System.out.println("La contrasenya es diferent!");
+                return false;
             }
         } catch (NoSuchAlgorithmException nsae) {
             System.out.println("Error encriptacio");
@@ -393,6 +453,16 @@ public class Login extends javax.swing.JFrame {
         Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
         mongoLogger.setLevel(Level.WARNING);
         mongoLogger.setUseParentHandlers(false);
+    }
+
+    /**
+     * Funcio creada per poder mostrar la interficie grafica creada quan el
+     * usuari hagui realitzat el login correctament sense cap mena de error.
+     */
+    private void mostrarInterficieXat() {
+        this.setVisible(false);
+        InterficieXat ix = new InterficieXat();
+        ix.setVisible(true);
     }
 
     /**
