@@ -13,6 +13,7 @@ public class ServidorExmple {
     // Estructura MongoDB
     // Usuari de la BD: grup1
     // Password: gat123
+    
     public static void main(String[] args) {
 
         try {
@@ -28,8 +29,13 @@ public class ServidorExmple {
                 qtClients++;
                 System.out.println("Servidor preparat per escoltar!");
                 Socket newSocket = serverSocket.accept();
-                System.out.println("Quantitat de clients connectats: " + qtClients);
+                //System.out.println("Quantitat de clients connectats: " + qtClients);
                 new Atendre_Clients(newSocket, qtClients).start();
+                //Prova de boolean per a si veu missatge de desconnexio, li resti, pero no funciona be ja que el que fara es aturar el while i no llegira l'altre client
+//                if(new Atendre_Clients(newSocket, qtClients).prova()){
+//                    qtClients--;
+//                }
+                
 //                while (!semafor) {
 //
 //                    InputStream is = newSocket.getInputStream();

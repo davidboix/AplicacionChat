@@ -18,6 +18,8 @@ public class Atendre_Clients extends Thread {
     private Socket newSocket;
     private String msgClient;
     private int qtClients;
+    //he intentat fer una global, pero quan entre un altre client es reseteje
+    int clientsNumber = 0;
 
     public Atendre_Clients(Socket newSocket) {
         this.newSocket = newSocket;
@@ -26,6 +28,7 @@ public class Atendre_Clients extends Thread {
     public Atendre_Clients(Socket cs, int qtClients) {
         this.newSocket = cs;
         this.qtClients = qtClients;
+        //this.qtClients = 0;
     }
 
     /**
@@ -77,8 +80,8 @@ public class Atendre_Clients extends Thread {
 
                 if (msg.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
                     Thread.sleep(2000);
-                    System.out.println("El client numero " + this.qtClients + " s'ha desonnectat...");
                     this.qtClients--;
+                    System.out.println("El client numero " + this.qtClients + " s'ha desonnectat...");
                     newSocket.close();
                     //TODO: Canviar el break per una condicio que ens deixi sortir del bucle
                     semafor = true;
@@ -110,6 +113,64 @@ public class Atendre_Clients extends Thread {
             System.err.println("ERROR!\nHi ha un metode que no ha funcionat correctament");
         }
     }
+    //funcio booleana de prova per a que quan vegi el missatge de desconnexio, retorni un true
+    public boolean prova(){
+        try {
+            /**
+             * TODO: El servidor llegira un missatge de desconnexio per part del
+             * client que sera DESCONNEXIO quan el client premi al boto de
+             * desconnexio de la interficie
+             */
+            final String MISSATGE_DESCONNEXIO = "exit";
+            InputStream is = newSocket.getInputStream();
+            OutputStream os = newSocket.getOutputStream();
+
+            DataInputStream dis = new DataInputStream(newSocket.getInputStream());
+            DataOutputStream dos = new DataOutputStream(newSocket.getOutputStream());
+
+
+                byte[] buffer = new byte[500];
+                int intBuffer = is.read(buffer);
+                String msg = new String(buffer, 0, intBuffer);
+
+                if (msg.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
+                    Thread.sleep(2000);
+                    System.out.println("El client numero " + this.qtClients + " s'ha desonnectat...");
+                    System.out.println("Numero " + clientsNumber + " s'ha desonnectat...");
+                    
+                    newSocket.close();
+                    return true;
+                }
+                
+                return false;
+//                System.out.println("Hem tancat sessio");
+//                newSocket.close();
+
+//                byte[] buffer = new byte[500];
+//                is.read(buffer);
+////                String msgDesconnexio = new String(buffer).trim();
+//                String msgDesconnexio = demanarDesconnexio(MISSATGE_DESCONNEXIO);
+////                String msgDesconnexio = "DESCONNEXIO";
+//
+//                if (msgDesconnexio.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
+//                    //Arriba el missatge de desconnexio i retornar true
+//                    System.out.println("\nArribem dins del condicional de Atendre_Client");
+//                    semafor = tancarConnexio(newSocket, MISSATGE_DESCONNEXIO);
+//                    System.out.println("\nTanquem nou socket...");
+//                }
+//                System.out.println("\nSeguim amb la connexio...");
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("ERROR!\n Hem entrat en un error...");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.err.println("ERROR!\nHi ha hagut un error de connexio");
+        } catch (Exception e) {
+            System.err.println("ERROR!\nHi ha un metode que no ha funcionat correctament");
+        }
+        return false;
+    }
 
     public void run() {
         try {
@@ -118,6 +179,7 @@ public class Atendre_Clients extends Thread {
              * client que sera DESCONNEXIO quan el client premi al boto de
              * desconnexio de la interficie
              */
+            clientsNumber++;
             boolean semafor = false;
             final String MISSATGE_DESCONNEXIO = "exit";
             InputStream is = newSocket.getInputStream();
@@ -127,6 +189,7 @@ public class Atendre_Clients extends Thread {
             DataOutputStream dos = new DataOutputStream(newSocket.getOutputStream());
 
             System.out.println("Quantitat de clients connectats: " + this.qtClients);
+            System.out.println("Connectats: " + clientsNumber);
             
             while (!semafor) {
 
@@ -145,7 +208,10 @@ public class Atendre_Clients extends Thread {
                 if (msg.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
                     Thread.sleep(2000);
                     System.out.println("El client numero " + this.qtClients + " s'ha desonnectat...");
+                    System.out.println("Numero " + clientsNumber + " s'ha desonnectat...");
                     this.qtClients--;
+                    //qtClients--;
+                    clientsNumber--;
                     newSocket.close();
                     semafor = true;
                 }
