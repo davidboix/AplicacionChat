@@ -16,9 +16,24 @@ public class ClientExemple {
             InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
             socket.connect(addr);
             System.out.println("Ens conectem...");
-            
-//            InputStream is = socket.getInputStream();
-//            OutputStream os = socket.getOutputStream();
+            InputStream is = socket.getInputStream();
+            OutputStream os = socket.getOutputStream();
+            boolean semafor = false;
+
+            while (!semafor) {
+                System.out.print("Escriu un missatge que vulguis al servidor: ");
+                String msg = lector.nextLine();
+
+                if (msg.equalsIgnoreCase("exit")) {
+                    os.write(msg.getBytes());
+                    System.out.println("Ens hem desonnectat del servidor...");
+                    semafor = true;
+                }
+
+                os.write(msg.getBytes());
+
+            }
+            socket.close();
 //            boolean semafor = false;
 //            while (!semafor) {
 //                System.out.println("Vol seguir connectat?: ");
@@ -32,7 +47,7 @@ public class ClientExemple {
 //                }
 //            }
         } catch (IOException ioe) {
-            System.err.println("ERROR\nNo es_tem poden fer la connexio...");
+            System.err.println("ERROR\nNo estem poden fer la connexio...");
         }
     }
 

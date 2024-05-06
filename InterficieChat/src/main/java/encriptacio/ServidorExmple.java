@@ -7,27 +7,24 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServidorExmple {
-
+    
     public static void main(String[] args) {
+        
         try {
-            final String DEMANAR_CONNEXIO = "DESCONNEXIO";
             System.out.println("Creem el socket servidor");
             ServerSocket serverSocket = new ServerSocket();
-
             InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
-
-            System.out.println("Fem el bind. Ja acceptem connexions...");
             serverSocket.bind(addr);
+
             boolean semafor = false;
             int qtClients = 0;
 
             while (true) {
-                System.out.println("Acceptant connexions");
-                Socket newSocket = serverSocket.accept();
                 qtClients++;
-                System.out.println("Conexión rebuda: " + qtClients);
-                new Atendre_Clients(newSocket).start();
-
+                System.out.println("Servidor preparat per escoltar!");
+                Socket newSocket = serverSocket.accept();
+                System.out.println("Quantitat de clients connectats: " + qtClients);
+                new Atendre_Clients(newSocket, qtClients).start();
 //                while (!semafor) {
 //
 //                    InputStream is = newSocket.getInputStream();
@@ -68,13 +65,38 @@ public class ServidorExmple {
 //                        System.out.println("No ha tancat connexio");
 //                    }
 //                }
-                qtClients--;
+//                qtClients--;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
+    /**
+     * Funcio provisional creada per poder augmentar les connexions que es
+     * realitzen en el servidor i portar un control sobre elles
+     *
+     * @param qtClients La quantitat de clients el qual ens trobem en aquell
+     * moment.
+     * @return Retorna la quantitat de clients actuals augmentada en 1.
+     */
+    private static int augmentarConnexio(int qtClients) {
+        return qtClients;
+    }
+
+    /**
+     * TODO: Funcio que haurem de desenvolupar mes tard per poder saber si estem
+     * fent un tractament correcte
+     *
+     * @param socket
+     * @param is
+     * @param os
+     * @param msgDesconnexio
+     * @param i
+     * @return
+     * @throws Exception
+     */
     private static boolean llegirDesconnexio(Socket socket, InputStream is, OutputStream os, String msgDesconnexio, int i) throws Exception {
         try {
             byte[] msg = new byte[500];

@@ -1,5 +1,7 @@
 package encriptacio;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,9 +17,15 @@ public class Atendre_Clients extends Thread {
 
     private Socket newSocket;
     private String msgClient;
+    private int qtClients;
 
-    public Atendre_Clients(Socket cs) {
-        newSocket = cs;
+    public Atendre_Clients(Socket newSocket) {
+        this.newSocket = newSocket;
+    }
+
+    public Atendre_Clients(Socket cs, int qtClients) {
+        this.newSocket = cs;
+        this.qtClients = qtClients;
     }
 
     /**
@@ -36,7 +44,8 @@ public class Atendre_Clients extends Thread {
 //    public String getMsgClient() {
 //        return this.msgClient;
 //    }
-    public void run(String nom) {
+    //TODO: Revisar aquesta funcio ja que ens esta donant problemes.
+    public void correForestCorre() {
         try {
             /**
              * TODO: El servidor llegira un missatge de desconnexio per part del
@@ -44,13 +53,38 @@ public class Atendre_Clients extends Thread {
              * desconnexio de la interficie
              */
             boolean semafor = false;
-            final String MISSATGE_DESCONNEXIO = "DESCONNEXIO";
+            final String MISSATGE_DESCONNEXIO = "exit";
             InputStream is = newSocket.getInputStream();
             OutputStream os = newSocket.getOutputStream();
-            while (true) {
-                Thread.sleep(5000);
-                System.out.println("Hem tancat sessio");
-                newSocket.close();
+
+            DataInputStream dis = new DataInputStream(newSocket.getInputStream());
+            DataOutputStream dos = new DataOutputStream(newSocket.getOutputStream());
+
+            System.out.println("Quantitat de clients connectats: " + this.qtClients);
+            while (!semafor) {
+
+                byte[] keyBytes = new byte[dis.readInt()];
+                dis.readFully(keyBytes);
+
+                byte[] buffer = new byte[500];
+                int intBuffer = is.read(buffer);
+//              TODO:Solucio proposada per CHATGPT
+                //String msg = new String(buffer, 0, intBuffer);
+                String msg = new String(keyBytes, 0, dis.read(keyBytes));
+//              TODO: Solucio proposada per David Boix
+                //String msg = new String(buffer);
+                System.out.println("Aquest es el missatge que ens envia des de el client: " + this.qtClients + ": " + msg);
+
+                if (msg.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
+                    Thread.sleep(2000);
+                    System.out.println("El client numero " + this.qtClients + " s'ha desonnectat...");
+                    this.qtClients--;
+                    newSocket.close();
+                    //TODO: Canviar el break per una condicio que ens deixi sortir del bucle
+                    semafor = true;
+                }
+//                System.out.println("Hem tancat sessio");
+//                newSocket.close();
 
 //                byte[] buffer = new byte[500];
 //                is.read(buffer);
@@ -71,12 +105,77 @@ public class Atendre_Clients extends Thread {
             System.err.println("ERROR!\n Hem entrat en un error...");
         } catch (InterruptedException e) {
             e.printStackTrace();
-            System.err.println("ERROR!\nHi ha hagut un error de interrupcio");
+            System.err.println("ERROR!\nHi ha hagut un error de connexio");
         } catch (Exception e) {
             System.err.println("ERROR!\nHi ha un metode que no ha funcionat correctament");
         }
     }
 
+    public void run() {
+        try {
+            /**
+             * TODO: El servidor llegira un missatge de desconnexio per part del
+             * client que sera DESCONNEXIO quan el client premi al boto de
+             * desconnexio de la interficie
+             */
+            boolean semafor = false;
+            final String MISSATGE_DESCONNEXIO = "exit";
+            InputStream is = newSocket.getInputStream();
+            OutputStream os = newSocket.getOutputStream();
+
+            DataInputStream dis = new DataInputStream(newSocket.getInputStream());
+            DataOutputStream dos = new DataOutputStream(newSocket.getOutputStream());
+
+            System.out.println("Quantitat de clients connectats: " + this.qtClients);
+            
+            while (!semafor) {
+
+//                byte[] keyBytes = new byte[dis.readInt()];
+//                dis.readFully(keyBytes);
+
+                byte[] buffer = new byte[500];
+                int intBuffer = is.read(buffer);
+//              TODO:Solucio proposada per CHATGPT
+                String msg = new String(buffer, 0, intBuffer);
+//                String msg = new String(keyBytes, 0, dis.read(keyBytes));
+//              TODO: Solucio proposada per David Boix
+                //String msg = new String(buffer);
+                System.out.println("Aquest es el missatge que ens envia des de el client: " + this.qtClients + ": " + msg);
+
+                if (msg.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
+                    Thread.sleep(2000);
+                    System.out.println("El client numero " + this.qtClients + " s'ha desonnectat...");
+                    this.qtClients--;
+                    newSocket.close();
+                    semafor = true;
+                }
+//                System.out.println("Hem tancat sessio");
+//                newSocket.close();
+
+//                byte[] buffer = new byte[500];
+//                is.read(buffer);
+////                String msgDesconnexio = new String(buffer).trim();
+//                String msgDesconnexio = demanarDesconnexio(MISSATGE_DESCONNEXIO);
+////                String msgDesconnexio = "DESCONNEXIO";
+//
+//                if (msgDesconnexio.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
+//                    //Arriba el missatge de desconnexio i retornar true
+//                    System.out.println("\nArribem dins del condicional de Atendre_Client");
+//                    semafor = tancarConnexio(newSocket, MISSATGE_DESCONNEXIO);
+//                    System.out.println("\nTanquem nou socket...");
+//                }
+//                System.out.println("\nSeguim amb la connexio...");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("ERROR!\n Hem entrat en un error...");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.err.println("ERROR!\nHi ha hagut un error de connexio");
+        } catch (Exception e) {
+            System.err.println("ERROR!\nHi ha un metode que no ha funcionat correctament");
+        }
+    }
     /**
      * Funcio que farem servir per poder desconnectar el client del servidor
      * quan arribi un missatge en clau per poder realitzar l'operacio
