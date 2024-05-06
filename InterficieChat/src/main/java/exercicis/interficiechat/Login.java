@@ -179,13 +179,18 @@ public class Login extends javax.swing.JFrame {
      * @param evt
      */
     private void botoLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoLoginActionPerformed
-        final String URLCONNEXIO = "mongodb://localhost:27017";
+        final String DB_SRV_USR = "grup1";
+        final String DB_SRV_PWD = "gat123";
+        final String DB_URL = "57.129.5.24";
+        final String DB_PORT = "27017";
+        String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
+
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
 
         try ( MongoClient mongoClient = new MongoClient(uri)) {
             String nomUsuari = this.usuariText.getText();
             //consultaActual(nomUsuari);
-            MongoDatabase database = mongoClient.getDatabase("Cuentas");
+            MongoDatabase database = mongoClient.getDatabase(DB_SRV_USR);
             MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
 
             long numUsuaris = cuentasCollection.countDocuments(Filters.eq("nomUser", nomUsuari));
@@ -198,12 +203,17 @@ public class Login extends javax.swing.JFrame {
                 } else {
                     System.out.println("malmaent");
                 }
-
+                
                 //long numContra = cuentasCollection.countDocuments(Filters.eq("contrasenya", password));
+                FindIterable<Document> resultatUsers = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
+                
+                for (Document row : resultatUsers) {
+                    System.out.println(row.getString("nomUser"));
+                    System.out.println(row.getString("contrasenyaUsuari"));
+                }
+
                 long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
 
-                //TODO: investigar alternativa a la consulta actual
-                //FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.eq("contrasenya", password));
                 if (numContra > 0) {
                     FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
                     for (Document infoUsuaris : resultatUsuaris) {
@@ -211,8 +221,9 @@ public class Login extends javax.swing.JFrame {
                         System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenyaUsuari"));
                     }
                 } else {
-                    System.out.println("Thy introduced password is nonexistent in our archives");
+                    System.out.println("La contrasenya es incorrecta, siusplau, introdueix la contrasenya correcta!");
                 }
+
             } else {
                 System.out.println("El usuari que estas intentant introduir, no existeix en la nostra base de dades");
             }
@@ -237,10 +248,15 @@ public class Login extends javax.swing.JFrame {
      */
     public String getPassword(String nomUsuari) {
         String password = "";
-        final String URLCONNEXIO = "mongodb://localhost:27017";
+        final String DB_SRV_USR = "grup1";
+        final String DB_SRV_PWD = "gat123";
+        final String DB_URL = "57.129.5.24";
+        final String DB_PORT = "27017";
+        String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
+
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
         try ( MongoClient mongoClient = new MongoClient(uri)) {
-            MongoDatabase database = mongoClient.getDatabase("Cuentas");
+            MongoDatabase database = mongoClient.getDatabase(DB_SRV_USR);
             MongoCollection<Document> comptes = database.getCollection("comptes");
 
             long numUsuari = comptes.countDocuments(Filters.eq("nomUser", nomUsuari));
@@ -249,6 +265,7 @@ public class Login extends javax.swing.JFrame {
                 for (Document row : resultatUsuaris) {
                     password = row.getString("contrasenyaUsuari");
                 }
+
                 if (!password.isEmpty()) {
                     System.out.println("Passem per aki");
                     return password;
@@ -281,7 +298,7 @@ public class Login extends javax.swing.JFrame {
 
             String base64String = Base64.getEncoder().encodeToString(resum2);
 
-            System.out.println(password + "+" + base64String);
+            System.out.println(password + "\n" + base64String);
 
             if (password.equalsIgnoreCase(base64String)) {
                 return true;

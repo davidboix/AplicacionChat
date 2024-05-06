@@ -241,8 +241,10 @@ public class Registre extends javax.swing.JFrame {
             if (correuValidat) {
                 System.out.println("El email es correcte");
             } else {
-                // TODO: Quan el correu sigui invalid, hem de mostrar un 
-                // missatge avisant al usuari en que ha fallat.
+                /**
+                 * TODO: Quan el correu sigui invalid, hem de mostrar un
+                 * missatge avisant al usuari en que ha fallat.
+                 */
                 System.out.println("El email es incorrecte");
             }
         }
@@ -264,7 +266,7 @@ public class Registre extends javax.swing.JFrame {
 //            if (isCognomValid && isNomValid && isEdatValid && isCorreuValid && isUsuariValid) {
             int edat = tractarEdat();
             inicialitzarDades(this.inputNom.getText(), this.inputCognom.getText(), edat, this.inputCorreu.getText(), this.inputUsuari.getText(), contrasenyaEncriptada);
-            System.out.println("Hem introduit un nou usuari!");
+//            System.out.println("Hem introduit un nou usuari!");
 //            }
         } else {
             System.out.println("Esta buit");
@@ -402,12 +404,17 @@ public class Registre extends javax.swing.JFrame {
      */
     private void inicialitzarDades(String nom, String cognom, int edat, String correuUsuari, String nomUsuari, String password) {
         amagarInfoWarnings();
-        final String URLCONNEXIO = "mongodb://localhost:27017";
+//        DavidBoix1234!
+        final String DB_SRV_USR = "grup1";
+        final String DB_SRV_PWD = "gat123";
+        final String DB_URL = "57.129.5.24";
+        final String DB_PORT = "27017";
+        String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
 
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
 
         try ( MongoClient mongoClient = new MongoClient(uri)) {
-            MongoDatabase database = mongoClient.getDatabase("Cuentas");
+            MongoDatabase database = mongoClient.getDatabase("grup1");
             MongoCollection<Document> comptes = database.getCollection("comptes");
 
             //TODO: Haurem de verificar que poden haver mes de un usuari amb el meu mateix nom i per tant no farem el insert a la base de dades.
@@ -420,7 +427,7 @@ public class Registre extends javax.swing.JFrame {
                     .append("contrasenyaUsuari", password);
 
             comptes.insertOne(nouUsuari);
-            System.out.println("Hem introduit un nou usuari...");
+            System.out.println("uHem introduit un nou usuari...");
 
         } catch (Exception e) {
             e.printStackTrace();

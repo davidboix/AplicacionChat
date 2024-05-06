@@ -140,7 +140,12 @@ public class Servidor {
     }
 
     public void setPassword(String nomUsuari, String password) {
-        final String URLCONNEXIO = "mongodb://localhost:27017";
+        final String DB_SRV_USR = "grup1";
+        final String DB_SRV_PWD = "gat123";
+        final String DB_URL = "57.129.5.24";
+        final String DB_PORT = "27017";
+
+        String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
 
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
 
@@ -167,7 +172,13 @@ public class Servidor {
 
     public String getPassword(String nomUsuari) {
         String password = "";
-        final String URLCONNEXIO = "mongodb://localhost:27017";
+        final String DB_SRV_USR = "grup1";
+        final String DB_SRV_PWD = "gat123";
+        final String DB_URL = "57.129.5.24";
+        final String DB_PORT = "27017";
+
+        String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
+
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
         try ( MongoClient mongoClient = new MongoClient(uri)) {
             MongoDatabase database = mongoClient.getDatabase("Cuentas");
@@ -258,7 +269,7 @@ public class Servidor {
 
                 byte[] keyBytes = new byte[dip.readInt()];
                 dip.readFully(keyBytes);
-                
+
                 SecretKey clau = new SecretKeySpec(keyBytes, "AES");
 
                 byte[] msgEncriptat = new byte[dip.readInt()];
@@ -266,24 +277,23 @@ public class Servidor {
 
                 Cipher aesCipher = Cipher.getInstance("AES");
                 aesCipher.init(Cipher.DECRYPT_MODE, clau);
-                
+
                 byte[] msgDesencriptat = aesCipher.doFinal(msgEncriptat);
                 String missatge = new String(msgDesencriptat);
                 System.out.println("Missatge desencriptat: " + missatge);
-                
+
                 /**
                  * Funcio que cridem per encriptar la contrasenya amb hash un
                  * cop hem desencriptat la contrasenya que el client ens envia
                  */
-                
                 servidor.encriptarPassword(missatge, socket, servidor, clau, msgEncriptat, aesCipher, out);
-                
+
                 byte[] conn = new byte[1000];
                 String connt = new String(conn);
-                if(connt == "no"){
+                if (connt == "no") {
                     qtClients--;
                 }
-                
+
                 System.out.println("\nServidor tornant a escoltar...");
 
                 /**

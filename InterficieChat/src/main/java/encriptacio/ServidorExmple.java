@@ -7,9 +7,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServidorExmple {
-    
+    // IP MongoDB al nuvol: 57.129.5.24
+    //Port MongodBD al nuvol: 27017
+
+    // Estructura MongoDB
+    // Usuari de la BD: grup1
+    // Password: gat123
     public static void main(String[] args) {
-        
+
         try {
             System.out.println("Creem el socket servidor");
             ServerSocket serverSocket = new ServerSocket();
