@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Scanner;
 
 public class ClientExemple {
@@ -29,25 +30,18 @@ public class ClientExemple {
                     System.out.println("Ens hem desonnectat del servidor...");
                     semafor = true;
                 }
-
                 os.write(msg.getBytes());
-
             }
             socket.close();
-//            boolean semafor = false;
-//            while (!semafor) {
-//                System.out.println("Vol seguir connectat?: ");
-//                String res = lector.next();
-//                //En aquest moment l'hi hem enviat el missatge al client
-//                os.write(res.getBytes());
-//                
-//                if (res.equalsIgnoreCase("DESCONNEXIO")) {
-//                    socket.close();
-//                    semafor = true;
-//                }
-//            }
+        } catch (SocketException se) {
+            se.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un error en la connexio del client cap al servidor.");
         } catch (IOException ioe) {
-            System.err.println("ERROR\nNo estem poden fer la connexio...");
+            ioe.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un error i per tant no s'ha executat correctament el client!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un problema general en el client");
         }
     }
 

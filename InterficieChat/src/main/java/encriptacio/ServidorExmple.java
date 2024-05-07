@@ -1,10 +1,12 @@
 package encriptacio;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ServidorExmple {
     // IP MongoDB al nuvol: 57.129.5.24
@@ -13,9 +15,60 @@ public class ServidorExmple {
     // Estructura MongoDB
     // Usuari de la BD: grup1
     // Password: gat123
-    
-    public static void main(String[] args) {
+    private static int qtClients;
 
+    public ServidorExmple() {
+
+    }
+
+    /**
+     *
+     * @param qtClients
+     */
+    public ServidorExmple(int qtClients) {
+        this.qtClients = qtClients;
+    }
+
+    /**
+     * Funcio desenvolupada per poder augmentar el numero de clients que estan
+     * connectats en aquell moment.
+     */
+    public void augmentarClientsConnectats() {
+        this.qtClients++;
+        System.out.println("Clients connectats actualment: " + this.qtClients);
+    }
+
+    /**
+     * Funcio desenvolupada per poder decrementar el numero de clients que s'han
+     * desconnectat en aquell moment.
+     */
+    public void decrementarClientsConnectats() {
+        this.qtClients--;
+        System.out.println("Clients connectats actualment: " + this.qtClients);
+    }
+
+    /**
+     * Getter desenvolupat per poder obtenir la quantitat de clients connectats
+     * en aquell moment.
+     *
+     * @return
+     */
+    public int getQtClients() {
+        return qtClients;
+    }
+
+    /**
+     * Setter desenvolupat per poder inicialitzar el numero de clients inicial o
+     * similar.
+     *
+     * @param qtClients
+     */
+    public void setQtClients(int qtClients) {
+        this.qtClients = qtClients;
+    }
+
+    public static void main(String[] args) {
+        ServidorExmple server = new ServidorExmple();
         try {
             System.out.println("Creem el socket servidor");
             ServerSocket serverSocket = new ServerSocket();
@@ -23,19 +76,51 @@ public class ServidorExmple {
             serverSocket.bind(addr);
 
             boolean semafor = false;
-            int qtClients = 0;
+            /**
+             * TODO: Variable obsoleta en el moment que estem realitzant els
+             * canvis pertinents.
+             *
+             * int pe = 1;
+             */
 
+            System.out.println("Servidor preparat per escoltar!");
             while (true) {
-                qtClients++;
-                System.out.println("Servidor preparat per escoltar!");
+                /**
+                 * TODO:Revisar funcionament (creiem que ha quedat obsolet) de
+                 * aquestes variables per poder portar el control de clients
+                 * connectats.
+                 *
+                 * pe++;
+                 *
+                 * server.setQtClients(pe);
+                 *
+                 * qtClients++;
+                 *
+                 * se.augmentarClientsConnectats();
+                 */
+                /**
+                 * TODO: En aquest moment, estem començant a aceptar les
+                 * connexions que estem rebent del client.
+                 *
+                 */
                 Socket newSocket = serverSocket.accept();
-                //System.out.println("Quantitat de clients connectats: " + qtClients);
-                new Atendre_Clients(newSocket, qtClients).start();
-                //Prova de boolean per a si veu missatge de desconnexio, li resti, pero no funciona be ja que el que fara es aturar el while i no llegira l'altre client
-//                if(new Atendre_Clients(newSocket, qtClients).prova()){
-//                    qtClients--;
-//                }
-                
+                /**
+                 * TODO: Hem de mirar de llegir el missatge en el servidor per
+                 * poder baixar el qtClients i d'aquesta manera tenir un control
+                 * sobre el contador.<- Creiem que aquest funcionament l'hem de
+                 * realitzar en el fil i NO en el servidor
+                 */
+                server.augmentarClientsConnectats();
+                new Atendre_Clients(newSocket).start();
+
+                /**
+                 * TODO: Prova feta per Oleh de boolean per a si veu missatge de
+                 * desconnexio, li resti, pero no funciona be ja que el que fara
+                 * es aturar el while i no llegira l'altre client
+                 *
+                 * if(new Atendre_Clients(newSocket, qtClients).prova()){
+                 * qtClients--; }
+                 */
 //                while (!semafor) {
 //
 //                    InputStream is = newSocket.getInputStream();
@@ -78,13 +163,23 @@ public class ServidorExmple {
 //                }
 //                qtClients--;
             }
+        } catch (SocketException se) {
+            System.err.println("\nERROR!\nLa connexio ha sigut detinguda inesperadament!");
+            se.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("\nERROR!\nHi ha hagut un error i per tant no s'ha executat correctament el servidor!");
+            e.printStackTrace();
         } catch (Exception e) {
+            System.err.println("\nERROR!\nHi ha hagut un error general i per tant el servidor no ha funcionat com toca!");
             e.printStackTrace();
         }
 
     }
 
     /**
+     * TODO: Hem de utilitzar aquesta funcio per deixar la funcio general lo mes
+     * simplificada possible.
+     *
      * Funcio provisional creada per poder augmentar les connexions que es
      * realitzen en el servidor i portar un control sobre elles
      *
