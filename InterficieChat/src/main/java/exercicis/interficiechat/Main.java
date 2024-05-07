@@ -16,7 +16,7 @@ public class Main {
      * @param args
      */
     public static void main(String[] args) {
-        VistaPrincipal vistaPrincipal= new VistaPrincipal();
-        vistaPrincipal.setVisible(true);
+        ClassMain cm = new ClassMain();
+        cm.setVisible(true);
     }
 }

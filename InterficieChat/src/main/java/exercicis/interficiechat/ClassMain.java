@@ -1,15 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package exercicis.interficiechat;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 /**
  *
- * @author dam
+ * @author David Boix Sanchez i Oleh Plechiy Tupis Andriyovech
  */
 public class ClassMain extends javax.swing.JFrame {
 
@@ -29,7 +26,7 @@ public class ClassMain extends javax.swing.JFrame {
         ImageIcon iconoClientAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
         ImageIcon iconoServidorAModificar = new ImageIcon("src\\main\\java\\img\\iconoServidor.png");
         //ImageIcon iconoPrincipalAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
-        
+
         Image iconoServidorModificat = iconoServidorAModificar.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         Image iconoClientModificat = iconoClientAModificar.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         //Image iconoPrincipalModificat = iconoPrincipalAModificar.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
@@ -37,9 +34,9 @@ public class ClassMain extends javax.swing.JFrame {
         ImageIcon iconoServidor = new ImageIcon(iconoServidorModificat);
         ImageIcon iconoClients = new ImageIcon(iconoClientModificat);
         //ImageIcon iconoPrincipal = new ImageIcon(iconoPrincipalModificat);
-        
-        this.jButton3.setIcon(iconoServidor);
-        this.jButton4.setIcon(iconoClients);
+
+        this.botoServidor.setIcon(iconoServidor);
+        this.botoClient.setIcon(iconoClients);
         //this.jLabel2.setIcon(iconoPrincipal);
     }
 
@@ -57,14 +54,17 @@ public class ClassMain extends javax.swing.JFrame {
         header = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         main = new javax.swing.JPanel();
-        jButton4 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        botoClient = new javax.swing.JButton();
+        botoServidor = new javax.swing.JButton();
         footer = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        accedirClient = new javax.swing.JButton();
+        accedirServidor = new javax.swing.JButton();
+        menuGeneral = new javax.swing.JMenuBar();
+        menuNavegacio = new javax.swing.JMenu();
+        opcioServidor = new javax.swing.JMenuItem();
+        opcioClient = new javax.swing.JMenuItem();
+        menuSortir = new javax.swing.JMenu();
+        opcioSortir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,49 +80,76 @@ public class ClassMain extends javax.swing.JFrame {
 
         main.setLayout(new java.awt.GridBagLayout());
 
-        jButton4.setContentAreaFilled(false);
-        jButton4.setOpaque(true);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        botoClient.setBorder(null);
+        botoClient.setContentAreaFilled(false);
+        botoClient.setOpaque(true);
+        botoClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                botoClientActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 100);
-        main.add(jButton4, gridBagConstraints);
+        main.add(botoClient, gridBagConstraints);
 
-        jButton3.setBorder(null);
-        jButton3.setContentAreaFilled(false);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        botoServidor.setBorder(null);
+        botoServidor.setContentAreaFilled(false);
+        botoServidor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                botoServidorActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 100);
-        main.add(jButton3, gridBagConstraints);
+        main.add(botoServidor, gridBagConstraints);
 
         panelGeneral.add(main, java.awt.BorderLayout.CENTER);
 
         footer.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("jButton1");
-        footer.add(jButton1, new java.awt.GridBagConstraints());
+        accedirClient.setText("Client");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 50);
+        footer.add(accedirClient, gridBagConstraints);
 
-        jButton2.setText("jButton2");
-        footer.add(jButton2, new java.awt.GridBagConstraints());
+        accedirServidor.setText("Servidor");
+        footer.add(accedirServidor, new java.awt.GridBagConstraints());
 
         panelGeneral.add(footer, java.awt.BorderLayout.PAGE_END);
 
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
+        menuNavegacio.setText("Navegació");
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        opcioServidor.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        opcioServidor.setText("Obrir Servidor");
+        opcioServidor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                opcioServidorActionPerformed(evt);
+            }
+        });
+        menuNavegacio.add(opcioServidor);
 
-        setJMenuBar(jMenuBar1);
+        opcioClient.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        opcioClient.setText("Obrir Client");
+        opcioClient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                opcioClientActionPerformed(evt);
+            }
+        });
+        menuNavegacio.add(opcioClient);
+
+        menuGeneral.add(menuNavegacio);
+
+        menuSortir.setText("Sortir");
+
+        opcioSortir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        opcioSortir.setText("Sortir");
+        menuSortir.add(opcioSortir);
+
+        menuGeneral.add(menuSortir);
+
+        setJMenuBar(menuGeneral);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -137,34 +164,73 @@ public class ClassMain extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        tancarFinestra();
+    /**
+     * Event creat per poder mostrar la interficie grafica que servira per poder
+     * aixecar el servidor,es a dir, encendre el servidor.
+     *
+     * @param evt
+     */
+    private void botoServidorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoServidorActionPerformed
         IniciServidor serv = new IniciServidor();
-        serv.setVisible(true);
-        /**
-         * TODO: En aquest moment ho deixarem comentat perque estem preparant la
-         * interficie
-         *
-         */
-        serv.setExtendedState(MAXIMIZED_BOTH);
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        this.mostrarInterficie(serv);
         tancarFinestra();
-        VistaPrincipal xat = new VistaPrincipal();
-        xat.setVisible(true);
+        /**
+         * TODO: En aquest moment ho deixarem comentat perque estem preparant la
+         * interficie
+         *
+         * serv.setExtendedState(MAXIMIZED_BOTH);
+         */
+
+    }//GEN-LAST:event_botoServidorActionPerformed
+    /**
+     * Event creat per a que quan es pulsi el boto del client per poder
+     * inicialitzar.
+     *
+     * @param evt
+     */
+    private void botoClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoClientActionPerformed
+        VistaPrincipal vp = new VistaPrincipal();
+        this.mostrarInterficie(vp);
+        this.tancarFinestra();
         /**
          * TODO: En aquest moment ho deixarem comentat perque estem preparant la
          * interficie
          *
          */
-        xat.setExtendedState(MAXIMIZED_BOTH);
-    }//GEN-LAST:event_jButton4ActionPerformed
+        vp.setExtendedState(MAXIMIZED_BOTH);
+    }//GEN-LAST:event_botoClientActionPerformed
+    private void opcioServidorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcioServidorActionPerformed
+        IniciServidor is = new IniciServidor();
+        this.mostrarInterficie(is);
+        this.tancarFinestra();
+    }//GEN-LAST:event_opcioServidorActionPerformed
+    /**
+     * Event creat per poder inicialitzar una accio en concret que nosaltres
+     * especificarem.
+     *
+     * @param evt
+     */
+    private void opcioClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcioClientActionPerformed
+        VistaPrincipal vp = new VistaPrincipal();
+        this.mostrarInterficie(vp);
+        this.tancarFinestra();
+    }//GEN-LAST:event_opcioClientActionPerformed
 
     private void tancarFinestra() {
         this.setVisible(false);
     }
+
+    /**
+     * Funcio creada per poder mostrar una interficie grafica que nosaltres
+     * passarem per parametres.
+     *
+     * @param jf La interficie que volem mostrar per pantalla.
+     */
+    private void mostrarInterficie(JFrame jf) {
+        jf.setVisible(false);
+        jf.setExtendedState(MAXIMIZED_BOTH);
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -201,17 +267,20 @@ public class ClassMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton accedirClient;
+    private javax.swing.JButton accedirServidor;
+    private javax.swing.JButton botoClient;
+    private javax.swing.JButton botoServidor;
     private javax.swing.JPanel footer;
     private javax.swing.JPanel header;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel main;
+    private javax.swing.JMenuBar menuGeneral;
+    private javax.swing.JMenu menuNavegacio;
+    private javax.swing.JMenu menuSortir;
+    private javax.swing.JMenuItem opcioClient;
+    private javax.swing.JMenuItem opcioServidor;
+    private javax.swing.JMenuItem opcioSortir;
     private javax.swing.JPanel panelGeneral;
     // End of variables declaration//GEN-END:variables
 }

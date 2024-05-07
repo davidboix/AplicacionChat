@@ -1,12 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package exercicis.interficiechat;
+
+import encriptacio.ServidorExmple;
+import javax.swing.JOptionPane;
 
 /**
  *
- * @author dam
+ * @author David Boix Sanchez
+ *
+ * TODO: Aquesta interficie l'haurem de realitzar utilitzant un JavaBean, es a
+ * dir, realitzarem un component personalitzat per poder aixecar el servidor amb
+ * la IP que nosaltres vulguem i que en tot cas, aquest servidor existeixi sino
+ * tota connexio que vulguem realitzar, no es fara correctament.
  */
 public class IniciServidor extends javax.swing.JFrame {
 
@@ -31,10 +35,12 @@ public class IniciServidor extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        inputServidor = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,16 +59,15 @@ public class IniciServidor extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_START);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        jButton1.setText("Inici Servidor");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel3.add(jButton1, new java.awt.GridBagConstraints());
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
@@ -74,7 +79,7 @@ public class IniciServidor extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 167, Short.MAX_VALUE)
+            .addGap(0, 245, Short.MAX_VALUE)
         );
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.LINE_END);
@@ -87,15 +92,30 @@ public class IniciServidor extends javax.swing.JFrame {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 167, Short.MAX_VALUE)
+            .addGap(0, 245, Short.MAX_VALUE)
         );
 
         jPanel1.add(jPanel5, java.awt.BorderLayout.LINE_START);
 
-        jPanel6.setLayout(new java.awt.GridLayout(1, 0));
+        jPanel6.setLayout(new java.awt.GridBagLayout());
 
-        jTextField1.setText("jTextField1");
-        jPanel6.add(jTextField1);
+        inputServidor.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        inputServidor.setMinimumSize(new java.awt.Dimension(150, 22));
+        inputServidor.setPreferredSize(new java.awt.Dimension(150, 22));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel6.add(inputServidor, gridBagConstraints);
+
+        jLabel2.setText("IP Servidor");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 22, 0);
+        jPanel6.add(jLabel2, gridBagConstraints);
 
         jPanel1.add(jPanel6, java.awt.BorderLayout.CENTER);
 
@@ -112,6 +132,117 @@ public class IniciServidor extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        String ipServidor = this.inputServidor.getText();
+
+        if (!ipServidor.isEmpty()) {
+            this.comprovacioIP(ipServidor);
+        } else {
+            System.out.println("No pot quedar buit!");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+    /**
+     * TODO: Funcio provisional per poder validar que les IP's son correctes
+     *
+     * @param ipServidor
+     */
+    private void comprovacioIP(String ipServidor) {
+        final String IPSERVIDOR = "57.129.5.24";
+
+        if (ipServidor.equalsIgnoreCase(IPSERVIDOR)) {
+            System.out.println("Les IP's son iguals.");
+            /**
+             * TODO: Afegirem un JOptionPane
+             */
+            JOptionPane jop = new JOptionPane();
+            String[] opcions = {"Cancelar", "Acceptar"};
+            /**
+             * TODO: Aqui estarem agafant l'opcio seleccionada que apareixera
+             * dins del JOptionPane.
+             */
+            int opcioSeleccionada = this.missatgeIniciServidor(jop, opcions);
+
+            if (opcioSeleccionada > 0) {
+                /**
+                 * TODO: En aquest punt, haurem de inicialitzar el servidor i
+                 * iniciar la vista de la interficie grafica del Login.
+                 *
+                 * POSSIBLE PROBLEMA: Quan iniciem el servidor, el servidor
+                 * haura de esperar a que es connecti un client i per tant, fins
+                 * que no passi el esmentat, no arrencara la interficie
+                 */
+                iniciClient();
+            } else {
+                /**
+                 * TODO: Aquest missatge apareixera quan el usuari seleccioni el
+                 * boto de cancelar.
+                 */
+                this.missatgeServidorErroni(jop, opcions);
+            }
+        } else {
+            System.out.println("Aquesta IP no existeix, per tant, no podrem utilitzar-la.");
+        }
+    }
+
+    /**
+     * Funcio realitzada per poder mostrar la interficie grafica on el client
+     * podra elegir entre iniciar sessio o registrar-se en el nostre sistema
+     * gestor de base de dades.
+     */
+    private void iniciClient() {
+        VistaPrincipal vp = new VistaPrincipal();
+        vp.setVisible(true);
+        this.setVisible(false);
+    }
+
+    /**
+     * Funcio desenvolupada per poder mostrar un JOptionPane personalitzat.
+     *
+     * @param jop Objecte JOptionPane que farem servir per mostrar un dialog.
+     * @param opcions Les diferentes opcions de seleccio que podra elegir el
+     * usuari.
+     * @return Retornara l'opcio seleccionada, ja sigui un 1 per quan sigui
+     * 'Aceptar' i un 0 una opcio diferent.
+     */
+    private int missatgeIniciServidor(JOptionPane jop, String[] opcions) {
+
+        int opcioSeleccionada = jop.showOptionDialog(
+                null,
+                "Vols iniciar el servidor?",
+                "Inici servidor",
+                jop.DEFAULT_OPTION,
+                jop.WARNING_MESSAGE,
+                null,
+                opcions,
+                opcions[0]
+        );
+
+        return opcioSeleccionada;
+    }
+
+    /**
+     * TODO: Canviar descripcio de la funcio.
+     *
+     * Funcio desenvolupada per poder mostrar un JOptionPane personalitzat.
+     *
+     * @param jop Objecte JOptionPane que farem servir per mostrar un dialog.
+     * @param opcions Les diferentes opcions de seleccio que podra elegir el
+     * usuari.
+     */
+    private void missatgeServidorErroni(JOptionPane jop, String[] opcions) {
+        jop.showOptionDialog(
+                null,
+                "No s'ha aixecat el servidor!",
+                "Inici servidor",
+                jop.DEFAULT_OPTION,
+                jop.WARNING_MESSAGE,
+                null,
+                opcions,
+                opcions[0]
+        );
+    }
 
     /**
      * @param args the command line arguments
@@ -149,13 +280,15 @@ public class IniciServidor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField inputServidor;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
