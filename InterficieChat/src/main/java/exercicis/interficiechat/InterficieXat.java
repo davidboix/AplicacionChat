@@ -23,6 +23,7 @@ import javax.swing.ImageIcon;
 public class InterficieXat extends javax.swing.JFrame {
 
     String resFinal = "";
+    //inicialitzaem el socket per a poder entrar al servidor
     Socket socket = new Socket();
 
     /**
@@ -32,6 +33,7 @@ public class InterficieXat extends javax.swing.JFrame {
         initComponents();
         inicialitzarInputs();
         inicialitzarIconos();
+        //obrim el socket per a connectar al servidor
         try {
 
             InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
@@ -207,6 +209,7 @@ public class InterficieXat extends javax.swing.JFrame {
         }
 
         if (!msg.isEmpty()) {
+            //aquest try agafara els misstages del textarea i els enviara al servidor
             try {
                 InputStream is = socket.getInputStream();
                 OutputStream os = socket.getOutputStream();
@@ -237,7 +240,12 @@ public class InterficieXat extends javax.swing.JFrame {
      * @param evt
      */
     private void botoLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoLogoutActionPerformed
+        //quan es premi el boto de logout, enviara un missatge al servidor per a que resti el contador i tancara el socket
         try {
+            String msg = "exit";
+            InputStream is = socket.getInputStream();
+            OutputStream os = socket.getOutputStream();
+            os.write(msg.getBytes());
             socket.close();
         } catch (IOException ex) {
             Logger.getLogger(InterficieXat.class.getName()).log(Level.SEVERE, null, ex);
