@@ -19,8 +19,10 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import org.bson.Document;
@@ -245,6 +247,27 @@ public class Registre extends javax.swing.JFrame {
                  * TODO: Quan el correu sigui invalid, hem de mostrar un
                  * missatge avisant al usuari en que ha fallat.
                  */
+                JOptionPane jop = new JOptionPane();
+                    Icon imagenLabel = new ImageIcon("src\\main\\java\\img\\passwordErroni.png");
+                    String[] opcions = {"Acceptar"};
+                    
+                    int correcte = jop.showOptionDialog(
+                            null,
+                            "El email es incorrecte.",
+                            "Email incorrecte",
+                            jop.DEFAULT_OPTION,
+                            jop.WARNING_MESSAGE,
+                            imagenLabel,
+                            opcions,
+                            opcions[0]
+                    );
+                    
+                    if (correcte > 0) {
+                        System.out.println("S'ha pulsat aceptar");
+                    } else {
+                        System.out.println("S'ha cancelat");
+                    }
+                    
                 System.out.println("El email es incorrecte");
             }
         }

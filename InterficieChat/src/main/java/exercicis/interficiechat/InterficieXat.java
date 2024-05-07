@@ -2,10 +2,17 @@ package exercicis.interficiechat;
 
 import java.awt.Font;
 import java.awt.Image;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 /**
@@ -16,6 +23,7 @@ import javax.swing.ImageIcon;
 public class InterficieXat extends javax.swing.JFrame {
 
     String resFinal = "";
+    Socket socket = new Socket();
 
     /**
      * Creates new form InterficieXat
@@ -24,6 +32,15 @@ public class InterficieXat extends javax.swing.JFrame {
         initComponents();
         inicialitzarInputs();
         inicialitzarIconos();
+        try {
+
+            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+            socket.connect(addr);
+            System.out.println("Ens conectem...");
+
+        } catch (IOException e) {
+            System.out.println("No s'ha pogut connectar al servidor");
+        }
     }
 
     /**
@@ -190,6 +207,19 @@ public class InterficieXat extends javax.swing.JFrame {
         }
 
         if (!msg.isEmpty()) {
+            try {
+                InputStream is = socket.getInputStream();
+                OutputStream os = socket.getOutputStream();
+                if (msg.equalsIgnoreCase("exit")) {
+                    os.write(msg.getBytes());
+                    System.out.println("Ens hem desonnectat del servidor...");
+                    //socket.close();
+                }
+                os.write(msg.getBytes());
+
+            } catch (IOException e) {
+                System.out.println("Missatge no enviat al servidor");
+            }
             String missatge = this.textAreaMissatge.getText();
             ArrayList<String> arrayListMsg = new ArrayList<>();
             arrayListMsg.add(msg);
@@ -203,11 +233,15 @@ public class InterficieXat extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botoEnviarMsgActionPerformed
     /**
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void botoLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoLogoutActionPerformed
-        
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(InterficieXat.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_botoLogoutActionPerformed
     /**
      * Funcio creada per inicialitzar el JTextField amb un missatge per defecte
@@ -242,6 +276,9 @@ public class InterficieXat extends javax.swing.JFrame {
     /**
      * Funcio desenvolupada per obtenir la hora, minuts i segons actuals en el
      * moment que fem la crida de la funcio
+     *
+     * TODO: Hem de revisar que el temps que apareix en el xat, aparegui de
+     * forma correcta
      *
      * @return Hora, Minuts i Segons com una cadena de text.
      */

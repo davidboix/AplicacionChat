@@ -6,11 +6,16 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import java.awt.Dimension;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import org.bson.Document;
 
@@ -29,6 +34,8 @@ public class Login extends javax.swing.JFrame {
         inicialitzarTextInputs();
         amagarInfoWarnings();
         inicialitzarInput();
+        //this.setExtendedState(MAXIMIZED_BOTH);
+        this.setMinimumSize(new Dimension(300, 300));
 
         //mongoClient = new MongoClient("localhost", 27017);
         //database = mongoClient.getDatabase("Cuentas");
@@ -91,26 +98,29 @@ public class Login extends javax.swing.JFrame {
         jPanel2.setPreferredSize(new java.awt.Dimension(434, 100));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        etiquetaPassword.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
+        etiquetaPassword.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         etiquetaPassword.setText("Contrasenya");
         etiquetaPassword.setToolTipText("Contrasenya");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         jPanel2.add(etiquetaPassword, gridBagConstraints);
 
         inputPassword.setToolTipText("Contrasenya de l'usuari");
         inputPassword.setEchoChar('\u0000');
         inputPassword.setFocusCycleRoot(true);
+        inputPassword.setPreferredSize(new java.awt.Dimension(200, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel2.add(inputPassword, gridBagConstraints);
 
-        etiquetaUsuari.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
+        etiquetaUsuari.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         etiquetaUsuari.setText("Usuari");
         etiquetaUsuari.setToolTipText("Usuari");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -120,11 +130,13 @@ public class Login extends javax.swing.JFrame {
         jPanel2.add(etiquetaUsuari, gridBagConstraints);
 
         usuariText.setToolTipText("Nom de l'usuari");
+        usuariText.setPreferredSize(new java.awt.Dimension(200, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel2.add(usuariText, gridBagConstraints);
 
         mainVista.add(jPanel2, java.awt.BorderLayout.CENTER);
@@ -207,6 +219,56 @@ public class Login extends javax.swing.JFrame {
                      * problemes.
                      */
                     passwordEncriptada = getPassword(nomUsuari);
+
+                    /**
+                     * TODO: Revisar aquesta proposta de solucio Ho podem borrar
+                     * ja que no ho fem servir JAJA.
+                     */
+                    //long numContra = cuentasCollection.countDocuments(Filters.eq("contrasenya", password));
+                    //TODO: Consulta realitzada incorrectament i per tant ho podem borrar mes endavant.
+                    //long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
+                    long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", passwordEncriptada)));
+
+                    if (numContra > 0 && passwordEncriptada != null) {
+                        /**
+                         * TODO: Mes endavant, haurem de borrar les dades que es
+                         * mostren per pantalla, incluida la consulta que estem
+                         * realitzant degut a que es innecessari i nomes ho
+                         * estem fent servir per poder assegurar-nos de que les
+                         * dades son correctes.
+                         */
+                        //TODO: Borrar consulta ja que ho estem fent malament.
+                        //FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
+                        FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", passwordEncriptada)));
+                        for (Document infoUsuaris : resultatUsuaris) {
+                            System.out.print("\nNom Usuari: " + infoUsuaris.getString("nomUser"));
+                            System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenyaUsuari"));
+                        }
+                        this.mostrarInterficieXat();
+                    } else {
+                        /**
+                         * TODO: Mostrar en un JOptionPane el seguent error per
+                         * tal de que el usuari client pugui saber que esta
+                         * passant i pugui solucionar la incidencia ell mateix
+                         * ja que es un problema extern que no podem controlar
+                         * com a programadors.
+                         */
+                        JOptionPane jop = new JOptionPane();
+
+                        String[] opcions = {"Acceptar"};
+
+                        jop.showOptionDialog(
+                                null,
+                                "El usuari o contrasenya es incorrecta!",
+                                "Dades erronees",
+                                jop.DEFAULT_OPTION,
+                                jop.WARNING_MESSAGE,
+                                null,
+                                opcions,
+                                opcions[0]
+                        );
+
+                    }
                 } else {
                     /**
                      * TODO: Hem de mostrar un JOptionPane amb el seguent
@@ -214,42 +276,21 @@ public class Login extends javax.swing.JFrame {
                      * aquell moment i per tant tenir-lo informat en tot moment
                      * de que esta passant.
                      */
-                    System.out.println("La contrasenya no es la mateixa i per tant no podem fer cap tipus de us.");
-                }
-                /**
-                 * TODO: Revisar aquesta proposta de solucio Ho podem borrar ja
-                 * que no ho fem servir JAJA.
-                 */
-                //long numContra = cuentasCollection.countDocuments(Filters.eq("contrasenya", password));
-                //TODO: Consulta realitzada incorrectament i per tant ho podem borrar mes endavant.
-                //long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
-                long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", passwordEncriptada)));
+                    JOptionPane jop = new JOptionPane();
+                    Icon imagenLabel = new ImageIcon("src\\main\\java\\img\\passwordErroni.png");
+                    String[] opcions = {"Acceptar"};
 
-                if (numContra > 0 && passwordEncriptada != null) {
-                    /**
-                     * TODO: Mes endavant, haurem de borrar les dades que es
-                     * mostren per pantalla, incluida la consulta que estem
-                     * realitzant degut a que es innecessari i nomes ho estem
-                     * fent servir per poder assegurar-nos de que les dades son
-                     * correctes.
-                     */
-                    //TODO: Borrar consulta ja que ho estem fent malament.
-                    //FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
-                    FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", passwordEncriptada)));
-                    for (Document infoUsuaris : resultatUsuaris) {
-                        System.out.print("\nNom Usuari: " + infoUsuaris.getString("nomUser"));
-                        System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenyaUsuari"));
-                    }
-                    this.mostrarInterficieXat();
-                } else {
-                    /**
-                     * TODO: Mostrar en un JOptionPane el seguent error per tal
-                     * de que el usuari client pugui saber que esta passant i
-                     * pugui solucionar la incidencia ell mateix ja que es un
-                     * problema extern que no podem controlar com a
-                     * programadors.
-                     */
-                    System.out.println("La contrasenya es incorrecta, siusplau, introdueix la contrasenya correcta!");
+                    jop.showOptionDialog(
+                            null,
+                            "La contrasenya no es correcta.",
+                            "La contrasenya es erronea",
+                            jop.DEFAULT_OPTION,
+                            jop.WARNING_MESSAGE,
+                            imagenLabel,
+                            opcions,
+                            opcions[0]
+                    );
+
                 }
 
             } else {
@@ -258,7 +299,21 @@ public class Login extends javax.swing.JFrame {
                  * informar al usuari del error el qual s'esta produint i per
                  * tant el erroni funcionament de la nostra aplicacio.
                  */
-                System.out.println("El usuari que estas intentant introduir, no existeix en la nostra base de dades");
+                JOptionPane jop = new JOptionPane();
+                Icon imagenLabel = new ImageIcon("src\\main\\java\\img\\usuariInexistent.png");
+                String[] opcions = {"Acceptar"};
+
+                jop.showOptionDialog(
+                        null,
+                        "El usuari que estas intentant introduir, no existeix en la nostra base de dades",
+                        "Nom d'usuari erroni",
+                        jop.DEFAULT_OPTION,
+                        jop.WARNING_MESSAGE,
+                        imagenLabel,
+                        opcions,
+                        opcions[0]
+                );
+
             }
         } catch (Exception e) {
             System.out.println("Hem entrat al error... \nREVISAR CODI...");
@@ -305,13 +360,6 @@ public class Login extends javax.swing.JFrame {
                 }
 
                 if (!password.isEmpty()) {
-                    /**
-                     * TODO: Missatge informatiu que hem afegit per saber si
-                     * realment estem passant dins del condicional i no ens esta
-                     * donant error per qualsevol causa i poguer solucionar de
-                     * la millor manera possible.
-                     */
-                    System.out.println("La contrasenya NO es buida i per tant, la contrasenya ha sigut retornada correctament.");
                     return password;
                 }
             }
