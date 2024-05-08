@@ -116,7 +116,8 @@ public class ServidorExmple {
                  * tots els missatges que envien els clients al servidor.
                  */
                 new Atendre_Clients(newSocket).start();
-
+                
+                new FilsEnviarInfoClients(newSocket).start();
                 /**
                  * TODO: Prova feta per Oleh de boolean per a si veu missatge de
                  * desconnexio, li resti, pero no funciona be ja que el que fara
