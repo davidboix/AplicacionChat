@@ -111,6 +111,10 @@ public class ServidorExmple {
                  * realitzar en el fil i NO en el servidor
                  */
                 server.augmentarClientsConnectats();
+                /**
+                 * TODO: Aquest es el fil que utilitzarem per poder escoltar
+                 * tots els missatges que envien els clients al servidor.
+                 */
                 new Atendre_Clients(newSocket).start();
 
                 /**
