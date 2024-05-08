@@ -1,5 +1,7 @@
 package encriptacio;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -7,6 +9,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 public class ServidorExmple {
     // IP MongoDB al nuvol: 57.129.5.24
@@ -69,6 +72,8 @@ public class ServidorExmple {
 
     public static void main(String[] args) {
         ServidorExmple server = new ServidorExmple();
+        ArrayList<String> arrUsuaris = new ArrayList<>();
+        ArrayList<Integer> arrSockets = new ArrayList<>();
         try {
             System.out.println("Creem el socket servidor");
             ServerSocket serverSocket = new ServerSocket();
@@ -104,6 +109,8 @@ public class ServidorExmple {
                  *
                  */
                 Socket newSocket = serverSocket.accept();
+                String nomUser = server.llegirUsuaris(newSocket);
+                server.inserirDadesMemoria(arrUsuaris, arrSockets, newSocket.getPort(),nomUser);
                 /**
                  * TODO: Hem de mirar de llegir el missatge en el servidor per
                  * poder baixar el qtClients i d'aquesta manera tenir un control
@@ -225,6 +232,62 @@ public class ServidorExmple {
             System.err.println("\nERROR!\n El metode valoraNom ha petat :( ");
         }
         return false;
+    }
+
+    /**
+     * TODO: Hem de revisar que el nom del client que fem servir actualment, es
+     * unicament el numero de client que li ha tocat a aquell client, l'haurem
+     * de modificar per el nom que fa servir per poder logejar-se.
+     *
+     * Funcio que hem desenvolupat per poder guardar en memoria les dades que fa
+     * servir el usuari per poder connectar-se al servidor on aquestes dades
+     * seran el nom del client i el port del socket del client que es connecta.
+     *
+     * @param arrUsuaris ArrayList que farem servir per poder guardar les dades
+     * del usuari.
+     * @param arrSockets ArrayList que farem servir per poder guardar el port
+     * del socket del cient en especific.
+     * @param portClient Port del client que farem servir per poder afegir-lo a
+     * un arrayList.
+     * @param nomClient Nom del client que farem servir per poder afegir-lo a un
+     * ArrayList.
+     */
+    private void inserirDadesMemoria(ArrayList<String> arrUsuaris, ArrayList<Integer> arrSockets, int portClient, String nomClient) {
+        arrUsuaris.add(nomClient);
+        arrSockets.add(portClient);
+        this.mostrarDadesArrayList(arrUsuaris, arrSockets);
+    }
+
+    /**
+     * Funcio realitzada per poder mostrar les dades dels ArrayLists creats per
+     * veure si s'esta realitzant correctament.
+     */
+    private void mostrarDadesArrayList(ArrayList<String> arrUsuaris, ArrayList<Integer> arrSockets) {
+        for (String row : arrUsuaris) {
+            System.out.println(row + " ");
+        }
+        for (int row : arrSockets) {
+            System.out.println(row + "\n");
+        }
+    }
+
+    /**
+     * Funcio creada per poder llegir el nom del usuari i d'aquesta manera poder
+     * tenir un control dels diferents usuaris que es connectin al servidor.
+     */
+    private String llegirUsuaris(Socket socket) throws IOException {
+        InputStream is = socket.getInputStream();
+        OutputStream os = socket.getOutputStream();
+
+        byte[] buffer = new byte[500];
+        int intBuffer = is.read(buffer);
+        String msg = new String(buffer, 0, intBuffer);
+        
+        if (msg.isEmpty()) {
+            return null;
+        }
+
+        return msg;
     }
 }
 

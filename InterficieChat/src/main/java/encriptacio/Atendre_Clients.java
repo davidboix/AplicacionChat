@@ -7,11 +7,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 /**
  *
  * @author David Boix Sanchez
  * @version 1.0
+ *
+ * Correu Begoña: berritja.cicles@gmail.com
  *
  */
 public class Atendre_Clients extends Thread {
@@ -159,9 +162,11 @@ public class Atendre_Clients extends Thread {
              * metodes que hem creat en el servidor
              */
             ServidorExmple server = new ServidorExmple();
-
+            ArrayList<String> arrUsuaris = new ArrayList<>();
+            ArrayList<Integer> arrSockets = new ArrayList<>();
             boolean semafor = false;
             final String MISSATGE_DESCONNEXIO = "exit";
+            
             InputStream is = newSocket.getInputStream();
             OutputStream os = newSocket.getOutputStream();
 
@@ -173,6 +178,8 @@ public class Atendre_Clients extends Thread {
 
             DataInputStream dis = new DataInputStream(newSocket.getInputStream());
             DataOutputStream dos = new DataOutputStream(newSocket.getOutputStream());
+            
+            
 
             /**
              * TODO: Missatge de informacio posat per Oleh que trobem que no fa
@@ -205,7 +212,8 @@ public class Atendre_Clients extends Thread {
                  * TODO:Solucio proposada per CHATGPT
                  */
                 String msg = new String(buffer, 0, intBuffer);
-
+                System.out.println("Aquest es el port del socket del client nº " + qtClientsConnectats + " que s'ha connectat: " + this.newSocket.getPort());
+                this.inserirDadesMemoria(arrUsuaris, arrSockets, this.newSocket.getPort(), msg);
                 /**
                  * TODO: Solucio proposada per David Boix
                  *
@@ -214,7 +222,7 @@ public class Atendre_Clients extends Thread {
                 if (msg.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
                     Thread.sleep(2000);
                     System.out.println("El client numero " + qtClientsConnectats + " s'ha desonnectat...");
-                    
+
                     /**
                      * TODO: Revisar aquest codi ja que no sabem si funciona
                      * correctament
@@ -288,6 +296,43 @@ public class Atendre_Clients extends Thread {
         }
     }
 
+    /**
+     * TODO: Hem de revisar que el nom del client que fem servir actualment, es
+     * unicament el numero de client que li ha tocat a aquell client, l'haurem
+     * de modificar per el nom que fa servir per poder logejar-se.
+     *
+     * Funcio que hem desenvolupat per poder guardar en memoria les dades que fa
+     * servir el usuari per poder connectar-se al servidor on aquestes dades
+     * seran el nom del client i el port del socket del client que es connecta.
+     *
+     * @param arrUsuaris ArrayList que farem servir per poder guardar les dades
+     * del usuari.
+     * @param arrSockets ArrayList que farem servir per poder guardar el port
+     * del socket del cient en especific.
+     * @param portClient Port del client que farem servir per poder afegir-lo a
+     * un arrayList.
+     * @param nomClient Nom del client que farem servir per poder afegir-lo a un
+     * ArrayList.
+     */
+    private void inserirDadesMemoria(ArrayList<String> arrUsuaris, ArrayList<Integer> arrSockets, int portClient, String nomClient) {
+        arrUsuaris.add(nomClient);
+        arrSockets.add(portClient);
+        this.mostrarDadesArrayList(arrUsuaris, arrSockets);
+    }
+
+    /**
+     * Funcio realitzada per poder mostrar les dades dels ArrayLists creats per
+     * veure si s'esta realitzant correctament.
+     */
+    private void mostrarDadesArrayList(ArrayList<String> arrUsuaris, ArrayList<Integer> arrSockets) {
+        for (String row : arrUsuaris) {
+            System.out.println(row + " ");
+        }
+        for (int row : arrSockets) {
+            System.out.println(row + "\n");
+        }
+    }
+    
     /**
      * TODO: Funcio booleana de prova per a que quan vegi el missatge de
      * desconnexio, retorni un true
