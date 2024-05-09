@@ -109,8 +109,8 @@ public class ServidorExmple {
                  *
                  */
                 Socket newSocket = serverSocket.accept();
-                String nomUser = server.llegirUsuaris(newSocket);
-                server.inserirDadesMemoria(arrUsuaris, arrSockets, newSocket.getPort(),nomUser);
+                //String nomUser = server.llegirUsuaris(newSocket);
+                //server.inserirDadesMemoria(arrUsuaris, arrSockets, newSocket.getPort(),nomUser);
                 /**
                  * TODO: Hem de mirar de llegir el missatge en el servidor per
                  * poder baixar el qtClients i d'aquesta manera tenir un control
@@ -124,7 +124,7 @@ public class ServidorExmple {
                  */
                 new Atendre_Clients(newSocket).start();
                 
-                new FilsEnviarInfoClients(newSocket).start();
+                
                 /**
                  * TODO: Prova feta per Oleh de boolean per a si veu missatge de
                  * desconnexio, li resti, pero no funciona be ja que el que fara

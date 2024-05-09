@@ -49,21 +49,8 @@ public class Atendre_Clients extends Thread {
     /**
      * TODO: Necessitem utilitzar aquestos metodes per poder inicialitzar un
      * missatge de un client pero ns sabem com.
-     */
-//    public Atendre_Clients(Socket cs, String msgClient) {
-//        newSocket = cs;
-//        this.msgClient = msgClient;
-//    }
-//
-//    public void setMsgClient(String msgClient) {
-//        this.msgClient = msgClient;
-//    }
-//
-//    public String getMsgClient() {
-//        return this.msgClient;
-//    }
-    /**
-     * TODO: Revisar aquesta funcio ja que ens esta donant problemes.
+     *
+     * - Revisar aquesta funcio ja que ens esta donant problemes.
      */
     public void correForestCorre() {
         try {
@@ -114,22 +101,6 @@ public class Atendre_Clients extends Thread {
                 }
 
                 System.out.println("Aquest es el missatge que ens envia des de el client: " + this.qtClients + ": " + msg);
-//                System.out.println("Hem tancat sessio");
-//                newSocket.close();
-
-//                byte[] buffer = new byte[500];
-//                is.read(buffer);
-////                String msgDesconnexio = new String(buffer).trim();
-//                String msgDesconnexio = demanarDesconnexio(MISSATGE_DESCONNEXIO);
-////                String msgDesconnexio = "DESCONNEXIO";
-//
-//                if (msgDesconnexio.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
-//                    //Arriba el missatge de desconnexio i retornar true
-//                    System.out.println("\nArribem dins del condicional de Atendre_Client");
-//                    semafor = tancarConnexio(newSocket, MISSATGE_DESCONNEXIO);
-//                    System.out.println("\nTanquem nou socket...");
-//                }
-//                System.out.println("\nSeguim amb la connexio...");
             }
             newSocket.close();
         } catch (IOException e) {
@@ -166,7 +137,7 @@ public class Atendre_Clients extends Thread {
             ArrayList<Integer> arrSockets = new ArrayList<>();
             boolean semafor = false;
             final String MISSATGE_DESCONNEXIO = "exit";
-            
+
             InputStream is = newSocket.getInputStream();
             OutputStream os = newSocket.getOutputStream();
 
@@ -178,8 +149,6 @@ public class Atendre_Clients extends Thread {
 
             DataInputStream dis = new DataInputStream(newSocket.getInputStream());
             DataOutputStream dos = new DataOutputStream(newSocket.getOutputStream());
-            
-            
 
             /**
              * TODO: Missatge de informacio posat per Oleh que trobem que no fa
@@ -212,8 +181,9 @@ public class Atendre_Clients extends Thread {
                  * TODO:Solucio proposada per CHATGPT
                  */
                 String msg = new String(buffer, 0, intBuffer);
-                System.out.println("Aquest es el port del socket del client nº " + qtClientsConnectats + " que s'ha connectat: " + this.newSocket.getPort());
-                this.inserirDadesMemoria(arrUsuaris, arrSockets, this.newSocket.getPort(), msg);
+                //TODO: Guarda informacio del client en una arraylist
+                //System.out.println("Aquest es el port del socket del client nº " + qtClientsConnectats + " que s'ha connectat: " + this.newSocket.getPort());
+                //this.inserirDadesMemoria(arrUsuaris, arrSockets, this.newSocket.getPort(), msg);
                 /**
                  * TODO: Solucio proposada per David Boix
                  *
@@ -245,6 +215,7 @@ public class Atendre_Clients extends Thread {
                      */
                     semafor = true;
                 }
+                new FilsEnviarInfoClients(newSocket,msg).start();
                 /**
                  * TODO: Mostrarem el missatge que ens ha enviat el client per
                  * consola del servidor i el veurem satisfactoriament.
@@ -332,7 +303,7 @@ public class Atendre_Clients extends Thread {
             System.out.println(row + "\n");
         }
     }
-    
+
     /**
      * TODO: Funcio booleana de prova per a que quan vegi el missatge de
      * desconnexio, retorni un true

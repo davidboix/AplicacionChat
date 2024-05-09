@@ -26,13 +26,21 @@ public class ClientExemple {
             while (!semafor) {
                 System.out.print("Escriu un missatge que vulguis al servidor: ");
                 String msg = lector.nextLine();
-
+                
                 if (msg.equalsIgnoreCase("exit")) {
                     os.write(msg.getBytes());
                     System.out.println("Ens hem desonnectat del servidor...");
                     semafor = true;
                 }
                 os.write(msg.getBytes());
+                byte[] buffer = new byte[500];
+                int intBuffer = is.read(buffer);
+
+                /**
+                 * TODO:Solucio proposada per CHATGPT
+                 */
+                String msgRebut = new String(buffer, 0, intBuffer);
+                System.out.println("Missatge rebut del servidor: " + msgRebut);
             }
             socket.close();
         } catch (SocketException se) {

@@ -24,19 +24,17 @@ public class FilsEnviarInfoClients extends Thread {
 
     }
 
-    public FilsEnviarInfoClients(Socket socket) {
+    public FilsEnviarInfoClients(Socket socket, String msg) {
         this.socket = socket;
+        this.msg = msg;
     }
     /**
      * Funcio la qual llegira els missatges que envii el client i els retornara
      */
     public void run() {
-        Scanner lector = new Scanner(System.in);
         try {
             ServidorExmple server = new ServidorExmple();
-
-            boolean semafor = false;
-            final String MISSATGE_DESCONNEXIO = "exit";
+            System.out.println("");
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
 
@@ -48,21 +46,18 @@ public class FilsEnviarInfoClients extends Thread {
             //socket.connect(addr);
             System.out.println("Ens conectem...");
 
-            while (!semafor) {
                 //TODO: llegira el missatge i el guardara en una variable
-                byte[] buffer = new byte[500];
-                int intBuffer = is.read(buffer);
-                String msg = new String(buffer, 0, intBuffer);
-
+                //byte[] buffer = new byte[500];
+                //int intBuffer = is.read(buffer);
+                //String msg = new String(buffer, 0, intBuffer);
+                System.out.println("Escribim des del servidor: " + msg);
                 if (msg.equalsIgnoreCase("exit")) {
                     //TODO: enviara el missatge llegit
                     os.write(msg.getBytes());
                     System.out.println("Ens hem desonnectat del servidor...");
-                    semafor = true;
                 }
                 os.write(msg.getBytes());
-            }
-            socket.close();
+            
         } catch (SocketException se) {
             se.printStackTrace();
             System.out.println("\nERROR!\nHi ha hagut un error en la connexio del client cap al servidor.");
