@@ -2,11 +2,15 @@ package exercicis.interficiechat;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 /**
  *
  * @author David Boix Sanchez i Oleh Plechiy Andriyovech Tupis
  * @version 1.0
+ *
+ * TODO: Hem de revisar els estils de la interficie grafica per deixar-ho
+ * enllestit i acabar definint l'interficie grafica.
  */
 public class VistaPrincipal extends javax.swing.JFrame {
 
@@ -14,8 +18,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
      * Creates new form VistaPrincipal
      */
     public VistaPrincipal() {
-        initComponents();
-        inicialitzarIconos();
+        this.initComponents();
+        this.inicialitzarIconos();
         this.setExtendedState(MAXIMIZED_BOTH);
     }
 
@@ -40,9 +44,9 @@ public class VistaPrincipal extends javax.swing.JFrame {
         menuSeleccio1 = new javax.swing.JMenuBar();
         menuDesplegableOpcions = new javax.swing.JMenu();
         menuOpcioLogin = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        menuOpcioRegistre = new javax.swing.JMenuItem();
         menuDesplegableSortir = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        menuOpcioSortir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Vista principal");
@@ -51,7 +55,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         vistaGeneral.setLayout(new java.awt.BorderLayout());
 
         headerVista.setToolTipText("");
-        headerVista.setLayout(new java.awt.GridLayout());
+        headerVista.setLayout(new java.awt.GridLayout(1, 0));
 
         titolVista.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         titolVista.setText("PRINCIPAL");
@@ -60,7 +64,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
         vistaGeneral.add(headerVista, java.awt.BorderLayout.PAGE_START);
 
-        mainVista.setLayout(new java.awt.GridLayout());
+        mainVista.setLayout(new java.awt.GridLayout(1, 0));
 
         iconoImatge.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mainVista.add(iconoImatge);
@@ -96,24 +100,49 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
         vistaGeneral.add(footerVista, java.awt.BorderLayout.PAGE_END);
 
-        menuDesplegableOpcions.setText("Opcions");
+        menuSeleccio1.setBackground(new java.awt.Color(203, 219, 242));
+        menuSeleccio1.setBorder(null);
+        menuSeleccio1.setOpaque(true);
 
-        menuOpcioLogin.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuDesplegableOpcions.setText("Navegació");
+
+        menuOpcioLogin.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioLogin.setBackground(new java.awt.Color(203, 219, 242));
         menuOpcioLogin.setText("Login");
+        menuOpcioLogin.setOpaque(true);
+        menuOpcioLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioLoginActionPerformed(evt);
+            }
+        });
         menuDesplegableOpcions.add(menuOpcioLogin);
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        jMenuItem2.setText("Registre");
-        menuDesplegableOpcions.add(jMenuItem2);
+        menuOpcioRegistre.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioRegistre.setBackground(new java.awt.Color(203, 219, 242));
+        menuOpcioRegistre.setText("Registre");
+        menuOpcioRegistre.setOpaque(true);
+        menuOpcioRegistre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioRegistreActionPerformed(evt);
+            }
+        });
+        menuDesplegableOpcions.add(menuOpcioRegistre);
 
         menuSeleccio1.add(menuDesplegableOpcions);
 
         menuDesplegableSortir.setText("Sortir");
         menuDesplegableSortir.setToolTipText("");
 
-        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        jMenuItem3.setText("Sortir");
-        menuDesplegableSortir.add(jMenuItem3);
+        menuOpcioSortir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioSortir.setBackground(new java.awt.Color(203, 219, 242));
+        menuOpcioSortir.setText("Sortir");
+        menuOpcioSortir.setOpaque(true);
+        menuOpcioSortir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioSortirActionPerformed(evt);
+            }
+        });
+        menuDesplegableSortir.add(menuOpcioSortir);
 
         menuSeleccio1.add(menuDesplegableSortir);
 
@@ -134,34 +163,52 @@ public class VistaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botoIniciSessioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoIniciSessioActionPerformed
-        tancarFinestra();
         Login login = new Login();
-        login.setVisible(true);
-        /**
-         * TODO: En aquest moment ho deixarem comentat perque estem preparant la
-         * interficie
-         *
-         */
-        login.setExtendedState(MAXIMIZED_BOTH);
+        this.obrirFinestra(login);
+        this.tancarFinestra();
     }//GEN-LAST:event_botoIniciSessioActionPerformed
 
     private void botoRegistreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoRegistreActionPerformed
-        tancarFinestra();
         Registre registre = new Registre();
-        registre.setVisible(true);
-        /**
-         * TODO: En aquest moment ho deixarem comentat perque estem preparant la
-         * interficie
-         *
-         */
-        registre.setExtendedState(MAXIMIZED_BOTH);
+        this.obrirFinestra(registre);
+        this.tancarFinestra();
     }//GEN-LAST:event_botoRegistreActionPerformed
     /**
+     * Event creat per poder navegar a la interficie grafica Login per poder
+     * iniciar sessio amb aquell usuari.
+     *
+     * @param evt Event que se li passa per activar la funcio.
+     */
+    private void menuOpcioLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioLoginActionPerformed
+        Login login = new Login();
+        this.obrirFinestra(login);
+        this.tancarFinestra();
+    }//GEN-LAST:event_menuOpcioLoginActionPerformed
+    /**
+     * Funcio creada per poder navegar a la interficie grafica del Registre per
+     * poder registrar-se en el nostre sistema de usuaris.
+     *
+     * @param evt Event que se li passa per activar la funcio.
+     */
+    private void menuOpcioRegistreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioRegistreActionPerformed
+        Registre registre = new Registre();
+        this.obrirFinestra(registre);
+        this.tancarFinestra();
+    }//GEN-LAST:event_menuOpcioRegistreActionPerformed
+    /**
+     * Funcio creada per poder tancar la finestra la qual ens trobem en aquell
+     * moment (Finestra actual).
+     *
+     * @param evt Event que se li passa per poder tancar la finestra.
+     */
+    private void menuOpcioSortirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioSortirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_menuOpcioSortirActionPerformed
+    /**
      * Funcio desenvolupada per poder inicialitzar icones personalitzades un cop
-     * s'inicia la aplicació .
+     * s'inicia la aplicació.
      */
     private void inicialitzarIconos() {
-//        TODO: Re
         ImageIcon logoXatAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
         Image logoXatModificat = logoXatAModificar.getImage().getScaledInstance(512, 512, Image.SCALE_SMOOTH);
         ImageIcon logoXat = new ImageIcon(logoXatModificat);
@@ -174,6 +221,19 @@ public class VistaPrincipal extends javax.swing.JFrame {
      */
     private void tancarFinestra() {
         this.setVisible(false);
+    }
+
+    /**
+     * Funcio creada per poder obrir la interficie grafica que tenim allotjada
+     * en el projecte i que li passarem per parametres
+     *
+     * @param jf JFrame que li passarem al usuari per poder obrir una interficie
+     * en concret.
+     */
+    private void obrirFinestra(JFrame jf) {
+        //Login login = new Login();
+        jf.setVisible(true);
+        jf.setExtendedState(MAXIMIZED_BOTH);
     }
 
     /**
@@ -217,12 +277,12 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel footerVista;
     private javax.swing.JPanel headerVista;
     private javax.swing.JLabel iconoImatge;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel mainVista;
     private javax.swing.JMenu menuDesplegableOpcions;
     private javax.swing.JMenu menuDesplegableSortir;
     private javax.swing.JMenuItem menuOpcioLogin;
+    private javax.swing.JMenuItem menuOpcioRegistre;
+    private javax.swing.JMenuItem menuOpcioSortir;
     private javax.swing.JMenuBar menuSeleccio1;
     private javax.swing.JLabel titolVista;
     private javax.swing.JPanel vistaGeneral;

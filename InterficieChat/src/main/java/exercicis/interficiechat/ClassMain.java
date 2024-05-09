@@ -14,8 +14,8 @@ public class ClassMain extends javax.swing.JFrame {
      * Creates new form ClassMain
      */
     public ClassMain() {
-        initComponents();
-        inicialitzarIcons();
+        this.initComponents();
+        this.inicialitzarIcons();
         this.setExtendedState(MAXIMIZED_BOTH);
     }
 
@@ -119,10 +119,15 @@ public class ClassMain extends javax.swing.JFrame {
 
         panelGeneral.add(footer, java.awt.BorderLayout.PAGE_END);
 
+        menuGeneral.setBackground(new java.awt.Color(203, 219, 242));
+        menuGeneral.setOpaque(true);
+
         menuNavegacio.setText("Navegació");
 
         opcioServidor.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        opcioServidor.setBackground(new java.awt.Color(203, 219, 242));
         opcioServidor.setText("Obrir Servidor");
+        opcioServidor.setOpaque(true);
         opcioServidor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 opcioServidorActionPerformed(evt);
@@ -131,7 +136,9 @@ public class ClassMain extends javax.swing.JFrame {
         menuNavegacio.add(opcioServidor);
 
         opcioClient.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        opcioClient.setBackground(new java.awt.Color(203, 219, 242));
         opcioClient.setText("Obrir Client");
+        opcioClient.setOpaque(true);
         opcioClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 opcioClientActionPerformed(evt);
@@ -144,7 +151,14 @@ public class ClassMain extends javax.swing.JFrame {
         menuSortir.setText("Sortir");
 
         opcioSortir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        opcioSortir.setBackground(new java.awt.Color(203, 219, 242));
         opcioSortir.setText("Sortir");
+        opcioSortir.setOpaque(true);
+        opcioSortir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                opcioSortirActionPerformed(evt);
+            }
+        });
         menuSortir.add(opcioSortir);
 
         menuGeneral.add(menuSortir);
@@ -173,7 +187,7 @@ public class ClassMain extends javax.swing.JFrame {
     private void botoServidorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoServidorActionPerformed
         IniciServidor serv = new IniciServidor();
         this.mostrarInterficie(serv);
-        tancarFinestra();
+        this.tancarFinestra();
         /**
          * TODO: En aquest moment ho deixarem comentat perque estem preparant la
          * interficie
@@ -216,6 +230,10 @@ public class ClassMain extends javax.swing.JFrame {
         this.tancarFinestra();
     }//GEN-LAST:event_opcioClientActionPerformed
 
+    private void opcioSortirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcioSortirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_opcioSortirActionPerformed
+
     private void tancarFinestra() {
         this.setVisible(false);
     }
@@ -226,9 +244,9 @@ public class ClassMain extends javax.swing.JFrame {
      *
      * @param jf La interficie que volem mostrar per pantalla.
      */
-    private void mostrarInterficie(JFrame jf) {
-        jf.setVisible(false);
-        jf.setExtendedState(MAXIMIZED_BOTH);
+    private void mostrarInterficie(JFrame jframe) {
+        jframe.setVisible(true);
+        jframe.setExtendedState(MAXIMIZED_BOTH);
     }
 
     /**

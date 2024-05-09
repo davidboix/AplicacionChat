@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -72,6 +73,12 @@ public class Login extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         footerVista = new javax.swing.JPanel();
         botoLogin = new javax.swing.JButton();
+        menuNavegacio = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        menuOpcioVistaPrincipal = new javax.swing.JMenuItem();
+        menuOpcioRegistre = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        menuOpcioSortir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
@@ -162,15 +169,61 @@ public class Login extends javax.swing.JFrame {
 
         jPanel1.add(footerVista, java.awt.BorderLayout.PAGE_END);
 
+        menuNavegacio.setBackground(new java.awt.Color(203, 219, 242));
+        menuNavegacio.setOpaque(true);
+
+        jMenu1.setText("Navegació");
+
+        menuOpcioVistaPrincipal.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioVistaPrincipal.setBackground(new java.awt.Color(203, 219, 242));
+        menuOpcioVistaPrincipal.setText("Finestra principal");
+        menuOpcioVistaPrincipal.setOpaque(true);
+        menuOpcioVistaPrincipal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioVistaPrincipalActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuOpcioVistaPrincipal);
+
+        menuOpcioRegistre.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioRegistre.setBackground(new java.awt.Color(203, 219, 242));
+        menuOpcioRegistre.setText("Registrar-se");
+        menuOpcioRegistre.setOpaque(true);
+        menuOpcioRegistre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioRegistreActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuOpcioRegistre);
+
+        menuNavegacio.add(jMenu1);
+
+        jMenu2.setText("Sortir");
+
+        menuOpcioSortir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioSortir.setBackground(new java.awt.Color(203, 219, 242));
+        menuOpcioSortir.setText("Tancar Finestra");
+        menuOpcioSortir.setOpaque(true);
+        menuOpcioSortir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioSortirActionPerformed(evt);
+            }
+        });
+        jMenu2.add(menuOpcioSortir);
+
+        menuNavegacio.add(jMenu2);
+
+        setJMenuBar(menuNavegacio);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
         );
 
         pack();
@@ -199,6 +252,8 @@ public class Login extends javax.swing.JFrame {
         String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
 
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
+
+        InterficieXat interficieXat = new InterficieXat();
 
         try ( MongoClient mongoClient = new MongoClient(uri)) {
             String nomUsuari = this.usuariText.getText();
@@ -244,7 +299,8 @@ public class Login extends javax.swing.JFrame {
                             System.out.print("\nNom Usuari: " + infoUsuaris.getString("nomUser"));
                             System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenyaUsuari"));
                         }
-                        this.mostrarInterficieXat();
+                        this.mostrarFinestra(interficieXat);
+                        this.tancarFinestraActual();
                     } else {
                         /**
                          * TODO: Mostrar en un JOptionPane el seguent error per
@@ -320,6 +376,38 @@ public class Login extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_botoLoginActionPerformed
+    /**
+     * Funcio creada per poder cridar a la interficie grafica anomenada Vista
+     * Principal per poder navegar si es el cas que el client no esta registrat
+     * en el nostre sistema.
+     *
+     * @param evt Event que se li passa per poder realitzar la funcio.
+     */
+    private void menuOpcioVistaPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioVistaPrincipalActionPerformed
+        VistaPrincipal vistaPrincipal = new VistaPrincipal();
+        this.mostrarFinestra(vistaPrincipal);
+        this.setVisible(false);
+    }//GEN-LAST:event_menuOpcioVistaPrincipalActionPerformed
+    /**
+     * Funcio creada per poder tancar la finestra la qual ens trobem en aquell
+     * moment.
+     *
+     * @param evt Event que se li passa per poder activar la funció.
+     */
+    private void menuOpcioSortirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioSortirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_menuOpcioSortirActionPerformed
+    /**
+     * Funcio creada per poder dirigir-se a la interficie grafica del registre
+     * per a que el usuari pugui registrar-se en el nostre sistema.
+     *
+     * @param evt Event que se li passa per poder activar la funcio.
+     */
+    private void menuOpcioRegistreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioRegistreActionPerformed
+        Registre registre = new Registre();
+        this.mostrarFinestra(registre);
+        this.tancarFinestraActual();
+    }//GEN-LAST:event_menuOpcioRegistreActionPerformed
     /**
      * Funcio creada per poder inicialitzar els diferents inputs de la nostra
      * interficie grafica i que,d'aquesta manera, el usuari pugui saber quin
@@ -504,13 +592,26 @@ public class Login extends javax.swing.JFrame {
     }
 
     /**
-     * Funcio creada per poder mostrar la interficie grafica creada quan el
-     * usuari hagui realitzat el login correctament sense cap mena de error.
+     * TODO: Allargar una mica mes la descripcio que realitza aquella funcio.
+     *
+     * Funcio creada per poder inicialitzar la interficie grafica que nosaltres
+     * li passare per parametres.
+     *
+     * @param jframe Interficie grafica que voldrem mostrar per pantalla.
      */
-    private void mostrarInterficieXat() {
+    private void mostrarFinestra(JFrame jframe) {
+        jframe.setVisible(true);
+        jframe.setExtendedState(MAXIMIZED_BOTH);
+    }
+
+    /**
+     * TODO: Allargar una mica mes la descripcio que realitza aquella funcio.
+     *
+     * Funcio creada per poder tancar la finestra la qual es troba oberta en
+     * aquell moment.
+     */
+    private void tancarFinestraActual() {
         this.setVisible(false);
-        InterficieXat ix = new InterficieXat();
-        ix.setVisible(true);
     }
 
     /**
@@ -555,10 +656,16 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPanel footerVista;
     private javax.swing.JPanel headerVista;
     private componentsPersonalitzats.JPasswordPlaceholder inputPassword;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel mainVista;
+    private javax.swing.JMenuBar menuNavegacio;
+    private javax.swing.JMenuItem menuOpcioRegistre;
+    private javax.swing.JMenuItem menuOpcioSortir;
+    private javax.swing.JMenuItem menuOpcioVistaPrincipal;
     private javax.swing.JLabel titolVista;
     private componentsPersonalitzats.JTextFieldPersonalitzat usuariText;
     // End of variables declaration//GEN-END:variables

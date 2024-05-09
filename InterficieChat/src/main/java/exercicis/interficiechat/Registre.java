@@ -21,6 +21,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -38,9 +39,9 @@ public class Registre extends javax.swing.JFrame {
      * Creates new form Registre
      */
     public Registre() {
-        initComponents();
-        inicialitzarTextInputs();
-        afegirIcono();
+        this.initComponents();
+        this.inicialitzarTextInputs();
+        this.afegirIcono();
         this.setExtendedState(MAXIMIZED_BOTH);
         //inicialitzarServidor();
     }
@@ -74,6 +75,12 @@ public class Registre extends javax.swing.JFrame {
         inputUsuari = new componentsPersonalitzats.JTextFieldPersonalitzat();
         inputPassword = new componentsPersonalitzats.JPasswordPlaceholder();
         inputEdat = new com.toedter.calendar.JDateChooser();
+        menuGeneral = new javax.swing.JMenuBar();
+        menuNavegacio = new javax.swing.JMenu();
+        menuOpcioVistaPrincipal = new javax.swing.JMenuItem();
+        menuOpcioLogin = new javax.swing.JMenuItem();
+        menuSortir = new javax.swing.JMenu();
+        menuOpcioSortir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registre");
@@ -210,6 +217,52 @@ public class Registre extends javax.swing.JFrame {
 
         vistaGeneral.add(mainVista, java.awt.BorderLayout.CENTER);
 
+        menuGeneral.setBackground(new java.awt.Color(203, 219, 242));
+        menuGeneral.setOpaque(true);
+
+        menuNavegacio.setText("Navegació");
+
+        menuOpcioVistaPrincipal.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioVistaPrincipal.setBackground(new java.awt.Color(203, 219, 242));
+        menuOpcioVistaPrincipal.setText("Vista Principal");
+        menuOpcioVistaPrincipal.setOpaque(true);
+        menuOpcioVistaPrincipal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioVistaPrincipalActionPerformed(evt);
+            }
+        });
+        menuNavegacio.add(menuOpcioVistaPrincipal);
+
+        menuOpcioLogin.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioLogin.setBackground(new java.awt.Color(203, 219, 242));
+        menuOpcioLogin.setText("Inici Sessió");
+        menuOpcioLogin.setOpaque(true);
+        menuOpcioLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioLoginActionPerformed(evt);
+            }
+        });
+        menuNavegacio.add(menuOpcioLogin);
+
+        menuGeneral.add(menuNavegacio);
+
+        menuSortir.setText("Sortir");
+
+        menuOpcioSortir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioSortir.setBackground(new java.awt.Color(203, 219, 242));
+        menuOpcioSortir.setText("Sortir");
+        menuOpcioSortir.setOpaque(true);
+        menuOpcioSortir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioSortirActionPerformed(evt);
+            }
+        });
+        menuSortir.add(menuOpcioSortir);
+
+        menuGeneral.add(menuSortir);
+
+        setJMenuBar(menuGeneral);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -218,7 +271,7 @@ public class Registre extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(vistaGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
+            .addComponent(vistaGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
         );
 
         pack();
@@ -248,26 +301,26 @@ public class Registre extends javax.swing.JFrame {
                  * missatge avisant al usuari en que ha fallat.
                  */
                 JOptionPane jop = new JOptionPane();
-                    Icon imagenLabel = new ImageIcon("src\\main\\java\\img\\passwordErroni.png");
-                    String[] opcions = {"Acceptar"};
-                    
-                    int correcte = jop.showOptionDialog(
-                            null,
-                            "El email es incorrecte.",
-                            "Email incorrecte",
-                            jop.DEFAULT_OPTION,
-                            jop.WARNING_MESSAGE,
-                            imagenLabel,
-                            opcions,
-                            opcions[0]
-                    );
-                    
-                    if (correcte > 0) {
-                        System.out.println("S'ha pulsat aceptar");
-                    } else {
-                        System.out.println("S'ha cancelat");
-                    }
-                    
+                Icon imagenLabel = new ImageIcon("src\\main\\java\\img\\passwordErroni.png");
+                String[] opcions = {"Acceptar"};
+
+                int correcte = jop.showOptionDialog(
+                        null,
+                        "El email es incorrecte.",
+                        "Email incorrecte",
+                        jop.DEFAULT_OPTION,
+                        jop.WARNING_MESSAGE,
+                        imagenLabel,
+                        opcions,
+                        opcions[0]
+                );
+
+                if (correcte > 0) {
+                    System.out.println("S'ha pulsat aceptar");
+                } else {
+                    System.out.println("S'ha cancelat");
+                }
+
                 System.out.println("El email es incorrecte");
             }
         }
@@ -295,6 +348,34 @@ public class Registre extends javax.swing.JFrame {
             System.out.println("Esta buit");
         }
     }//GEN-LAST:event_botoAltaUsuariActionPerformed
+    /**
+     * TODO: Falta afegir la documentacio JavaDoc.
+     *
+     * @param evt
+     */
+    private void menuOpcioVistaPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioVistaPrincipalActionPerformed
+        VistaPrincipal vistaPrincipal = new VistaPrincipal();
+        this.mostrarFinestra(vistaPrincipal);
+        this.tancarFinestraActual();
+    }//GEN-LAST:event_menuOpcioVistaPrincipalActionPerformed
+    /**
+     * TODO: Falta afegir la documentacio JavaDoc.
+     *
+     * @param evt
+     */
+    private void menuOpcioLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioLoginActionPerformed
+        Login login = new Login();
+        this.mostrarFinestra(login);
+        this.tancarFinestraActual();
+    }//GEN-LAST:event_menuOpcioLoginActionPerformed
+    /**
+     * TODO: Falta afegir la documentacio JavaDoc.
+     *
+     * @param evt
+     */
+    private void menuOpcioSortirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioSortirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_menuOpcioSortirActionPerformed
     /**
      * Funcio desenvolupada per poder validar que un JTextField no pugui quedar
      * buit
@@ -547,6 +628,23 @@ public class Registre extends javax.swing.JFrame {
     }
 
     /**
+     * TODO: Faltar afegir la documentacio JavaDoc.
+     *
+     *
+     * @param jframe
+     */
+    private void mostrarFinestra(JFrame jframe) {
+        jframe.setVisible(true);
+        jframe.setExtendedState(MAXIMIZED_BOTH);
+    }
+    /**
+     * TODO: Falta afegir documentacio JavaDoc.
+     */
+    private void tancarFinestraActual () {
+        this.setVisible(false);
+    }
+
+    /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -598,6 +696,12 @@ public class Registre extends javax.swing.JFrame {
     private componentsPersonalitzats.JPasswordPlaceholder inputPassword;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputUsuari;
     private javax.swing.JPanel mainVista;
+    private javax.swing.JMenuBar menuGeneral;
+    private javax.swing.JMenu menuNavegacio;
+    private javax.swing.JMenuItem menuOpcioLogin;
+    private javax.swing.JMenuItem menuOpcioSortir;
+    private javax.swing.JMenuItem menuOpcioVistaPrincipal;
+    private javax.swing.JMenu menuSortir;
     private javax.swing.JLabel titolRegistre;
     private javax.swing.JPanel vistaGeneral;
     // End of variables declaration//GEN-END:variables
