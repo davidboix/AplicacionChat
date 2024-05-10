@@ -21,15 +21,17 @@ public class FilsEnviarInfoClients extends Thread {
     private String msg;
     private Socket socket;
     private ArrayList<String> arrMsg = new ArrayList<>();
+    private ArrayList<Socket> arrSocket = new ArrayList<>();
 
     public FilsEnviarInfoClients() {
 
     }
 
-    public FilsEnviarInfoClients(Socket socket, String msg, ArrayList<String> arrMsg) {
+    public FilsEnviarInfoClients(Socket socket, String msg, ArrayList<String> arrMsg, ArrayList<Socket> arrSocket) {
         this.socket = socket;
         this.msg = msg;
         this.arrMsg = arrMsg;
+        this.arrSocket = arrSocket;
     }
 
     /**
@@ -81,6 +83,10 @@ public class FilsEnviarInfoClients extends Thread {
             for (String row : this.arrMsg) {
                 System.out.println(row);
                 os.write(row.getBytes());
+            }
+            
+            for (Socket row: this.arrSocket) {
+                System.out.println(row);
             }
 
             if (this.msg.equalsIgnoreCase("exit")) {

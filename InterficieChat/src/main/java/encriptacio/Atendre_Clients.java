@@ -23,6 +23,7 @@ public class Atendre_Clients extends Thread {
     private String msgClient;
     private int qtClients;
     private ArrayList<String> arrMsg = new ArrayList<>();
+    private ArrayList<Socket> arrSocket = new ArrayList<>();
 
     /**
      * TODO: Oleh: He intentat fer una global, pero quan entre un altre client
@@ -46,6 +47,10 @@ public class Atendre_Clients extends Thread {
          */
         //this.qtClients = 0;
     }
+    public Atendre_Clients (Socket socket,ArrayList<Socket> arrSocket) {
+        this.newSocket = socket;
+        this.arrSocket = arrSocket;
+    }
 
     private ArrayList guardarMissatgesArrayList(ArrayList<String> arrMsg, String msg) {
         if (!msg.isEmpty()) {
@@ -54,13 +59,19 @@ public class Atendre_Clients extends Thread {
         return arrMsg;
     }
 
+    private ArrayList guardarClientsArrayList(ArrayList<Socket> arrSocket, Socket socket) {
+        if (!socket.isClosed()) {
+            arrSocket.add(socket);
+        }
+        return arrSocket;
+    }
+
     /**
      * TODO: Necessitem utilitzar aquestos metodes per poder inicialitzar un
      * missatge de un client pero ns sabem com.
      *
      * - Revisar aquesta funcio ja que ens esta donant problemes.
      */
-
     public void correForestCorre() {
         try {
             /**
@@ -229,11 +240,12 @@ public class Atendre_Clients extends Thread {
                  * missatge de retorn al client.
                  */
                 this.guardarMissatgesArrayList(arrMsg, msg);
+                //this.guardarClientsArrayList(arrSocket, newSocket);
 //                System.out.println("Missatges client: ");
 //                for (String row : arrMsg) {
 //                    System.out.println(row);
 //                }
-                new FilsEnviarInfoClients(newSocket, msg, arrMsg).start();
+                new FilsEnviarInfoClients(newSocket, msg, arrMsg, arrSocket).start();
                 /**
                  * TODO: Mostrarem el missatge que ens ha enviat el client per
                  * consola del servidor i el veurem satisfactoriament.

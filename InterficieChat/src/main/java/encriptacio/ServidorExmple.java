@@ -11,6 +11,29 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 
+/**
+ * TODO: Prova de realitzar aquestos passos per no haver de crear nous
+ * arraylists cada cop que
+ *
+ * 1 - Crearem el ArrayList al Servidor en ves de el fil Atendre_Clients.
+ *
+ * 2 - En el bucle while assignare una variable per guardar el ArrayList.
+ *
+ * 3 - Llavors li passarem el ArrayList per parametres a la instancia de
+ * Atendre_Clients.
+ *
+ * Solucio Alternativa:
+ *
+ * Guardar el socket en la BD de MongoDB.
+ *
+ * Quan un client es desonnecti, el borrarem tant de la MongoBD, com de memoria
+ * i del servidor.
+ *
+ * O inserirem tot el ArrayList a MongoDB, i quan un usuari es desconnecti,
+ * borrarem tot el ArrayList i el tornarem a inserir sense aquell client que
+ * s'ha desconnectat.
+ *
+ */
 public class ServidorExmple {
     // IP MongoDB al nuvol: 57.129.5.24
     //Port MongodBD al nuvol: 27017
@@ -19,6 +42,7 @@ public class ServidorExmple {
     // Usuari de la BD: grup1
     // Password: gat123
     private static int qtClients;
+    private ArrayList<Socket> arrSocket = new ArrayList<>();
 
     public ServidorExmple() {
 
@@ -118,11 +142,13 @@ public class ServidorExmple {
                  * realitzar en el fil i NO en el servidor
                  */
                 server.augmentarClientsConnectats();
+                server.guardarClientsArrayList(server.arrSocket, newSocket);
                 /**
                  * TODO: Aquest es el fil que utilitzarem per poder escoltar
                  * tots els missatges que envien els clients al servidor.
                  */
-                new Atendre_Clients(newSocket).start();
+//                new Atendre_Clients(newSocket).start();
+                new Atendre_Clients(newSocket, server.arrSocket).start();
 
                 /**
                  * TODO: Prova feta per Oleh de boolean per a si veu missatge de
@@ -200,6 +226,13 @@ public class ServidorExmple {
      */
     private static int augmentarConnexio(int qtClients) {
         return qtClients;
+    }
+
+    private ArrayList guardarClientsArrayList(ArrayList<Socket> arrSocket, Socket socket) {
+        if (!socket.isClosed()) {
+            arrSocket.add(socket);
+        }
+        return arrSocket;
     }
 
     /**

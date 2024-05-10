@@ -27,7 +27,7 @@ public class ClientExemple {
                 System.out.print("Escriu un missatge que vulguis al servidor: ");
                 String msg = lector.nextLine();
                 os.write(msg.getBytes());
-
+                
                 if (msg.equalsIgnoreCase("exit")) {
                     os.write(msg.getBytes());
                     System.out.println("Ens hem desconnectat del servidor...");
