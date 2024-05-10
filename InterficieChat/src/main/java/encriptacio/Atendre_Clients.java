@@ -22,6 +22,7 @@ public class Atendre_Clients extends Thread {
     private Socket newSocket;
     private String msgClient;
     private int qtClients;
+    private ArrayList<String> arrMsg = new ArrayList<>();
 
     /**
      * TODO: Oleh: He intentat fer una global, pero quan entre un altre client
@@ -46,12 +47,20 @@ public class Atendre_Clients extends Thread {
         //this.qtClients = 0;
     }
 
+    private ArrayList guardarMissatgesArrayList(ArrayList<String> arrMsg, String msg) {
+        if (!msg.isEmpty()) {
+            arrMsg.add(msg);
+        }
+        return arrMsg;
+    }
+
     /**
      * TODO: Necessitem utilitzar aquestos metodes per poder inicialitzar un
      * missatge de un client pero ns sabem com.
      *
      * - Revisar aquesta funcio ja que ens esta donant problemes.
      */
+
     public void correForestCorre() {
         try {
             /**
@@ -215,14 +224,22 @@ public class Atendre_Clients extends Thread {
                      */
                     semafor = true;
                 }
-                new FilsEnviarInfoClients(newSocket,msg).start();
+                /**
+                 * TODO: Aqui es quan obrirem el nou fil per poder enviar el
+                 * missatge de retorn al client.
+                 */
+                this.guardarMissatgesArrayList(arrMsg, msg);
+//                System.out.println("Missatges client: ");
+//                for (String row : arrMsg) {
+//                    System.out.println(row);
+//                }
+                new FilsEnviarInfoClients(newSocket, msg, arrMsg).start();
                 /**
                  * TODO: Mostrarem el missatge que ens ha enviat el client per
                  * consola del servidor i el veurem satisfactoriament.
                  */
 
-                System.out.println("Aquest es el missatge que ens envia des de el client " + qtClientsConnectats + ": " + msg);
-
+                //System.out.println("Aquest es el missatge que ens envia des de el client " + qtClientsConnectats + ": " + msg);
 //                System.out.println("Hem tancat sessio");
 //                newSocket.close();
 //                byte[] buffer = new byte[500];

@@ -123,8 +123,7 @@ public class ServidorExmple {
                  * tots els missatges que envien els clients al servidor.
                  */
                 new Atendre_Clients(newSocket).start();
-                
-                
+
                 /**
                  * TODO: Prova feta per Oleh de boolean per a si veu missatge de
                  * desconnexio, li resti, pero no funciona be ja que el que fara
@@ -176,14 +175,14 @@ public class ServidorExmple {
 //                qtClients--;
             }
         } catch (SocketException se) {
-            System.err.println("\nERROR!\nLa connexio ha sigut detinguda inesperadament!");
             se.printStackTrace();
+            System.err.println("\nERROR!\nLa connexio ha sigut detinguda inesperadament!");
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("\nERROR!\nHi ha hagut un error i per tant no s'ha executat correctament el servidor!");
-            e.printStackTrace();
         } catch (Exception e) {
-            System.err.println("\nERROR!\nHi ha hagut un error general i per tant el servidor no ha funcionat com toca!");
             e.printStackTrace();
+            System.err.println("\nERROR!\nHi ha hagut un error general i per tant el servidor no ha funcionat com toca!");
         }
 
     }
@@ -283,7 +282,7 @@ public class ServidorExmple {
         byte[] buffer = new byte[500];
         int intBuffer = is.read(buffer);
         String msg = new String(buffer, 0, intBuffer);
-        
+
         if (msg.isEmpty()) {
             return null;
         }

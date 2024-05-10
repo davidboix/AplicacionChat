@@ -26,21 +26,14 @@ public class ClientExemple {
             while (!semafor) {
                 System.out.print("Escriu un missatge que vulguis al servidor: ");
                 String msg = lector.nextLine();
-                
+                os.write(msg.getBytes());
+
                 if (msg.equalsIgnoreCase("exit")) {
                     os.write(msg.getBytes());
-                    System.out.println("Ens hem desonnectat del servidor...");
+                    System.out.println("Ens hem desconnectat del servidor...");
                     semafor = true;
                 }
-                os.write(msg.getBytes());
-                byte[] buffer = new byte[500];
-                int intBuffer = is.read(buffer);
-
-                /**
-                 * TODO:Solucio proposada per CHATGPT
-                 */
-                String msgRebut = new String(buffer, 0, intBuffer);
-                System.out.println("Missatge rebut del servidor: " + msgRebut);
+                llegirMissatgeServidor(is);
             }
             socket.close();
         } catch (SocketException se) {
@@ -53,6 +46,25 @@ public class ClientExemple {
             e.printStackTrace();
             System.out.println("\nERROR!\nHi ha hagut un problema general en el client");
         }
+    }
+
+    /**
+     * TODO: Revisar logica de la funcio ja i separar-ho per capes per no
+     * tenir-ho tot en una classe.
+     *
+     * Funcio creada per poder llegirs els diferents missatges que ens envien
+     * desde el servidor.
+     */
+    private static void llegirMissatgeServidor(InputStream is) throws IOException {
+        byte[] buffer = new byte[500];
+        int intBuffer = is.read(buffer);
+        String msgRebut = new String(buffer, 0, intBuffer);
+        String[] arrMsg = msgRebut.split("\n");
+        System.out.println("missatges rebut per part de servidor...");
+        for (String row : arrMsg) {
+            System.out.println(row);
+        }
+        System.out.println("Missatge rebut del servidor: " + msgRebut);
     }
 
 }

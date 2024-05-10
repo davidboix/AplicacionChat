@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -19,45 +20,76 @@ public class FilsEnviarInfoClients extends Thread {
 
     private String msg;
     private Socket socket;
+    private ArrayList<String> arrMsg = new ArrayList<>();
 
     public FilsEnviarInfoClients() {
 
     }
 
-    public FilsEnviarInfoClients(Socket socket, String msg) {
+    public FilsEnviarInfoClients(Socket socket, String msg, ArrayList<String> arrMsg) {
         this.socket = socket;
         this.msg = msg;
+        this.arrMsg = arrMsg;
     }
+
+    /**
+     * TODO: Augmentar les linies de la documentacio de la funcio.
+     *
+     * Funcio creada per poder guardar els missatges que envien els diferents
+     * clients al servidor
+     *
+     * @param msg Missatge enviat per el client.
+     * @return Retornem un ArrayList per poder realitzar certes operacions amb
+     * ell.
+     */
+    private ArrayList guardarMissatges(ArrayList<String> arrMsg, String msg) {
+        if (!msg.isEmpty()) {
+            arrMsg.add(msg);
+        }
+        return arrMsg;
+    }
+
     /**
      * Funcio la qual llegira els missatges que envii el client i els retornara
      */
     public void run() {
         try {
             ServidorExmple server = new ServidorExmple();
-            System.out.println("");
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
-
 
             DataInputStream dis = new DataInputStream(is);
             DataOutputStream dos = new DataOutputStream(os);
             //TODO: aqui es connectara al client al qual li tornara els missatges
             //InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
             //socket.connect(addr);
-            System.out.println("Ens conectem...");
 
-                //TODO: llegira el missatge i el guardara en una variable
-                //byte[] buffer = new byte[500];
-                //int intBuffer = is.read(buffer);
-                //String msg = new String(buffer, 0, intBuffer);
-                System.out.println("Escribim des del servidor: " + msg);
-                if (msg.equalsIgnoreCase("exit")) {
-                    //TODO: enviara el missatge llegit
-                    os.write(msg.getBytes());
-                    System.out.println("Ens hem desonnectat del servidor...");
-                }
-                os.write(msg.getBytes());
-            
+            /**
+             * TODO:
+             *
+             * Lllegira el missatge i el guardara en una variable
+             *
+             * byte[] buffer = new byte[500];
+             *
+             * int intBuffer = is.read(buffer);
+             *
+             */
+            //String msg = new String(buffer, 0, intBuffer);
+//            this.guardarMissatges(this.arrMsg, this.msg);
+            System.out.println("Missatges enviats...");
+//            //Printem per pantalla els missatges.
+            for (String row : this.arrMsg) {
+                System.out.println(row);
+                os.write(row.getBytes());
+            }
+
+            if (this.msg.equalsIgnoreCase("exit")) {
+                //TODO: enviara el missatge llegit
+                os.write(this.msg.getBytes());
+                System.out.println("Ens hem desconnectat del servidor...");
+            }
+            //os.write(this.msg.getBytes());
+
         } catch (SocketException se) {
             se.printStackTrace();
             System.out.println("\nERROR!\nHi ha hagut un error en la connexio del client cap al servidor.");
