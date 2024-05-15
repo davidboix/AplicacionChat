@@ -34,6 +34,7 @@ public class Atendre_Clients extends Thread {
     public Atendre_Clients(Socket socket, ArrayList<Socket> arrSocket) {
         this.socket = socket;
         this.arrSocket = arrSocket;
+        
     }
 
     public Atendre_Clients(Socket socket, ArrayList<Socket> arrSocket, ArrayList<String> arrMsg) {
@@ -56,6 +57,30 @@ public class Atendre_Clients extends Thread {
         return arrSocket;
     }
 
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public ArrayList<String> getArrMsg() {
+        return arrMsg;
+    }
+
+    public ArrayList<Socket> getArrSocket() {
+        return arrSocket;
+    }
+
+    public void setArrMsg(ArrayList<String> arrMsg) {
+        this.arrMsg = arrMsg;
+    }
+
+    public void setArrSocket(ArrayList<Socket> arrSocket) {
+        this.arrSocket = arrSocket;
+    }
+
     /**
      * TODO: El servidor llegira un missatge de desconnexio per part del client
      * que sera 'exit' quan el client premi al boto de desconnexio de la
@@ -68,6 +93,7 @@ public class Atendre_Clients extends Thread {
              * metodes que hem creat en el servidor
              */
             Servidor servidor = new Servidor();
+            
             boolean semafor = false;
             boolean connexioTancada = false;
             final String MISSATGE_DESCONNEXIO = "exit";
@@ -118,10 +144,16 @@ public class Atendre_Clients extends Thread {
                  * TODO: Aqui es quan obrirem el nou fil per poder enviar el
                  * missatge de retorn al client.
                  */
-                this.guardarMissatgesArrayList(this.arrMsg, msg);
-                servidor.getDadesLlistes(this.arrSocket, this.arrMsg);
-                if (!connexioTancada) {
-                    new FilsEnviarInfoClients(socket, this.arrMsg, this.arrSocket).start();
+                //En aquest punt guardarem els missatges en un ArrayList.
+                boolean comprovarExit = this.comprovarMsgDesconnexio(msg);
+                if (!comprovarExit) {
+                    this.guardarMissatgesArrayList(servidor.arrMsg2, msg);
+                    //En aquest punt mostrarem els valors dels ArrayLists.
+                    servidor.getDadesLlistes(this.arrSocket, servidor.arrMsg2);
+                    if (!connexioTancada) {
+                        //new FilsEnviarInfoClients(socket, this.arrMsg, this.arrSocket).start();
+                        new FilsEnviarInfoClients(socket, servidor.arrMsg2, this.arrSocket).start();
+                    }                    
                 }
                 //new FilsEnviarInfoClients(this.arrMsg, this.arrSocket).start();
 
@@ -209,6 +241,12 @@ public class Atendre_Clients extends Thread {
         for (int row : arrSockets) {
             System.out.println(row + "\n");
         }
+    }
+    
+    private boolean comprovarMsgDesconnexio (String msg) {
+        String exit = "exit";
+        if (msg.equalsIgnoreCase(exit)) return true;
+        return false;
     }
 
     /**

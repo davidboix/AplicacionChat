@@ -68,13 +68,12 @@ public class FilsEnviarInfoClients extends Thread {
      */
     public void run() {
         try {
-
             Servidor servidor = new Servidor();
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
 
-//            DataInputStream dis = new DataInputStream(is);
-//            DataOutputStream dos = new DataOutputStream(os);
+//          DataInputStream dis = new DataInputStream(is);
+//          DataOutputStream dos = new DataOutputStream(os);
             //TODO: aqui es connectara al client al qual li tornara els missatges
             //InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
             //socket.connect(addr);
@@ -89,10 +88,13 @@ public class FilsEnviarInfoClients extends Thread {
              *
              * String msg = new String(buffer, 0, intBuffer);
              */
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-
-            out.writeObject(this.arrMsg);
-
+            System.out.println("maricnie");
+            for (Socket socketClient: Servidor.arrSocket) {
+                ObjectOutputStream out = new ObjectOutputStream(socketClient.getOutputStream());
+                out.writeObject(this.arrMsg);
+            }
+//            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+//            out.writeObject(this.arrMsg);
         } catch (SocketException se) {
             se.printStackTrace();
             System.out.println("\nERROR!\nHi ha hagut un error en la connexio del client cap al servidor.");

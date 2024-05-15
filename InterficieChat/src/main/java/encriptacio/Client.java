@@ -6,9 +6,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
-
 import java.net.Socket;
-
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -36,7 +34,6 @@ public class Client {
                     System.out.println("Ens hem desconnectat del servidor...");
                     semafor = true;
                 }
-                //llegirMissatgeServidor(is);
                 llegirArrayList(socket);
 
             }
@@ -82,7 +79,7 @@ public class Client {
             }
             
         } catch (EOFException eof) {
-            System.err.println("\nCLIENT: Hi ha hagut un error alhora de rebre els missatges!!");
+            System.err.println("\nCLIENT: No hi han mes missatges a mostrar...");
         } catch (Exception e) {
             e.printStackTrace();
         }
