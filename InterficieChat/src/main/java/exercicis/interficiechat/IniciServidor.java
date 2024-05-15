@@ -136,7 +136,9 @@ public class IniciServidor extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String [] i = {};
         String ipServidor = this.inputServidor.getText();
-        Servidor.setIpServidor(ipServidor);
+        //Comentat per a que no done error
+        //Pose la ip que s'ha introduit a la interficie per a crear el servidor
+        //Servidor.setIpServidor(ipServidor);
         
         if (!ipServidor.isEmpty()) {
             Servidor.main(i);

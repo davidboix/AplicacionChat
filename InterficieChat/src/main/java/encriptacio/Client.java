@@ -25,6 +25,7 @@ public class Client {
             boolean semafor = false;
 
             while (!semafor) {
+                llegirArrayList(socket);
                 System.out.print("Escriu un missatge que vulguis al servidor: ");
                 String msg = lector.nextLine();
                 os.write(msg.getBytes());
@@ -34,7 +35,7 @@ public class Client {
                     System.out.println("Ens hem desconnectat del servidor...");
                     semafor = true;
                 }
-                llegirArrayList(socket);
+                //llegirArrayList(socket);
 
             }
             socket.close();

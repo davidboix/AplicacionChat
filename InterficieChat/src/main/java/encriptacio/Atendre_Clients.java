@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
@@ -111,6 +112,7 @@ public class Atendre_Clients extends Thread {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
             while (!semafor) {
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 /**
                  * TODO: Hem de revisar el us dels objectes DataInputStream i el
                  * DataOutputStream per poder llegir els missatges que s'envien
