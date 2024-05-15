@@ -134,11 +134,13 @@ public class IniciServidor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        String [] i = {};
         String ipServidor = this.inputServidor.getText();
-
+        Servidor.setIpServidor(ipServidor);
+        
         if (!ipServidor.isEmpty()) {
-            this.comprovacioIP(ipServidor);
+            Servidor.main(i);
+            //this.comprovacioIP(ipServidor);
         } else {
             System.out.println("No pot quedar buit!");
         }

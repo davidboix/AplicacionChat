@@ -42,6 +42,7 @@ public class Servidor {
     // Usuari de la BD: grup1
     // Password: gat123
     private static int qtClients;
+    public static String ipServidor;
     private ArrayList<Socket> arrSocket = new ArrayList<>();
     private ArrayList<String> arrMsg = new ArrayList<>();
 
@@ -55,6 +56,15 @@ public class Servidor {
      */
     public Servidor(int qtClients) {
         this.qtClients = qtClients;
+        this.ipServidor = ipServidor;
+    }
+
+    public static String getIpServidor() {
+        return ipServidor;
+    }
+
+    public static void setIpServidor(String ipServidor) {
+        Servidor.ipServidor = ipServidor;
     }
 
     /**
@@ -118,7 +128,11 @@ public class Servidor {
         try {
             System.out.println("Creem el socket servidor");
             ServerSocket serverSocket = new ServerSocket();
-            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+            //adreça de prova
+            //InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+            //adreça bona
+            InetSocketAddress addr = new InetSocketAddress(ipServidor, 5556);
+            System.out.println(ipServidor);
             serverSocket.bind(addr);
 
             boolean semafor = false;
