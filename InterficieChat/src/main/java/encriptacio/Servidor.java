@@ -1,37 +1,49 @@
 package encriptacio;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import org.bson.Document;
+import java.net.SocketException;
+import java.util.ArrayList;
 
 /**
+ * TODO: Prova de realitzar aquestos passos per no haver de crear nous
+ * arraylists cada cop que
  *
- * @author David Boix Sanchez provisional i Oleh Plechiy Tupis Andriyovech
- * @version 1.0
+ * 1 - Crearem el ArrayList al Servidor en ves de el fil Atendre_Clients.
+ *
+ * 2 - En el bucle while assignare una variable per guardar el ArrayList.
+ *
+ * 3 - Llavors li passarem el ArrayList per parametres a la instancia de
+ * Atendre_Clients.
+ *
+ * Solucio Alternativa:
+ *
+ * Guardar el socket en la BD de MongoDB.
+ *
+ * Quan un client es desonnecti, el borrarem tant de la MongoBD, com de memoria
+ * i del servidor.
+ *
+ * O inserirem tot el ArrayList a MongoDB, i quan un usuari es desconnecti,
+ * borrarem tot el ArrayList i el tornarem a inserir sense aquell client que
+ * s'ha desconnectat.
+ *
  */
 public class Servidor {
+    // IP MongoDB al nuvol: 57.129.5.24
+    //Port MongodBD al nuvol: 27017
 
-    private String ipServidor;
-    private int portServidor;
+    // Estructura MongoDB
+    // Usuari de la BD: grup1
+    // Password: gat123
+    private static int qtClients;
+    private ArrayList<Socket> arrSocket = new ArrayList<>();
+    private ArrayList<String> arrMsg = new ArrayList<>();
 
     public Servidor() {
 
@@ -39,288 +51,412 @@ public class Servidor {
 
     /**
      *
-     * @param ipServidor
-     * @param portServidor
+     * @param qtClients
      */
-    public Servidor(String ipServidor, int portServidor) {
-        this.ipServidor = ipServidor;
-        this.portServidor = portServidor;
+    public Servidor(int qtClients) {
+        this.qtClients = qtClients;
     }
 
     /**
+     * Getter desenvolupat per poder obtenir la quantitat de clients connectats
+     * en aquell moment.
      *
      * @return
      */
-    public String getIpServidor() {
-        return ipServidor;
+    public int getQtClients() {
+        return qtClients;
     }
 
     /**
+     * Setter desenvolupat per poder inicialitzar el numero de clients inicial o
+     * similar.
      *
-     * @param ipServidor
+     * @param qtClients
      */
-    public void setIpServidor(String ipServidor) {
-        this.ipServidor = ipServidor;
+    public void setQtClients(int qtClients) {
+        this.qtClients = qtClients;
+    }
+
+    public ArrayList<Socket> getArrSocket() {
+        return arrSocket;
+    }
+
+    public void setArrSocket(ArrayList<Socket> arrSocket) {
+        this.arrSocket = arrSocket;
+    }
+
+    public ArrayList<String> getArrMsg() {
+        return arrMsg;
+    }
+
+    public void setArrMsg(ArrayList<String> arrMsg) {
+        this.arrMsg = arrMsg;
     }
 
     /**
-     *
-     * @return
+     * Funcio desenvolupada per poder augmentar el numero de clients que estan
+     * connectats en aquell moment.
      */
-    public int getPortServidor() {
-        return portServidor;
+    public void augmentarClientsConnectats() {
+        this.qtClients++;
+        System.out.println("Clients connectats actualment: " + this.qtClients);
     }
 
     /**
-     *
-     * @param portServidor
+     * Funcio desenvolupada per poder decrementar el numero de clients que s'han
+     * desconnectat en aquell moment.
      */
-    public void setPortServidor(int portServidor) {
-        this.portServidor = portServidor;
-    }
-
-    /**
-     * TODO: Verificar les dades
-     *
-     * @param portServidor
-     * @return
-     * @throws IOException
-     */
-    public Socket iniciarServidor(int portServidor) throws IOException {
-        ServerSocket server = new ServerSocket(portServidor);
-        System.out.println("Acceptem connexions...");
-        Socket socket = server.accept();
-        return socket;
-    }
-
-    /**
-     *
-     * @return @throws NoSuchAlgorithmException
-     */
-    public SecretKey generarKeyAES() throws NoSuchAlgorithmException {
-        System.out.println("Generem clau simetrica...");
-        KeyGenerator keygen = KeyGenerator.getInstance("AES");
-        SecretKey clau = keygen.generateKey();
-        return clau;
-    }
-
-    public void iniciServidor(String ip, int port) {
-        try {
-            ServerSocket server = new ServerSocket(port);
-            System.out.println("Servidor obert...");
-            while (true) {
-                Socket socket = server.accept();
-                System.out.println("Client connectat...");
-
-                DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-                DataInputStream dip = new DataInputStream(socket.getInputStream());
-
-                byte[] keyBytes = new byte[dip.readInt()];
-                dip.readFully(keyBytes);
-
-                SecretKey clau = new SecretKeySpec(keyBytes, "AES");
-
-                int msgLength = dip.readInt();
-                byte[] msgEncriptat = new byte[msgLength];
-                dip.readFully(msgEncriptat);
-
-                Cipher aesCipher = Cipher.getInstance("AES");
-                aesCipher.init(Cipher.DECRYPT_MODE, clau);
-                byte[] msgDesencriptat = aesCipher.doFinal(msgEncriptat);
-
-                String missatge = new String(msgDesencriptat);
-                System.out.println("Missatge desencriptat: " + missatge);
-
-                //socket.close();
-                System.out.println("Servidor tornant a escoltar...");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setPassword(String nomUsuari, String password) {
-        final String DB_SRV_USR = "grup1";
-        final String DB_SRV_PWD = "gat123";
-        final String DB_URL = "57.129.5.24";
-        final String DB_PORT = "27017";
-
-        String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
-
-        MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
-
-        try ( MongoClient mongoClient = new MongoClient(uri)) {
-            MongoDatabase database = mongoClient.getDatabase("Cuentas");
-            MongoCollection<Document> comptes = database.getCollection("comptes");
-
-            //TODO: Haurem de verificar que poden haver mes de un usuari amb el meu mateix nom i per tant no farem el insert a la base de dades.
-            Document nouUsuari = new Document("nomUsuari", nomUsuari).append("contrasenyaUsuari", password);
-
-            comptes.insertOne(nouUsuari);
-            System.out.println("Hem introduit un nou usuari...");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void amagarInfoWarnings() {
-        Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
-        mongoLogger.setLevel(Level.WARNING);
-        mongoLogger.setUseParentHandlers(false);
-    }
-
-    public String getPassword(String nomUsuari) {
-        String password = "";
-        final String DB_SRV_USR = "grup1";
-        final String DB_SRV_PWD = "gat123";
-        final String DB_URL = "57.129.5.24";
-        final String DB_PORT = "27017";
-
-        String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
-
-        MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
-        try ( MongoClient mongoClient = new MongoClient(uri)) {
-            MongoDatabase database = mongoClient.getDatabase("Cuentas");
-            MongoCollection<Document> comptes = database.getCollection("comptes");
-
-            long numUsuari = comptes.countDocuments(Filters.eq("nomUsuari", nomUsuari));
-            if (numUsuari > 0) {
-                FindIterable<Document> resultatUsuaris = comptes.find(Filters.eq("nomUsuari", nomUsuari));
-                for (Document row : resultatUsuaris) {
-                    password = row.getString("contrasenyaUsuari");
-                }
-                if (!password.isEmpty()) {
-                    System.out.println("Passem per aki");
-                    return password;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return password;
-    }
-
-    public void informarQtClients(SecretKey clau, Cipher aesCipher, DataOutputStream out, String contadorClients) {
-        try {
-            byte[] keyByte = clau.getEncoded();
-            out.writeInt(keyByte.length);
-            out.write(keyByte);
-            aesCipher.init(Cipher.ENCRYPT_MODE, clau);
-            byte[] msgAEncriptar = aesCipher.doFinal(contadorClients.getBytes());
-            out.writeInt(msgAEncriptar.length);
-            out.write(msgAEncriptar);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void enviarMsgClient(String missatge, SecretKey clau, byte[] msgEncriptat, Cipher aesCipher, DataOutputStream out) {
-        try {
-            byte[] keyByte = clau.getEncoded();
-            out.writeInt(keyByte.length);
-            out.write(keyByte);
-            aesCipher.init(Cipher.ENCRYPT_MODE, clau);
-            byte[] msgAEncriptar = aesCipher.doFinal(missatge.getBytes());
-            out.writeInt(msgAEncriptar.length);
-            out.write(msgAEncriptar);
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void encriptarPassword(String missatge, Socket socket, Servidor servidor, SecretKey clau, byte[] msgEncriptat, Cipher aesCipher, DataOutputStream out) {
-
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] b1 = missatge.getBytes();
-            md.update(b1);
-            byte[] resum = md.digest();
-            String contrasenyaHash = Base64.getEncoder().encodeToString(resum);
-            /**
-             * Funcio que cridem per a que el servidor envii al client la
-             * contrasenya encriptada
-             */
-            servidor.enviarMsgClient(contrasenyaHash, clau, msgEncriptat, aesCipher, out);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void decrementarClientsConnectats() {
+        this.qtClients--;
+        System.out.println("Clients connectats actualment: " + this.qtClients);
     }
 
     public static void main(String[] args) {
-        final String IP = "localhost";
-        final int PORT = 12345;
-        int qtClients = 0;
-
         Servidor servidor = new Servidor();
-        servidor.amagarInfoWarnings();
+        //servidor.setArrMsg(servidor.arrMsg);
 
-        try ( ServerSocket server = new ServerSocket(PORT);) {
-            System.out.println("Servidor obert...");
+        try {
+            System.out.println("Creem el socket servidor");
+            ServerSocket serverSocket = new ServerSocket();
+            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+            serverSocket.bind(addr);
+
+            boolean semafor = false;
+
+            System.out.println("Servidor preparat per escoltar!");
             while (true) {
-                Socket socket = server.accept();
-                qtClients++;
-                System.out.println("Clients connectats: " + qtClients);
-
-                DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-                DataInputStream dip = new DataInputStream(socket.getInputStream());
-
-                byte[] keyBytes = new byte[dip.readInt()];
-                dip.readFully(keyBytes);
-
-                SecretKey clau = new SecretKeySpec(keyBytes, "AES");
-
-                byte[] msgEncriptat = new byte[dip.readInt()];
-                dip.readFully(msgEncriptat);
-
-                Cipher aesCipher = Cipher.getInstance("AES");
-                aesCipher.init(Cipher.DECRYPT_MODE, clau);
-
-                byte[] msgDesencriptat = aesCipher.doFinal(msgEncriptat);
-                String missatge = new String(msgDesencriptat);
-                System.out.println("Missatge desencriptat: " + missatge);
+                /**
+                 * TODO: En aquest moment, estem començant a aceptar les
+                 * connexions que estem rebent del client.
+                 *
+                 */
+                Socket newSocket = serverSocket.accept();
+                InputStream is = newSocket.getInputStream();
+                //String nomUser = server.llegirUsuaris(newSocket);
+                //server.inserirDadesMemoria(arrUsuaris, arrSockets, newSocket.getPort(),nomUser);
+                /**
+                 * TODO: Hem de mirar de llegir el missatge en el servidor per
+                 * poder baixar el qtClients i d'aquesta manera tenir un control
+                 * sobre el contador.<- Creiem que aquest funcionament l'hem de
+                 * realitzar en el fil i NO en el servidor
+                 */
+                servidor.augmentarClientsConnectats();
+                servidor.guardarClientsArrayList(servidor.arrSocket, newSocket);
+//                String msg = servidor.llegirMissatgeClient(is);
+//                servidor.setMsgClients(msg, servidor.arrMsg);
 
                 /**
-                 * Funcio que cridem per encriptar la contrasenya amb hash un
-                 * cop hem desencriptat la contrasenya que el client ens envia
+                 * TODO: Aquest es el fil que utilitzarem per poder escoltar
+                 * tots els missatges que envien els clients al servidor.
                  */
-                servidor.encriptarPassword(missatge, socket, servidor, clau, msgEncriptat, aesCipher, out);
-
-                byte[] conn = new byte[1000];
-                String connt = new String(conn);
-                if (connt == "no") {
-                    qtClients--;
-                }
-
-                System.out.println("\nServidor tornant a escoltar...");
+//                new Atendre_Clients(newSocket).start();
+                new Atendre_Clients(newSocket, servidor.arrSocket).start();
+                //new Atendre_Clients(newSocket, servidor.arrSocket, servidor.arrMsg).start();
 
                 /**
-                 * Codi de exemple per comparar 2 contrasenyes utilitzant hash
+                 * TODO: Prova feta per Oleh de boolean per a si veu missatge de
+                 * desconnexio, li resti, pero no funciona be ja que el que fara
+                 * es aturar el while i no llegira l'altre client
+                 *
+                 * if(new Atendre_Clients(newSocket, qtClients).prova()){
+                 * qtClients--; }
                  */
-                /*
-                byte[] b1 = missatge.getBytes();
-                md.update(b1);
-                byte[] resum = md.digest();
-                String base64Stringss = Base64.getEncoder().encodeToString(resum);
-                servidor.setPassword("boix",base64Stringss);
-                String password = servidor.getPassword("boix");
-                byte[] b2 = password.getBytes();
-                md.update(b2);
-                byte[] resum2 = md.digest();
-                if (Arrays.equals(resum, resum2)) {
-                    System.out.println("Les contrasenyes son iguasl");
-                } else {
-                    System.out.println("Diferents!");
-                }
-                System.out.println("RESUMEN SHA-256: " + new String(resum));
-                System.out.println("RESUMEN2 SHA-256: " + new String(resum2));
-                 */
+//                while (!semafor) {
+//
+//                    InputStream is = newSocket.getInputStream();
+//                    OutputStream os = newSocket.getOutputStream();
+//                    /**
+//                     * TODO: Desde el servidor, hem de rebre el missatge de
+//                     * desconnexio que ens envia el client per poder
+//                     * desconnectar
+//                     *
+//                     */
+//                    boolean cagar = llegirDesconnexio(newSocket, is, os, DEMANAR_CONNEXIO, qtClients);
+//                    if (cagar) {
+//                        newSocket.close();
+//                        qtClients--;
+//                        System.out.println("Connexions actuals: " + qtClients);
+//                        semafor = !semafor;
+//
+//                    }
+//                    
+//                }
+//                new Atendre_Clients(newSocket).start;
+////                Atendre_Clients atendreClientsqtClients = new Atendre_Clients(newSocket);
+//                atendreClientsqtClients.start();
+//
+//                boolean desconnectar = llegirDesconnexio(newSocket, is, os, DEMANAR_CONNEXIO);
+//                if (desconnectar) {
+//                    System.out.println("Rebem missatge del cient");
+//
+//                    atendreClientsqtClients.setMsgClient(DEMANAR_CONNEXIO);
+//                    byte[] msg = new byte[500];
+//                    is.read(msg);
+//                    String prova = new String();
+//                    if (atendreClientsqtClients.getMsgClient().equalsIgnoreCase(DEMANAR_CONNEXIO)) {
+//                        atendreClientsqtClients.tancarConnexio(newSocket, DEMANAR_CONNEXIO);
+//                        System.out.println("Tanquem connexio");
+//                        qtClients--;
+//                    } else {
+//                        System.out.println("No ha tancat connexio");
+//                    }
+//                }
+//                qtClients--;
             }
+        } catch (SocketException se) {
+            se.printStackTrace();
+            System.err.println("\nERROR!\nLa connexio ha sigut detinguda inesperadament!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un error i per tant no s'ha executat correctament el servidor!");
         } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("\nERROR!\nHi ha hagut un error general i per tant el servidor no ha funcionat com toca!");
+        }
+
+    }
+
+    /**
+     * TODO: Hem de utilitzar aquesta funcio per deixar la funcio general lo mes
+     * simplificada possible.
+     *
+     * Funcio provisional creada per poder augmentar les connexions que es
+     * realitzen en el servidor i portar un control sobre elles
+     *
+     * @param qtClients La quantitat de clients el qual ens trobem en aquell
+     * moment.
+     * @return Retorna la quantitat de clients actuals augmentada en 1.
+     */
+    private static int augmentarConnexio(int qtClients) {
+        return qtClients;
+    }
+
+    private ArrayList guardarClientsArrayList(ArrayList<Socket> arrSocket, Socket socket) {
+        if (!socket.isClosed()) {
+            arrSocket.add(socket);
+        }
+        return arrSocket;
+    }
+
+    /**
+     * TODO: Funcio que haurem de desenvolupar mes tard per poder saber si estem
+     * fent un tractament correcte
+     *
+     * @param socket
+     * @param is
+     * @param os
+     * @param msgDesconnexio
+     * @param i
+     * @return
+     * @throws Exception
+     */
+    private static boolean llegirDesconnexio(Socket socket, InputStream is, OutputStream os, String msgDesconnexio, int i) throws Exception {
+        try {
+            byte[] msg = new byte[500];
+            is.read(msg);
+            String desconnexio = new String(msg);
+            System.out.println(desconnexio);
+            if (msgDesconnexio.equalsIgnoreCase(desconnexio)) {
+                i--;
+                return true;
+            } else {
+                System.out.println("NO TANQUEM CONNEXIO");
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("\nERROR!\n El metode valoraNom ha petat :( ");
+        }
+        return false;
+    }
+
+    /**
+     * TODO: Hem de revisar que el nom del client que fem servir actualment, es
+     * unicament el numero de client que li ha tocat a aquell client, l'haurem
+     * de modificar per el nom que fa servir per poder logejar-se.
+     *
+     * Funcio que hem desenvolupat per poder guardar en memoria les dades que fa
+     * servir el usuari per poder connectar-se al servidor on aquestes dades
+     * seran el nom del client i el port del socket del client que es connecta.
+     *
+     * @param arrUsuaris ArrayList que farem servir per poder guardar les dades
+     * del usuari.
+     * @param arrSockets ArrayList que farem servir per poder guardar el port
+     * del socket del cient en especific.
+     * @param portClient Port del client que farem servir per poder afegir-lo a
+     * un arrayList.
+     * @param nomClient Nom del client que farem servir per poder afegir-lo a un
+     * ArrayList.
+     */
+    private void inserirDadesMemoria(ArrayList<String> arrUsuaris, ArrayList<Integer> arrSockets, int portClient, String nomClient) {
+        arrUsuaris.add(nomClient);
+        arrSockets.add(portClient);
+        this.getDadesArrayList(arrUsuaris, arrSockets);
+    }
+
+    /**
+     * Funcio realitzada per poder mostrar les dades dels ArrayLists creats per
+     * veure si s'esta realitzant correctament.
+     */
+    private void getDadesArrayList(ArrayList<String> arrUsuaris, ArrayList<Integer> arrSockets) {
+        for (String row : arrUsuaris) {
+            System.out.println(row + " ");
+        }
+        for (int row : arrSockets) {
+            System.out.println(row + "\n");
         }
     }
 
+    /**
+     * Funcio creada per poder llegir el nom del usuari i d'aquesta manera poder
+     * tenir un control dels diferents usuaris que es connectin al servidor.
+     */
+    private String llegirUsuaris(Socket socket) throws IOException {
+        InputStream is = socket.getInputStream();
+        OutputStream os = socket.getOutputStream();
+
+        byte[] buffer = new byte[500];
+        int intBuffer = is.read(buffer);
+        String msg = new String(buffer, 0, intBuffer);
+
+        if (msg.isEmpty()) {
+            return null;
+        }
+
+        return msg;
+    }
+
+    /**
+     * Funcio que crearem per poder visualitzar tots els missatges que envien
+     * els diferents clients per poder treballar amb un ArrayList general i NO
+     * independent de cada client que es connecti.
+     */
+    public void getDadesLlistes(ArrayList<Socket> arrSocket, ArrayList<String> arrMsg) throws IOException {
+        System.out.println("\nSockets clients...");
+        for (Socket row : arrSocket) {
+            System.out.println(row);
+        }
+        System.out.println("\nMissatges clients...");
+        for (String row : arrMsg) {
+            System.out.println(row);
+        }
+    }
+
+    public boolean eliminarSocket(ArrayList<Socket> arrSocket, Socket socket) {
+        try {
+            socket.close();
+            arrSocket.remove(socket);
+            return true;
+        } catch (SocketException se) {
+            se.printStackTrace();
+            System.out.println("ERROR!\nS'ha produit un error quan s'ha volgut tancar una connexio...");
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.err.println("ERROR!\nS'ha produit un error alhora de voler tancar la connexio...");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("ERROR!\nS'ha produit un error que no estem controlant...");
+        }
+        return false;
+    }
+
+    private String llegirMissatgeClient(InputStream is) throws IOException {
+        byte[] buffer = new byte[500];
+        int intBuffer = is.read(buffer);
+        String msg = new String(buffer, 0, intBuffer);
+        if (!msg.isEmpty()) {
+            return msg;
+        } else {
+            System.out.println("\nServidor: El missatge esta buit...");
+        }
+
+        return "";
+    }
+
+    private void setMsgClients(String msg, ArrayList<String> arrMsg) {
+        if (!msg.isEmpty()) {
+            arrMsg.add(msg);
+        }
+    }
 }
+
+//import java.io.InputStream;
+//import java.io.OutputStream;
+//import java.net.InetSocketAddress;
+//import java.net.ServerSocket;
+//import java.net.Socket;
+//
+//public class Servidor {
+//
+//    public static void main(String[] args) {
+//        try {
+//            final String DEMANAR_CONNEXIO = "DESCONNEXIO";
+//            System.out.println("Creem el socket servidor");
+//            ServerSocket serverSocket = new ServerSocket();
+//
+//            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+//
+//            System.out.println("Fem el bind. Ja acceptem connexions...");
+//            serverSocket.bind(addr);
+//
+//            
+//
+//            // Thread to handle new connections
+//            Thread acceptThread = new Thread(() -> {
+//                int qtClients = 0;
+//                boolean semafor = false;
+//                while (true) {
+//                    try {
+//                        System.out.println("Acceptant connexions");
+//                        Socket newSocket = serverSocket.accept();
+//                        qtClients++;
+//                        System.out.println("Conexió rebuda: " + qtClients + " clients connectats");
+//
+//                        // Create a new thread for each client
+//                        new Atendre_Clients(newSocket).start();
+//                        InputStream is = newSocket.getInputStream();
+//                        OutputStream os = newSocket.getOutputStream();
+//
+//                        boolean cagar = llegirDesconnexio(newSocket, is, os, DEMANAR_CONNEXIO, qtClients);
+//                        if (cagar) {
+//                            newSocket.close();
+//                            qtClients--;
+//                            System.out.println("Connexions actuals: " + qtClients);
+//                            semafor = !semafor;
+//
+//                        }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                }
+//            });
+//            acceptThread.start();
+//
+//            // Main thread to read disconnection messages
+//            while (true) {
+//                Thread.sleep(1000); // Sleep for 1 second to avoid busy-waiting
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    private static boolean llegirDesconnexio(Socket socket, InputStream is, OutputStream os, String msgDesconnexio, int i) throws Exception {
+//        try {
+//            byte[] msg = new byte[500];
+//            is.read(msg);
+//            String desconnexio = new String(msg).trim(); // trim() removes leading and trailing whitespaces
+//            System.out.println(desconnexio);
+//            if (msgDesconnexio.equalsIgnoreCase(desconnexio)) {
+//                return true;
+//            } else {
+//                System.out.println("NO TANQUEM CONNEXIO");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.err.println("\nERROR!\n El metode valoraNom ha petat :( ");
+//        }
+//        return false;
+//    }
+//}
+

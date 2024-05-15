@@ -4,7 +4,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import encriptacio.Servidor;
+import encriptacio.ServidorProvisional;
 import java.awt.Image;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -555,7 +555,7 @@ public class Registre extends javax.swing.JFrame {
     private void inicialitzarServidor() {
         final String IP = "localhost";
         final int PORT = 12345;
-        Servidor servidor = new Servidor(IP, PORT);
+        ServidorProvisional servidor = new ServidorProvisional(IP, PORT);
         servidor.iniciServidor(servidor.getIpServidor(), servidor.getPortServidor());
     }
 

@@ -19,37 +19,27 @@ import java.util.ArrayList;
  */
 public class Atendre_Clients extends Thread {
 
-    private Socket newSocket;
-    private String msgClient;
-    private int qtClients;
+    private Socket socket;
     private ArrayList<String> arrMsg = new ArrayList<>();
     private ArrayList<Socket> arrSocket = new ArrayList<>();
 
-    /**
-     * TODO: Oleh: He intentat fer una global, pero quan entre un altre client
-     * es reseteje.
-     *
-     * Aquesta variable NO serveix per a res ja que es un atribut del objecte i
-     * per tant no es capaç de fer-ho servir
-     *
-     * int clientsNumber = 0;
-     *
-     */
-    public Atendre_Clients(Socket newSocket) {
-        this.newSocket = newSocket;
+    public Atendre_Clients() {
+
     }
 
-    public Atendre_Clients(Socket cs, int qtClients) {
-        this.newSocket = cs;
-        this.qtClients = qtClients;
-        /**
-         * TODO: Inicialitzacio de la variable inservible.
-         */
-        //this.qtClients = 0;
+    public Atendre_Clients(Socket socket) {
+        this.socket = socket;
     }
-    public Atendre_Clients (Socket socket,ArrayList<Socket> arrSocket) {
-        this.newSocket = socket;
+
+    public Atendre_Clients(Socket socket, ArrayList<Socket> arrSocket) {
+        this.socket = socket;
         this.arrSocket = arrSocket;
+    }
+
+    public Atendre_Clients(Socket socket, ArrayList<Socket> arrSocket, ArrayList<String> arrMsg) {
+        this.socket = socket;
+        this.arrSocket = arrSocket;
+        this.arrMsg = arrMsg;
     }
 
     private ArrayList guardarMissatgesArrayList(ArrayList<String> arrMsg, String msg) {
@@ -67,124 +57,34 @@ public class Atendre_Clients extends Thread {
     }
 
     /**
-     * TODO: Necessitem utilitzar aquestos metodes per poder inicialitzar un
-     * missatge de un client pero ns sabem com.
-     *
-     * - Revisar aquesta funcio ja que ens esta donant problemes.
-     */
-    public void correForestCorre() {
-        try {
-            /**
-             * TODO: El servidor llegira un missatge de desconnexio per part del
-             * client que sera DESCONNEXIO quan el client premi al boto de
-             * desconnexio de la interficie
-             */
-            boolean semafor = false;
-            final String MISSATGE_DESCONNEXIO = "exit";
-            InputStream is = this.newSocket.getInputStream();
-            OutputStream os = this.newSocket.getOutputStream();
-
-            DataInputStream dis = new DataInputStream(newSocket.getInputStream());
-            DataOutputStream dos = new DataOutputStream(newSocket.getOutputStream());
-
-            System.out.println("Quantitat de clients connectats: " + this.qtClients);
-
-            while (!semafor) {
-                /**
-                 * TODO: Haurem de utilitzar aquest espai de memoria per poder
-                 * utilitzar de una forma mes correcta els missatges que envia
-                 * desde el client.
-                 *
-                 * byte[] keyBytes = new byte[dis.readInt()];
-                 * dis.readFully(keyBytes);
-                 */
-
-                byte[] buffer = new byte[500];
-                int intBuffer = is.read(buffer);
-//              TODO:Solucio proposada per CHATGPT
-                String msg = new String(buffer, 0, intBuffer);
-
-                /**
-                 * TODO: Hem de revisar aquesta sentencia per decidir si
-                 * utilitzarla o no.
-                 *
-                 * String msg = new String(keyBytes, 0, dis.read(keyBytes));
-                 */
-//              TODO: Solucio proposada per David Boix
-                //String msg = new String(buffer);
-                if (msg.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
-                    Thread.sleep(2000);
-                    System.out.println("El client numero " + this.qtClients + " s'ha desonnectat...");
-                    this.qtClients--;
-                    //TODO: Canviar el break per una condicio que ens deixi sortir del bucle
-                    semafor = true;
-                }
-
-                System.out.println("Aquest es el missatge que ens envia des de el client: " + this.qtClients + ": " + msg);
-            }
-            newSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("ERROR!\n Hem entrat en un error...");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            System.err.println("ERROR!\nHi ha hagut un error de connexio");
-        } catch (Exception e) {
-            System.err.println("ERROR!\nHi ha un metode que no ha funcionat correctament");
-        }
-    }
-
-    /**
      * TODO: El servidor llegira un missatge de desconnexio per part del client
      * que sera 'exit' quan el client premi al boto de desconnexio de la
      * interficie
      */
     public void run() {
         try {
-
-            /**
-             * TODO: Variable assignada per Oleh que trobem que no fa falta en
-             * aquest moment
-             *
-             * clientsNumber++;
-             */
             /**
              * TODO: Crearem una instancia del servidor per poder utilitzar els
              * metodes que hem creat en el servidor
              */
-            ServidorExmple server = new ServidorExmple();
-            ArrayList<String> arrUsuaris = new ArrayList<>();
-            ArrayList<Integer> arrSockets = new ArrayList<>();
+            Servidor servidor = new Servidor();
             boolean semafor = false;
+            boolean connexioTancada = false;
             final String MISSATGE_DESCONNEXIO = "exit";
 
-            InputStream is = newSocket.getInputStream();
-            OutputStream os = newSocket.getOutputStream();
+            InputStream is = socket.getInputStream();
+            OutputStream os = socket.getOutputStream();
 
             /**
              * TODO: En aquest moment estem guardant la quantitat de clients
              * connectats al servidor actualment.
              */
-            int qtClientsConnectats = server.getQtClients();
+            int qtClients = servidor.getQtClients();
 
-            DataInputStream dis = new DataInputStream(newSocket.getInputStream());
-            DataOutputStream dos = new DataOutputStream(newSocket.getOutputStream());
+            DataInputStream dis = new DataInputStream(socket.getInputStream());
+            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
-            /**
-             * TODO: Missatge de informacio posat per Oleh que trobem que no fa
-             * falta posar-ho en aquest moment
-             *
-             * System.out.println("Connectats: " + clientsNumber);
-             */
             while (!semafor) {
-
-                /**
-                 * TODO: Revisar aquest codi ja que no s'esta produint
-                 * correctament.
-                 *
-                 * ServidorExmple server = new ServidorExmple(0);
-                 * server.augmentarClientsConnectats();
-                 */
                 /**
                  * TODO: Hem de revisar el us dels objectes DataInputStream i el
                  * DataOutputStream per poder llegir els missatges que s'envien
@@ -194,6 +94,7 @@ public class Atendre_Clients extends Thread {
                  * byte[] keyBytes = new byte[dis.readInt()];
                  * dis.readFully(keyBytes);
                  */
+
                 byte[] buffer = new byte[500];
                 int intBuffer = is.read(buffer);
 
@@ -201,9 +102,6 @@ public class Atendre_Clients extends Thread {
                  * TODO:Solucio proposada per CHATGPT
                  */
                 String msg = new String(buffer, 0, intBuffer);
-                //TODO: Guarda informacio del client en una arraylist
-                //System.out.println("Aquest es el port del socket del client nº " + qtClientsConnectats + " que s'ha connectat: " + this.newSocket.getPort());
-                //this.inserirDadesMemoria(arrUsuaris, arrSockets, this.newSocket.getPort(), msg);
                 /**
                  * TODO: Solucio proposada per David Boix
                  *
@@ -211,47 +109,27 @@ public class Atendre_Clients extends Thread {
                  */
                 if (msg.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
                     Thread.sleep(2000);
-                    System.out.println("El client numero " + qtClientsConnectats + " s'ha desonnectat...");
-
-                    /**
-                     * TODO: Revisar aquest codi ja que no sabem si funciona
-                     * correctament
-                     *
-                     * server.decrementarClientsConnectats();
-                     *
-                     *
-                     * TODO: Missatge assignat per Oleh que trobem que no falta
-                     * en aquest moment i per tant queda comentat
-                     *
-                     * System.out.println("Numero " + clientsNumber + " s'ha
-                     * desonnectat...");
-                     *
-                     * this.qtClients--;
-                     *
-                     * TODO: Us de la variable clientsNumber per poder realitzar
-                     * la prova feta per Oleh
-                     *
-                     * this.clientsNumber--;
-                     */
+                    System.out.println("El client numero " + qtClients + " i amb socket : " + socket.getPort() + " s'ha desonnectat...");
+                    connexioTancada = servidor.eliminarSocket(this.arrSocket, socket);
                     semafor = true;
+                    System.out.println("Hem passat per aqui...");
                 }
                 /**
                  * TODO: Aqui es quan obrirem el nou fil per poder enviar el
                  * missatge de retorn al client.
                  */
-                this.guardarMissatgesArrayList(arrMsg, msg);
-                //this.guardarClientsArrayList(arrSocket, newSocket);
-//                System.out.println("Missatges client: ");
-//                for (String row : arrMsg) {
-//                    System.out.println(row);
-//                }
-                new FilsEnviarInfoClients(newSocket, msg, arrMsg, arrSocket).start();
+                this.guardarMissatgesArrayList(this.arrMsg, msg);
+                servidor.getDadesLlistes(this.arrSocket, this.arrMsg);
+                if (!connexioTancada) {
+                    new FilsEnviarInfoClients(socket, this.arrMsg, this.arrSocket).start();
+                }
+                //new FilsEnviarInfoClients(this.arrMsg, this.arrSocket).start();
+
                 /**
                  * TODO: Mostrarem el missatge que ens ha enviat el client per
                  * consola del servidor i el veurem satisfactoriament.
                  */
-
-                //System.out.println("Aquest es el missatge que ens envia des de el client " + qtClientsConnectats + ": " + msg);
+                //System.out.println("Aquest es el missatge que ens envia des de el client " + qtClients + ": " + msg);
 //                System.out.println("Hem tancat sessio");
 //                newSocket.close();
 //                byte[] buffer = new byte[500];
@@ -274,13 +152,13 @@ public class Atendre_Clients extends Thread {
              * paraula 'exit' i per tant, significa que el client ha volgut
              * desconnectar-se del servidor
              */
-            newSocket.close();
+            //socket.close();
             /**
              * TODO: Crida de la funcio decrementarClientsConnectats de la
              * classe Servidor per poder realitzar la resta en 1 de clients
              * connectats en el servidor.
              */
-            server.decrementarClientsConnectats();
+            servidor.decrementarClientsConnectats();
         } catch (SocketException se) {
             se.printStackTrace();
             System.err.println("\nERROR!\nS'ha produit un problema al intentar connectar un fil al socket.");
@@ -333,68 +211,6 @@ public class Atendre_Clients extends Thread {
         }
     }
 
-    /**
-     * TODO: Funcio booleana de prova per a que quan vegi el missatge de
-     * desconnexio, retorni un true
-     */
-    public boolean prova() {
-        try {
-            /**
-             * TODO: El servidor llegira un missatge de desconnexio per part del
-             * client que sera DESCONNEXIO quan el client premi al boto de
-             * desconnexio de la interficie
-             */
-            final String MISSATGE_DESCONNEXIO = "exit";
-            InputStream is = newSocket.getInputStream();
-            OutputStream os = newSocket.getOutputStream();
-
-            DataInputStream dis = new DataInputStream(newSocket.getInputStream());
-            DataOutputStream dos = new DataOutputStream(newSocket.getOutputStream());
-
-            byte[] buffer = new byte[500];
-            int intBuffer = is.read(buffer);
-            String msg = new String(buffer, 0, intBuffer);
-
-            if (msg.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
-                Thread.sleep(2000);
-                System.out.println("El client numero " + this.qtClients + " s'ha desonnectat...");
-//                System.out.println("Numero " + clientsNumber + " s'ha desonnectat...");
-                newSocket.close();
-                return true;
-            }
-
-            return false;
-//                System.out.println("Hem tancat sessio");
-//                newSocket.close();
-
-//                byte[] buffer = new byte[500];
-//                is.read(buffer);
-////                String msgDesconnexio = new String(buffer).trim();
-//                String msgDesconnexio = demanarDesconnexio(MISSATGE_DESCONNEXIO);
-////                String msgDesconnexio = "DESCONNEXIO";
-//
-//                if (msgDesconnexio.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
-//                    //Arriba el missatge de desconnexio i retornar true
-//                    System.out.println("\nArribem dins del condicional de Atendre_Client");
-//                    semafor = tancarConnexio(newSocket, MISSATGE_DESCONNEXIO);
-//                    System.out.println("\nTanquem nou socket...");
-//                }
-//                System.out.println("\nSeguim amb la connexio...");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("ERROR!\n Hem entrat en un error...");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            System.err.println("ERROR!\nHi ha hagut un error de connexio");
-        } catch (Exception e) {
-            System.err.println("ERROR!\nHi ha un metode que no ha funcionat correctament");
-        }
-        return false;
-    }
-
-    public void getMsgClient() {
-        System.out.println("Arribem fins aqui");
-    }
     /**
      * Funcio que farem servir per poder desconnectar el client del servidor
      * quan arribi un missatge en clau per poder realitzar l'operacio

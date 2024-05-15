@@ -9,7 +9,7 @@ import java.net.Socket;
  * @author David Boix Sanchez
  * @version 1.0
  */
-public class ClientSocket {
+public class ProvisionalClientSocket {
 
     public static void main(String[] args) {
         try {

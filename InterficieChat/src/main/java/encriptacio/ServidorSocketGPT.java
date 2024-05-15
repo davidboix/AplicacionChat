@@ -22,7 +22,7 @@ public class ServidorSocketGPT {
             while (true) {
                 System.out.println("Servidor escoltant... ja preparat");
                 Socket newSocket = serverSocket.accept();
-                Persona persona = new Persona(newSocket, i);
+                ProvisionalPersona persona = new ProvisionalPersona(newSocket, i);
                 executor.execute(persona);
                 i++;
             }

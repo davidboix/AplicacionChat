@@ -9,12 +9,12 @@ import java.net.Socket;
  * @author David Boix Sanchez
  * @version 1.0
  */
-public class Persona implements Runnable {
+public class ProvisionalPersona implements Runnable {
 
     private Socket socket;
     private byte i;
 
-    public Persona(Socket socket, byte i) {
+    public ProvisionalPersona(Socket socket, byte i) {
         this.socket = socket;
         this.i = i;
     }

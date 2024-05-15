@@ -1,86 +1,91 @@
 package encriptacio;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.net.Socket;
-import java.util.Base64;
-import java.util.Scanner;
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
 
-/**
- *
- * @author David Boix Sanchez
- * @version 1.0
- */
+import java.net.Socket;
+
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Client {
 
     public static void main(String[] args) {
         Scanner lector = new Scanner(System.in);
-        final String IPSERVIDOR = "localhost";
-        final int PORT = 12345;
-        boolean seguir = true;
-        try ( Socket cs = new Socket(IPSERVIDOR, PORT);  DataOutputStream out = new DataOutputStream(cs.getOutputStream());  DataInputStream dip = new DataInputStream(cs.getInputStream());) {
-            while (seguir) {
+        try {
+            Socket socket = new Socket();
+            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+            socket.connect(addr);
+            System.out.println("Ens conectem...");
+            InputStream is = socket.getInputStream();
+            OutputStream os = socket.getOutputStream();
+            boolean semafor = false;
 
-                KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-                SecretKey clau = keyGen.generateKey();
+            while (!semafor) {
+                System.out.print("Escriu un missatge que vulguis al servidor: ");
+                String msg = lector.nextLine();
+                os.write(msg.getBytes());
 
-                byte[] keyBytes = clau.getEncoded();
-                out.writeInt(keyBytes.length);
-                out.write(keyBytes);
-
-                //System.out.print("Escriu la contrasenya: ");
-                //String msg = lector.nextLine();
-                String msg = "Hola, el meu nom es Oleh";
-                Cipher aesCipher = Cipher.getInstance("AES");
-                aesCipher.init(Cipher.ENCRYPT_MODE, clau);
-                byte[] msgEncriptat = aesCipher.doFinal(msg.getBytes());
-
-                out.writeInt(msgEncriptat.length);
-                out.write(msgEncriptat);
-
-                System.out.println("Missatge encriptat i clau enviats al servidor...");
-
-                byte[] keyBytesServ = new byte[dip.readInt()];
-                dip.readFully(keyBytesServ);
-
-                SecretKey clauServidor = new SecretKeySpec(keyBytesServ, "AES");
-                //SecretKey clauServidor = new SecretKeySpec(dip.readNBytes(keyBytes.length), "AES");
-
-                byte[] msgEncriptats = new byte[dip.readInt()];
-                dip.readFully(msgEncriptats);
-
-                Cipher aesCipher2 = Cipher.getInstance("AES");
-                aesCipher2.init(Cipher.DECRYPT_MODE, clau);
-
-                byte[] msgDesencriptat = aesCipher2.doFinal(msgEncriptats);
-                String missatge = new String(msgDesencriptat);
-                //            String base64String = Base64.getEncoder().encodeToString(msgDesencriptat);
-                System.out.println("Quantitat clients connectats: " + missatge);
-                Thread.sleep(5000);
-
-                System.out.println("Vol seguir connectat?");
-                String conn = lector.nextLine();
-                byte[] conConn = conn.getBytes();
-                if (conn.equals("si")) {
-                    System.out.println("Continue");
-                } else if (conn.equals("no")) {
-                    out.writeInt(conConn.length);
-                    out.write(conConn);
-                    System.out.println("Disconnect");
-                    System.out.println("Quantitat clients connectats: " + missatge);
-                    dip.close();
-                    out.close();
-                    cs.close();
-                    break;
+                if (msg.equalsIgnoreCase("exit")) {
+                    os.write(msg.getBytes());
+                    System.out.println("Ens hem desconnectat del servidor...");
+                    semafor = true;
                 }
+                //llegirMissatgeServidor(is);
+                llegirArrayList(socket);
 
             }
+            socket.close();
+        } catch (SocketException se) {
+            se.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un error en la connexio del client cap al servidor.");
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un error i per tant no s'ha executat correctament el client!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un problema general en el client");
+        }
+    }
+
+    /**
+     * TODO: Revisar logica de la funcio ja i separar-ho per capes per no
+     * tenir-ho tot en una classe.
+     *
+     * Funcio creada per poder llegirs els diferents missatges que ens envien
+     * desde el servidor.
+     */
+    private static void llegirMissatgeServidor(InputStream is) throws IOException {
+        byte[] buffer = new byte[500];
+        int intBuffer = is.read(buffer);
+        String msgRebut = new String(buffer, 0, intBuffer);
+//        String[] arrMsg = msgRebut.split("\n");
+//        System.out.println("\nMissatges rebut per part de servidor...");
+//        for (String row : arrMsg) {
+//            System.out.println(row);
+//        }
+        System.out.println("Missatge rebut del servidor: " + msgRebut);
+    }
+
+    private static void llegirArrayList(Socket socket) {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            ArrayList<String> msgClients = (ArrayList<String>) ois.readObject();
+
+            for (String row : msgClients) {
+                System.out.println(row);
+            }
+            
+        } catch (EOFException eof) {
+            System.err.println("\nCLIENT: Hi ha hagut un error alhora de rebre els missatges!!");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }

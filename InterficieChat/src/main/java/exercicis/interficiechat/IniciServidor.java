@@ -1,6 +1,6 @@
 package exercicis.interficiechat;
 
-import encriptacio.ServidorExmple;
+import encriptacio.Servidor;
 import javax.swing.JOptionPane;
 
 /**

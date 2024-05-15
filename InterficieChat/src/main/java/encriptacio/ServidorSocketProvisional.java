@@ -11,7 +11,7 @@ import java.net.Socket;
  * @author David Boix Sanchez
  * @version 1.0
  */
-public class ServidorSocket {
+public class ServidorSocketProvisional {
 
     public static void main(String[] args) {
         try {

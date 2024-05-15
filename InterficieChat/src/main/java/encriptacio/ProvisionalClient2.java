@@ -15,7 +15,7 @@ import javax.crypto.spec.SecretKeySpec;
  * @author David Boix Sanchez
  * @version 1.0
  */
-public class Client2 {
+public class ProvisionalClient2 {
 
     public static void main(String[] args) {
         Scanner lector = new Scanner(System.in);
