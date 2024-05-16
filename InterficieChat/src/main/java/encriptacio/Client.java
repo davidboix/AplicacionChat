@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -22,20 +23,40 @@ public class Client {
             System.out.println("Ens conectem...");
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
+
+            Scanner entradaServer = new Scanner(socket.getInputStream());
+            PrintWriter sortidaServer = new PrintWriter(socket.getOutputStream(), true);
+
+            Thread filCreat = new Thread(() -> {
+                while (true) {
+                    if (entradaServer.hasNextLine()) {
+                        String mensaje = entradaServer.nextLine();
+                        System.out.println("Mensaje del servidor: " + mensaje);
+                    }
+                }
+            });
+            filCreat.start();
+
             boolean semafor = false;
+//            String msgConnexio = "Connexio";
+//            os.write(msgConnexio.getBytes());
+            //llegirArrayList(socket);
 
             while (!semafor) {
-                llegirArrayList(socket);
                 System.out.print("Escriu un missatge que vulguis al servidor: ");
                 String msg = lector.nextLine();
                 os.write(msg.getBytes());
+                //sortidaServer.println(msg);
+                //llegirArrayList(socket);
 
                 if (msg.equalsIgnoreCase("exit")) {
                     os.write(msg.getBytes());
                     System.out.println("Ens hem desconnectat del servidor...");
                     semafor = true;
                 }
+
                 //llegirArrayList(socket);
+                //llegirArrayList(Servidor.arrSocket);
 
             }
             socket.close();
@@ -62,15 +83,17 @@ public class Client {
         byte[] buffer = new byte[500];
         int intBuffer = is.read(buffer);
         String msgRebut = new String(buffer, 0, intBuffer);
-//        String[] arrMsg = msgRebut.split("\n");
-//        System.out.println("\nMissatges rebut per part de servidor...");
-//        for (String row : arrMsg) {
-//            System.out.println(row);
-//        }
         System.out.println("Missatge rebut del servidor: " + msgRebut);
     }
 
+    /**
+     * Funcio creada provisionalment per poder rebre tot el ArrayList que conte
+     * tots els missatges enviats per un client en questio.
+     *
+     * @param socket
+     */
     private static void llegirArrayList(Socket socket) {
+        //private static void llegirArrayList(ArrayList<Socket> arrSocket) {
         try {
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             ArrayList<String> msgClients = (ArrayList<String>) ois.readObject();
@@ -78,11 +101,11 @@ public class Client {
             for (String row : msgClients) {
                 System.out.println(row);
             }
-            
         } catch (EOFException eof) {
             System.err.println("\nCLIENT: No hi han mes missatges a mostrar...");
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("\nCLIENT:Hi ha hagut un error general...");
         }
     }
 

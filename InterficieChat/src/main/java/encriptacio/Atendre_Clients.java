@@ -112,7 +112,7 @@ public class Atendre_Clients extends Thread {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
             while (!semafor) {
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                //ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 /**
                  * TODO: Hem de revisar el us dels objectes DataInputStream i el
                  * DataOutputStream per poder llegir els missatges que s'envien
@@ -140,7 +140,6 @@ public class Atendre_Clients extends Thread {
                     System.out.println("El client numero " + qtClients + " i amb socket : " + socket.getPort() + " s'ha desonnectat...");
                     connexioTancada = servidor.eliminarSocket(this.arrSocket, socket);
                     semafor = true;
-                    System.out.println("Hem passat per aqui...");
                 }
                 /**
                  * TODO: Aqui es quan obrirem el nou fil per poder enviar el
@@ -148,6 +147,7 @@ public class Atendre_Clients extends Thread {
                  */
                 //En aquest punt guardarem els missatges en un ArrayList.
                 boolean comprovarExit = this.comprovarMsgDesconnexio(msg);
+                
                 if (!comprovarExit) {
                     this.guardarMissatgesArrayList(servidor.arrMsg2, msg);
                     //En aquest punt mostrarem els valors dels ArrayLists.
@@ -157,6 +157,7 @@ public class Atendre_Clients extends Thread {
                         new FilsEnviarInfoClients(socket, servidor.arrMsg2, this.arrSocket).start();
                     }                    
                 }
+                
                 //new FilsEnviarInfoClients(this.arrMsg, this.arrSocket).start();
 
                 /**
