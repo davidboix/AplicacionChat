@@ -2,6 +2,7 @@ package exercicis.interficiechat;
 
 import java.util.Calendar;
 import java.util.Date;
+import metatron.CrudMONGO;
 
 /**
  *
@@ -30,6 +31,7 @@ public class proves extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -47,6 +49,14 @@ public class proves extends javax.swing.JFrame {
             }
         });
         jPanel2.add(jButton1);
+
+        jButton2.setText("jButton2");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton2);
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_END);
 
@@ -181,6 +191,25 @@ public class proves extends javax.swing.JFrame {
         System.out.println(diaSetmana + ", " + diaCalendari + " de " + mesSeleccionat + " de " + anyCalendari);
 
     }//GEN-LAST:event_jButton1ActionPerformed
+    private CrudMONGO inicialitzarMongo() {
+        final String DB_SRV_USR = "grup1";
+        final String DB_SRV_PWD = "gat123";
+        final String DB_URL = "57.129.5.24";
+        final int DB_PORT = 27017;
+        final String nomColeccio = "comptes";
+        CrudMONGO cm = new CrudMONGO();
+
+        cm.setUsuariServidor(DB_SRV_USR);
+        cm.setPasswordServidor(DB_SRV_PWD);
+        cm.setIpServidor(DB_URL);
+        cm.setPortServidor(DB_PORT);
+        cm.setNomColeccio(nomColeccio);
+        return cm;
+    }
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        CrudMONGO cm = this.inicialitzarMongo();
+        cm.getUsers("david");
+    }//GEN-LAST:event_jButton2ActionPerformed
     /**
      * TODO: Funcio inacabada Funcio que farem servir per poder calcular la edat
      * del usuari, on per parametres li passarem el any de naixement i
@@ -238,6 +267,7 @@ public class proves extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser inputData;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
