@@ -23,38 +23,54 @@ public class Client {
             System.out.println("Ens conectem...");
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
-
+            
+            Scanner entradaUsuario = new Scanner(System.in);
+            Scanner entradaServidor = new Scanner(socket.getInputStream());
+            PrintWriter salidaServidor = new PrintWriter(socket.getOutputStream(), true);
+            
             Scanner entradaServer = new Scanner(socket.getInputStream());
             PrintWriter sortidaServer = new PrintWriter(socket.getOutputStream(), true);
 
-            Thread filCreat = new Thread(() -> {
-                while (true) {
-                    if (entradaServer.hasNextLine()) {
-                        String mensaje = entradaServer.nextLine();
-                        System.out.println("Mensaje del servidor: " + mensaje);
-                    }
-                }
-            });
-            filCreat.start();
+//            Thread filCreat = new Thread(() -> {
+//                while (true) {
+//                    if (entradaServer.hasNextLine()) {
+//                        String mensaje = entradaServer.nextLine();
+//                        System.out.println("Mensaje del servidor: " + mensaje);
+//                    }
+//                }
+//            });
+//            filCreat.start();
 
             boolean semafor = false;
 //            String msgConnexio = "Connexio";
 //            os.write(msgConnexio.getBytes());
             //llegirArrayList(socket);
+            Thread hiloRecepcion = new Thread(() -> {
+                    while (true) {
+                        if (entradaServidor.hasNextLine()) {
+                            System.out.println("klk");
+                            String mensaje = entradaServidor.nextLine();
+                            System.out.println("Mensaje del servidor: " + mensaje);
+                        }
+                    }
+                });
+                hiloRecepcion.start();
 
             while (!semafor) {
+                //llegirArrayList(socket);
                 System.out.print("Escriu un missatge que vulguis al servidor: ");
                 String msg = lector.nextLine();
                 os.write(msg.getBytes());
                 //sortidaServer.println(msg);
                 //llegirArrayList(socket);
-
+                
+                
                 if (msg.equalsIgnoreCase("exit")) {
                     os.write(msg.getBytes());
                     System.out.println("Ens hem desconnectat del servidor...");
                     semafor = true;
                 }
-
+                
                 //llegirArrayList(socket);
                 //llegirArrayList(Servidor.arrSocket);
 

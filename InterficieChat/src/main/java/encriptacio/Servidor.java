@@ -146,7 +146,6 @@ public class Servidor {
                  *
                  */
                 Socket newSocket = serverSocket.accept();
-                InputStream is = newSocket.getInputStream();
                 //String nomUser = server.llegirUsuaris(newSocket);
                 //server.inserirDadesMemoria(arrUsuaris, arrSockets, newSocket.getPort(),nomUser);
                 /**

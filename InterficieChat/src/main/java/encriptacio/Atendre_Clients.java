@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -94,7 +95,7 @@ public class Atendre_Clients extends Thread {
              * metodes que hem creat en el servidor
              */
             Servidor servidor = new Servidor();
-            
+            Scanner entradaCliente = new Scanner(socket.getInputStream());
             boolean semafor = false;
             boolean connexioTancada = false;
             final String MISSATGE_DESCONNEXIO = "exit";
@@ -112,6 +113,8 @@ public class Atendre_Clients extends Thread {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
             while (!semafor) {
+                //ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                //out.writeObject(this.arrMsg);
                 //ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 /**
                  * TODO: Hem de revisar el us dels objectes DataInputStream i el
