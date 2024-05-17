@@ -254,6 +254,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Atendre_Clients extends Thread {
@@ -271,6 +272,7 @@ public class Atendre_Clients extends Thread {
 
     public void run() {
         try {
+            Servidor servidor = new Servidor();
             InputStream is = socket.getInputStream();
             os = socket.getOutputStream();
             arrClients.add(os);
@@ -283,18 +285,40 @@ public class Atendre_Clients extends Thread {
 //                if (intBuffer == -1) {
 //                    semafor = true;
 //                }
+
                 String msg = new String(buffer, 0, intBuffer);
+                
                 if (msg.equalsIgnoreCase("exit")) {
+                    servidor.eliminarSocket(servidor.arrSocket, socket);
                     semafor = true;
+                    break;
                 }
+
+                this.guardarMissatgesArrayList(servidor.arrMsg2, msg);
+                System.out.println("Aquestos son els missatges guardats en el ArrayList");
+                System.out.println();
+                for (String row : servidor.arrMsg2) {
+                    System.out.println(row);
+                }
+                
                 System.out.println("Missatge que hem rebut en el servidor: " + msg);
                 enviarMissatge(msg);
+
             }
+            System.out.println("Hem sortit del bucle...");
             arrClients.remove(os);
             socket.close();
+            servidor.decrementarClientsConnectats();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private ArrayList guardarMissatgesArrayList(ArrayList<String> arrMsg, String msg) {
+        if (!msg.isEmpty()) {
+            arrMsg.add(msg);
+        }
+        return arrMsg;
     }
 
     private void enviarMissatge(String mensaje) {

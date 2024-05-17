@@ -117,6 +117,7 @@ public class Servidor {
      * desconnectat en aquell moment.
      */
     public void decrementarClientsConnectats() {
+        System.out.println("S'ha desconectat un client...");
         this.qtClients--;
         System.out.println("Clients connectats actualment: " + this.qtClients);
     }
@@ -156,6 +157,9 @@ public class Servidor {
                  */
                 servidor.augmentarClientsConnectats();
                 servidor.guardarClientsArrayList(servidor.arrSocket, newSocket);
+                for (Socket socket: servidor.arrSocket) {
+                    System.out.println(socket);
+                }
 
                 //new Atendre_Clients(newSocket, servidor.arrSocket).start();
                 new Atendre_Clients(newSocket).start();

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -26,6 +25,12 @@ public class Client {
 
             boolean semafor = false;
 
+            /**
+             * TODO: Hem de moure aquest fil a una classe externa per utilitzar
+             * la nomenclatura seguent tal i com fem amb Atendre_Clients:
+             *
+             * new nouFil().start();
+             */
             Thread hiloRecepcion = new Thread(() -> {
                 try {
                     System.out.print("Escriu un missatge que vulguis al servidor: ");
