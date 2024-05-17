@@ -15,6 +15,60 @@ import java.util.Scanner;
 public class Client {
 
     public static void main(String[] args) {
+        try {
+            Socket socket = new Socket();
+            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+            socket.connect(addr);
+
+            Scanner lector = new Scanner(System.in);
+            InputStream is = socket.getInputStream();
+            OutputStream os = socket.getOutputStream();
+
+            boolean semafor = false;
+
+            Thread hiloRecepcion = new Thread(() -> {
+                try {
+                    System.out.print("Escriu un missatge que vulguis al servidor: ");
+                    byte[] buffer = new byte[1024];
+                    //while (true) {
+                    while (!socket.isClosed()) {
+                        int intBytes = is.read(buffer);
+                        if (intBytes != -1) {
+                            String msg = new String(buffer, 0, intBytes);
+                            System.out.println("\nMensaje del servidor: " + msg);
+                            System.out.print("Escriu un missatge que vulguis al servidor: ");
+                        }
+                    }
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                    System.out.println("Hem entrat en el error...");
+                }
+            });
+            hiloRecepcion.start();
+
+            while (!semafor) {
+                String msg = lector.nextLine();
+                if (msg.equalsIgnoreCase("exit")) {
+                    os.write(msg.getBytes());
+                    System.out.println("ens hem desconnectat del servidor");
+                    semafor = true;
+                }
+                os.write(msg.getBytes());
+            }
+            socket.close();
+        } catch (SocketException se) {
+            se.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un error en la connexio del client cap al servidor.");
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un error i per tant no s'ha executat correctament el client!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un problema general en el client");
+        }
+    }
+
+    public static void main2(String[] args) {
         Scanner lector = new Scanner(System.in);
         try {
             Socket socket = new Socket();
@@ -23,57 +77,21 @@ public class Client {
             System.out.println("Ens conectem...");
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
-            
-            Scanner entradaUsuario = new Scanner(System.in);
-            Scanner entradaServidor = new Scanner(socket.getInputStream());
-            PrintWriter salidaServidor = new PrintWriter(socket.getOutputStream(), true);
-            
-            Scanner entradaServer = new Scanner(socket.getInputStream());
-            PrintWriter sortidaServer = new PrintWriter(socket.getOutputStream(), true);
-
-//            Thread filCreat = new Thread(() -> {
-//                while (true) {
-//                    if (entradaServer.hasNextLine()) {
-//                        String mensaje = entradaServer.nextLine();
-//                        System.out.println("Mensaje del servidor: " + mensaje);
-//                    }
-//                }
-//            });
-//            filCreat.start();
 
             boolean semafor = false;
-//            String msgConnexio = "Connexio";
-//            os.write(msgConnexio.getBytes());
-            //llegirArrayList(socket);
-            Thread hiloRecepcion = new Thread(() -> {
-                    while (true) {
-                        if (entradaServidor.hasNextLine()) {
-                            System.out.println("klk");
-                            String mensaje = entradaServidor.nextLine();
-                            System.out.println("Mensaje del servidor: " + mensaje);
-                        }
-                    }
-                });
-                hiloRecepcion.start();
 
             while (!semafor) {
-                //llegirArrayList(socket);
                 System.out.print("Escriu un missatge que vulguis al servidor: ");
                 String msg = lector.nextLine();
                 os.write(msg.getBytes());
-                //sortidaServer.println(msg);
-                //llegirArrayList(socket);
-                
-                
+
                 if (msg.equalsIgnoreCase("exit")) {
                     os.write(msg.getBytes());
                     System.out.println("Ens hem desconnectat del servidor...");
                     semafor = true;
                 }
-                
-                //llegirArrayList(socket);
-                //llegirArrayList(Servidor.arrSocket);
 
+                //llegirArrayList(socket);
             }
             socket.close();
         } catch (SocketException se) {

@@ -156,66 +156,9 @@ public class Servidor {
                  */
                 servidor.augmentarClientsConnectats();
                 servidor.guardarClientsArrayList(servidor.arrSocket, newSocket);
-//                String msg = servidor.llegirMissatgeClient(is);
-//                servidor.setMsgClients(msg, servidor.arrMsg);
 
-                /**
-                 * TODO: Aquest es el fil que utilitzarem per poder escoltar
-                 * tots els missatges que envien els clients al servidor.
-                 */
-//                new Atendre_Clients(newSocket).start();
-                new Atendre_Clients(newSocket, servidor.arrSocket).start();
-                //new Atendre_Clients(newSocket, servidor.arrSocket, servidor.arrMsg).start();
-
-                /**
-                 * TODO: Prova feta per Oleh de boolean per a si veu missatge de
-                 * desconnexio, li resti, pero no funciona be ja que el que fara
-                 * es aturar el while i no llegira l'altre client
-                 *
-                 * if(new Atendre_Clients(newSocket, qtClients).prova()){
-                 * qtClients--; }
-                 */
-//                while (!semafor) {
-//
-//                    InputStream is = newSocket.getInputStream();
-//                    OutputStream os = newSocket.getOutputStream();
-//                    /**
-//                     * TODO: Desde el servidor, hem de rebre el missatge de
-//                     * desconnexio que ens envia el client per poder
-//                     * desconnectar
-//                     *
-//                     */
-//                    boolean cagar = llegirDesconnexio(newSocket, is, os, DEMANAR_CONNEXIO, qtClients);
-//                    if (cagar) {
-//                        newSocket.close();
-//                        qtClients--;
-//                        System.out.println("Connexions actuals: " + qtClients);
-//                        semafor = !semafor;
-//
-//                    }
-//                    
-//                }
-//                new Atendre_Clients(newSocket).start;
-////                Atendre_Clients atendreClientsqtClients = new Atendre_Clients(newSocket);
-//                atendreClientsqtClients.start();
-//
-//                boolean desconnectar = llegirDesconnexio(newSocket, is, os, DEMANAR_CONNEXIO);
-//                if (desconnectar) {
-//                    System.out.println("Rebem missatge del cient");
-//
-//                    atendreClientsqtClients.setMsgClient(DEMANAR_CONNEXIO);
-//                    byte[] msg = new byte[500];
-//                    is.read(msg);
-//                    String prova = new String();
-//                    if (atendreClientsqtClients.getMsgClient().equalsIgnoreCase(DEMANAR_CONNEXIO)) {
-//                        atendreClientsqtClients.tancarConnexio(newSocket, DEMANAR_CONNEXIO);
-//                        System.out.println("Tanquem connexio");
-//                        qtClients--;
-//                    } else {
-//                        System.out.println("No ha tancat connexio");
-//                    }
-//                }
-//                qtClients--;
+                //new Atendre_Clients(newSocket, servidor.arrSocket).start();
+                new Atendre_Clients(newSocket).start();
             }
         } catch (SocketException se) {
             se.printStackTrace();
