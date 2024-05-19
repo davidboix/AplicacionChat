@@ -1,5 +1,7 @@
 package exercicis.interficiechat;
 
+import encriptacio.Client;
+import encriptacio.EscoltaMsgServidor;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.IOException;
@@ -21,25 +23,29 @@ import javax.swing.ImageIcon;
  * @version 1.0
  */
 public class InterficieXat extends javax.swing.JFrame {
-
+    InputStream is;
+    OutputStream os;
     String resFinal = "";
     //inicialitzaem el socket per a poder entrar al servidor
     Socket socket = new Socket();
-
+    String msgArr[];
+    
     /**
      * Creates new form InterficieXat
      */
     public InterficieXat() {
+        
         initComponents();
         inicialitzarInputs();
         inicialitzarIconos();
         //obrim el socket per a connectar al servidor
         try {
-
+            
             InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
             socket.connect(addr);
             System.out.println("Ens conectem...");
-
+            is = socket.getInputStream();
+            new EscoltaMsgServidor(socket, is, this.textAreaMissatge).start();
         } catch (IOException e) {
             System.out.println("No s'ha pogut connectar al servidor");
         }
@@ -211,28 +217,35 @@ public class InterficieXat extends javax.swing.JFrame {
         if (!msg.isEmpty()) {
             //aquest try agafara els misstages del textarea i els enviara al servidor
             try {
-                InputStream is = socket.getInputStream();
-                OutputStream os = socket.getOutputStream();
-                if (msg.equalsIgnoreCase("exit")) {
-                    os.write(msg.getBytes());
-                    System.out.println("Ens hem desonnectat del servidor...");
-                    //socket.close();
-                }
-                os.write(msg.getBytes());
-
+//                InputStream is = socket.getInputStream();
+//                OutputStream os = socket.getOutputStream();
+                  //is = socket.getInputStream();
+                  os = socket.getOutputStream();
+//                if (msg.equalsIgnoreCase("exit")) {
+//                    os.write(msg.getBytes());
+//                    System.out.println("Ens hem desonnectat del servidor...");
+//                    //socket.close();
+//                }
+//                os.write(msg.getBytes());
+                Client.setMissatgeClient(msg);
+                Client.enviarMissatgeServidor(os, socket);
+                
+                //String dataActual = getData();
+//                String horaActual = getTemps();
+//                this.textAreaMissatge.append("[" + dataActual + " || " + horaActual + "]: " + msg);
+//                this.inputMsg.setText(null);
+                //Client.llegirMissatgeServidor(is,this.textAreaMissatge);
             } catch (IOException e) {
                 System.out.println("Missatge no enviat al servidor");
             }
-            String missatge = this.textAreaMissatge.getText();
-            ArrayList<String> arrayListMsg = new ArrayList<>();
-            arrayListMsg.add(msg);
-            for (String misg : arrayListMsg) {
-                resFinal += misg;
-            }
-            String dataActual = getData();
-            String horaActual = getTemps();
-            this.textAreaMissatge.setText("[" + dataActual + " || " + horaActual + "]: " + msg);
-            this.inputMsg.setText(null);
+//            String missatge = this.textAreaMissatge.getText();
+//            ArrayList<String> arrayListMsg = new ArrayList<>();
+//            arrayListMsg.add(msg);
+//            for (String misg : arrayListMsg) {
+//                resFinal += misg;
+//            }
+            
+            
         }
     }//GEN-LAST:event_botoEnviarMsgActionPerformed
     /**

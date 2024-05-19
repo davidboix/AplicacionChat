@@ -3,6 +3,9 @@ package encriptacio;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.time.LocalTime;
+import java.util.Calendar;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -10,7 +13,7 @@ import java.net.Socket;
  * @version 1.0
  */
 public class EscoltaMsgServidor extends Thread {
-
+    private JTextArea msgArr;
     private Socket socket;
     private InputStream inputStream;
 
@@ -35,6 +38,12 @@ public class EscoltaMsgServidor extends Thread {
     public EscoltaMsgServidor(Socket socket, InputStream inputStream) {
         this.socket = socket;
         this.inputStream = inputStream;
+    }
+    
+    public EscoltaMsgServidor(Socket socket, InputStream inputStream, JTextArea msgArr) {
+        this.socket = socket;
+        this.inputStream = inputStream;
+        this.msgArr = msgArr;
     }
 
     /**
@@ -78,12 +87,35 @@ public class EscoltaMsgServidor extends Thread {
         this.inputStream = is;
     }
 
+    public EscoltaMsgServidor(JTextArea msgArr) {
+        this.msgArr = msgArr;
+    }
+
     /**
      * Funcio sobreescrita la qual ens aporta la classe Thread per poder
      * inicialitzar fils correctament definits i que realitzaran la funcio de
      * rebre missatges per part del Servidor.
      */
     @Override
+//    public void run() {
+//        try {
+//            System.out.print("Escriu el missatge que vulguis al servidor: ");
+//            byte[] buffer = new byte[1024];
+//            while (!this.socket.isClosed()) {
+//                int intBytes = this.inputStream.read(buffer);
+//                if (intBytes != -1) {
+//                    String msg = new String(buffer, 0, intBytes);
+//                    System.out.println("\nMissatge del servidor: " + msg);
+//                    System.out.print("Escriu el missatge que vulguis al servidor: ");
+//                }
+//            }
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+    
     public void run() {
         try {
             System.out.print("Escriu el missatge que vulguis al servidor: ");
@@ -91,16 +123,67 @@ public class EscoltaMsgServidor extends Thread {
             while (!this.socket.isClosed()) {
                 int intBytes = this.inputStream.read(buffer);
                 if (intBytes != -1) {
+                    String dataActual = getData();
+                    String horaActual = getTemps();
                     String msg = new String(buffer, 0, intBytes);
                     System.out.println("\nMissatge del servidor: " + msg);
+                    msgArr.append("[" + dataActual + " || " + horaActual + "]: " + msg + "\n");
                     System.out.print("Escriu el missatge que vulguis al servidor: ");
                 }
             }
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            //ioe.printStackTrace();
+            System.out.println("El socket s'ha tancat");
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("El socket s'ha tancat");
         }
+    }
+    
+    /**
+     * Funcio desenvolupada per poder retornar la data la qual ens trobem en
+     * aquell moment en format cadena de text
+     *
+     * @return La data de avui en format cadena de text.
+     */
+    private String getData() {
+        Calendar cal = Calendar.getInstance();
+        int dia = cal.get(Calendar.DAY_OF_MONTH);
+        int mes = cal.get(Calendar.MONTH) + 1;
+        int any = cal.get(Calendar.YEAR);
+        String data = dia + "/" + mes + "/" + any;
+
+        if (!data.isEmpty()) {
+            return data;
+        }
+
+        return "";
+    }
+    
+    /**
+     * Funcio desenvolupada per obtenir la hora, minuts i segons actuals en el
+     * moment que fem la crida de la funcio
+     *
+     * TODO: Hem de revisar que el temps que apareix en el xat, aparegui de
+     * forma correcta
+     *
+     * @return Hora, Minuts i Segons com una cadena de text.
+     */
+    private String getTemps() {
+        LocalTime myObj = LocalTime.now();
+        String hora = tractarTemps(myObj.getHour());
+        String minuts = tractarTemps(myObj.getMinute());
+        String segons = tractarTemps(myObj.getSecond());
+        String temps = hora + ":" + minuts + ":" + segons;
+        if (!temps.isEmpty()) {
+            return temps;
+        }
+        return "";
+    }
+    
+    private String tractarTemps(int temps) {
+        String tempsActual = String.valueOf(temps);
+        return tempsActual;
     }
 
 }

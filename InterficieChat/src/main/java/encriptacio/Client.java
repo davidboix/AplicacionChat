@@ -10,9 +10,19 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.swing.JTextArea;
 
 public class Client {
+    public static String missatgeClient;
 
+    public static String getMissatgeClient() {
+        return missatgeClient;
+    }
+
+    public static void setMissatgeClient(String missatgeClient) {
+        Client.missatgeClient = missatgeClient;
+    }
+    
     public Client() {
 
     }
@@ -75,7 +85,7 @@ public class Client {
      * Funcio creada per poder llegirs els diferents missatges que ens envien
      * desde el servidor.
      */
-    private static void llegirMissatgeServidor(InputStream is) throws IOException {
+    public static void llegirMissatgeServidor(InputStream is, JTextArea msgArr) throws IOException {
         byte[] buffer = new byte[500];
         int intBuffer = is.read(buffer);
         String msgRebut = new String(buffer, 0, intBuffer);
@@ -88,14 +98,17 @@ public class Client {
      *
      * @param socket
      */
-    private static void llegirArrayList(Socket socket) {
+    public static void llegirArrayList(Socket socket,JTextArea msgArr) {
         //private static void llegirArrayList(ArrayList<Socket> arrSocket) {
         try {
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             ArrayList<String> msgClients = (ArrayList<String>) ois.readObject();
-
+            int j = 0;
+            System.out.println("Entrem");
             for (String row : msgClients) {
                 System.out.println(row);
+                msgArr.append(j + ": " + msgClients.get(j) + "/n");
+                System.out.println("Entrem2");
             }
         } catch (EOFException eof) {
             System.err.println("\nCLIENT: No hi han mes missatges a mostrar...");
@@ -123,7 +136,7 @@ public class Client {
 
             new EscoltaMsgServidor(socket, is).start();
 
-            boolean semafor = enviarMissatgeServidor(lector, os, socket);;
+            boolean semafor = enviarMissatgeServidor(os, socket);
 
             if (!semafor) {
                 socket.close();
@@ -156,20 +169,21 @@ public class Client {
      * contrari, si el usuari envia el missatge 'exit' retornara fals i per
      * consequencia, es realitzara la desconexio.
      */
-    private static boolean enviarMissatgeServidor(Scanner lector, OutputStream os, Socket socket) {
+    public static boolean enviarMissatgeServidor(OutputStream os, Socket socket) {
         boolean sortir = false;
         try {
-            while (!sortir) {
-                String msg = lector.nextLine();
+            //while (!sortir) {
+                String msg = missatgeClient;
                 if (msg.equalsIgnoreCase("exit")) {
                     os.write(msg.getBytes());
                     System.out.println("Ens hem desconnectat del servidor correctament...");
                     sortir = true;
                     socket.close();
+                    return sortir;
                 }
                 os.write(msg.getBytes());
-            }
-            return sortir;
+            //}
+            
 
         } catch (IOException ioe) {
             ioe.printStackTrace();
