@@ -135,8 +135,7 @@ public class EscoltaMsgServidor extends Thread {
             //ioe.printStackTrace();
             System.out.println("El socket s'ha tancat");
         } catch (Exception e) {
-            //e.printStackTrace();
-            System.out.println("El socket s'ha tancat");
+            e.printStackTrace();
         }
     }
     
