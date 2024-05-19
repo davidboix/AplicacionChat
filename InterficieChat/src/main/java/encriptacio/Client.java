@@ -13,64 +13,21 @@ import java.util.Scanner;
 
 public class Client {
 
+    public Client() {
+
+    }
+
+    /**
+     * Main que farem servir per poder fer les proves entre client i servidor
+     * sense utilitzar la interficie grafica.
+     *
+     * TODO: Haurem de comentar aquesta funcio per a que NO deixi de funcionar
+     * en la interficie grafica.
+     *
+     * @param args
+     */
     public static void main(String[] args) {
-        try {
-            Socket socket = new Socket();
-            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
-            socket.connect(addr);
-
-            Scanner lector = new Scanner(System.in);
-            InputStream is = socket.getInputStream();
-            OutputStream os = socket.getOutputStream();
-
-            boolean semafor = false;
-
-            /**
-             * TODO: Hem de moure aquest fil a una classe externa per utilitzar
-             * la nomenclatura seguent tal i com fem amb Atendre_Clients:
-             *
-             * new nouFil().start();
-             */
-            Thread hiloRecepcion = new Thread(() -> {
-                try {
-                    System.out.print("Escriu un missatge que vulguis al servidor: ");
-                    byte[] buffer = new byte[1024];
-                    //while (true) {
-                    while (!socket.isClosed()) {
-                        int intBytes = is.read(buffer);
-                        if (intBytes != -1) {
-                            String msg = new String(buffer, 0, intBytes);
-                            System.out.println("\nMensaje del servidor: " + msg);
-                            System.out.print("Escriu un missatge que vulguis al servidor: ");
-                        }
-                    }
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                    System.out.println("Hem entrat en el error...");
-                }
-            });
-            hiloRecepcion.start();
-
-            while (!semafor) {
-                String msg = lector.nextLine();
-                if (msg.equalsIgnoreCase("exit")) {
-                    os.write(msg.getBytes());
-                    System.out.println("ens hem desconnectat del servidor");
-                    semafor = true;
-                }
-                os.write(msg.getBytes());
-            }
-            socket.close();
-        } catch (SocketException se) {
-            se.printStackTrace();
-            System.out.println("\nERROR!\nHi ha hagut un error en la connexio del client cap al servidor.");
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-            System.out.println("\nERROR!\nHi ha hagut un error i per tant no s'ha executat correctament el client!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("\nERROR!\nHi ha hagut un problema general en el client");
-        }
+        setConnexio();
     }
 
     public static void main2(String[] args) {
@@ -146,6 +103,80 @@ public class Client {
             e.printStackTrace();
             System.out.println("\nCLIENT:Hi ha hagut un error general...");
         }
+    }
+
+    /**
+     * TODO: Afegir una descripcio mes objectiva, es a dir, mes extensa.
+     *
+     * Funcio creada per poder fer la connexio en el servidor utilitzant el
+     * metode en questio.
+     */
+    public static void setConnexio() {
+        try {
+            Socket socket = new Socket();
+            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+            socket.connect(addr);
+
+            Scanner lector = new Scanner(System.in);
+            InputStream is = socket.getInputStream();
+            OutputStream os = socket.getOutputStream();
+
+            new EscoltaMsgServidor(socket, is).start();
+
+            boolean semafor = enviarMissatgeServidor(lector, os, socket);;
+
+            if (!semafor) {
+                socket.close();
+            }
+        } catch (SocketException se) {
+            se.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un error en la connexio del client cap al servidor.");
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un error i per tant no s'ha executat correctament el client!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un problema general en el client");
+        }
+    }
+
+    /**
+     * Funcio creada per poder enviar missatges al servidor i a mes a mes, es
+     * tractara la paraula clau definida per poder desconectar-se del servidor
+     * correctament.
+     *
+     * @param lector Objecte de tipus Scanner que ens servira per poder escriure
+     * missatges per consola i enviar-los.
+     * @param os Objecte de tipus OutputStream que ens servira per poder enviar
+     * els missatges escrits per consola.
+     * @param socket Objecte de tipus Socket que ens servira per identificar
+     * quin socket hem de tancar.
+     * @return Retornara cert si el usuari no ha enviat la paraula clau
+     * anomenada 'exit' i per tant podra seguir enviant missatges i el cas
+     * contrari, si el usuari envia el missatge 'exit' retornara fals i per
+     * consequencia, es realitzara la desconexio.
+     */
+    private static boolean enviarMissatgeServidor(Scanner lector, OutputStream os, Socket socket) {
+        boolean sortir = false;
+        try {
+            while (!sortir) {
+                String msg = lector.nextLine();
+                if (msg.equalsIgnoreCase("exit")) {
+                    os.write(msg.getBytes());
+                    System.out.println("Ens hem desconnectat del servidor correctament...");
+                    sortir = true;
+                    socket.close();
+                }
+                os.write(msg.getBytes());
+            }
+            return sortir;
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sortir;
     }
 
 }

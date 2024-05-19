@@ -116,8 +116,8 @@ public class Servidor {
      * Funcio desenvolupada per poder decrementar el numero de clients que s'han
      * desconnectat en aquell moment.
      */
-    public void decrementarClientsConnectats() {
-        System.out.println("S'ha desconectat un client...");
+    public void decrementarClientsConnectats(Socket socket) {
+        System.out.println("S'ha desconectat el client amb socket: " + socket);
         this.qtClients--;
         System.out.println("Clients connectats actualment: " + this.qtClients);
     }
@@ -157,10 +157,7 @@ public class Servidor {
                  */
                 servidor.augmentarClientsConnectats();
                 servidor.guardarClientsArrayList(servidor.arrSocket, newSocket);
-                for (Socket socket: servidor.arrSocket) {
-                    System.out.println(socket);
-                }
-
+                servidor.mostrarClientsConectats(servidor.arrSocket);
                 //new Atendre_Clients(newSocket, servidor.arrSocket).start();
                 new Atendre_Clients(newSocket).start();
             }
@@ -339,10 +336,12 @@ public class Servidor {
             arrMsg.add(msg);
         }
     }
-
-    private ArrayList<String> prepararArrayList() {
-        ArrayList<String> arrProva = new ArrayList<>();
-        return arrProva;
+    
+    private void mostrarClientsConectats (ArrayList<Socket> arrSocket) {
+        System.out.println("Aquestos son els clients que estan conectats: ");
+        for (Socket socket: arrSocket) {
+            System.out.println(socket);
+        }
     }
 }
 

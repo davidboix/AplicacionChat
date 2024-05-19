@@ -287,31 +287,43 @@ public class Atendre_Clients extends Thread {
 //                }
 
                 String msg = new String(buffer, 0, intBuffer);
-                
+
                 if (msg.equalsIgnoreCase("exit")) {
-                    servidor.eliminarSocket(servidor.arrSocket, socket);
-                    semafor = true;
-                    break;
+                    boolean desconnexio = servidor.eliminarSocket(servidor.arrSocket, socket);
+                    if (desconnexio) {
+                        this.eliminarClientArray(this.arrClients, this.os);
+                        semafor = true;
+                        /**
+                         * TODO: Investigar alternativa al us del break degut a
+                         * que NO es una bona practica per utilitzar per sortir
+                         * del bucle.
+                         */
+                        break;  
+                    }
                 }
 
                 this.guardarMissatgesArrayList(servidor.arrMsg2, msg);
-                System.out.println("Aquestos son els missatges guardats en el ArrayList");
-                System.out.println();
-                for (String row : servidor.arrMsg2) {
-                    System.out.println(row);
-                }
-                
-                System.out.println("Missatge que hem rebut en el servidor: " + msg);
+                this.mostrarMissatgesArrayList(servidor.arrMsg2);
+                this.mostrarMissatgeUsuari(socket, msg);
                 enviarMissatge(msg);
 
             }
-            System.out.println("Hem sortit del bucle...");
-            arrClients.remove(os);
-            socket.close();
-            servidor.decrementarClientsConnectats();
+            //arrClients.remove(os);
+            //socket.close();
+            servidor.decrementarClientsConnectats(socket);
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void eliminarClientArray(CopyOnWriteArrayList<OutputStream> arrClients, OutputStream os) {
+        if (!arrClients.isEmpty()) {
+            arrClients.remove(os);
+        } else {
+            System.out.println("El Array no te cap client per poder borrar.");
+        }
+
     }
 
     private ArrayList guardarMissatgesArrayList(ArrayList<String> arrMsg, String msg) {
@@ -321,11 +333,28 @@ public class Atendre_Clients extends Thread {
         return arrMsg;
     }
 
+    private void mostrarMissatgesArrayList(ArrayList<String> arrMsg) {
+        try {
+            System.out.println("Aquestos son els missatges guardats en el ArrayList: ");
+            for (String row : arrMsg) {
+                System.out.println(row);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void mostrarMissatgeUsuari(Socket socket,String msg) {
+        if (!msg.isEmpty()) {
+            System.out.println("Missatge enviat per el usuari amb socket: " + socket + " que hem rebut en el servidor: " + msg);
+        }
+    }
+    
     private void enviarMissatge(String mensaje) {
-        for (OutputStream cliente : arrClients) {
+        for (OutputStream clients : arrClients) {
             try {
-                cliente.write((mensaje + "\n").getBytes());
-                cliente.flush();
+                clients.write((mensaje + "\n").getBytes());
+                clients.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
