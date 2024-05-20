@@ -44,6 +44,7 @@ public class Servidor {
     private static int qtClients;
     public static String ipServidor;
     static ArrayList<Socket> arrSocket = new ArrayList<>();
+    private static ArrayList<String> arrNoms = new ArrayList<>();
     private ArrayList<String> arrMsg = new ArrayList<>();
     static ArrayList<String> arrMsg2 = new ArrayList<>();
 
@@ -78,6 +79,14 @@ public class Servidor {
     public void setQtClients(int qtClients) {
         this.qtClients = qtClients;
     }
+
+//    public static ArrayList<Socket> getArrNoms() {
+//        return arrNoms;
+//    }
+//
+//    public static void setArrNoms(ArrayList<Socket> arrNoms) {
+//        Servidor.arrNoms = arrNoms;
+//    }
 
     public ArrayList<Socket> getArrSocket() {
         return arrSocket;
@@ -141,14 +150,22 @@ public class Servidor {
             System.out.println("Servidor preparat per escoltar!");
             while (true) {
                 Socket newSocket = serverSocket.accept();
-                
+                InputStream is = newSocket.getInputStream();
                 servidor.augmentarClientsConnectats();
                 servidor.guardarClientsArrayList(servidor.arrSocket, newSocket);
-                
+                byte[] buffer = new byte[1024];
+                int intBuffer = is.read(buffer);
+                String nomUsuari = new String(buffer, 0, intBuffer);
+                System.out.println(nomUsuari);
+                servidor.guardarNomClients(servidor.arrNoms,nomUsuari);
+                System.out.println("Clients guardats....");
+                for (String row: servidor.arrNoms) {
+                    System.out.println(row);
+                }
                 //servidor.mostrarClientsConectats(servidor.arrSocket);
-                
+
                 servidor.getUltimClientConectat(servidor.arrSocket);
-                                
+
                 new Atendre_Clients(newSocket).start();
             }
         } catch (SocketException se) {
@@ -346,6 +363,12 @@ public class Servidor {
             socketClient = socket;
         }
         System.out.println("Aquest es el ultim client que s'ha connectat al servidor: " + socketClient);
+    }
+
+    private static void guardarNomClients(ArrayList<String> arrNom, String nomClient) {
+        if (!nomClient.isEmpty()) {
+            arrNom.add(nomClient);
+        }
     }
 }
 

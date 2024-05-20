@@ -17,6 +17,7 @@ public class EscoltaMsgServidor extends Thread {
     private JTextArea msgArr;
     private Socket socket;
     private InputStream inputStream;
+    private String nomUsuari;
 
     /**
      * Definit constructor buit per poder inicialitzar objectes de tipus
@@ -40,15 +41,30 @@ public class EscoltaMsgServidor extends Thread {
         this.socket = socket;
         this.inputStream = inputStream;
     }
-
+    
     public EscoltaMsgServidor(Socket socket, InputStream inputStream, JTextArea msgArr) {
         this.socket = socket;
         this.inputStream = inputStream;
         this.msgArr = msgArr;
     }
+    
+    public EscoltaMsgServidor(Socket socket, InputStream inputStream, JTextArea msgArr, String nomUsuari) {
+        this.socket = socket;
+        this.inputStream = inputStream;
+        this.msgArr = msgArr;
+        this.nomUsuari = nomUsuari;
+    }
+
 
     public EscoltaMsgServidor(JTextArea msgArr) {
         this.msgArr = msgArr;
+    }
+
+    public EscoltaMsgServidor(JTextArea msgArr, Socket socket, InputStream inputStream, String nomUsuari) {
+        this.msgArr = msgArr;
+        this.socket = socket;
+        this.inputStream = inputStream;
+
     }
 
     /**
@@ -99,6 +115,16 @@ public class EscoltaMsgServidor extends Thread {
     public void setMsgArr(JTextArea msgArr) {
         this.msgArr = msgArr;
     }
+
+    public String getNomUsuari() {
+        return nomUsuari;
+    }
+
+    public void setNomUsuari(String nomUsuari) {
+        this.nomUsuari = nomUsuari;
+    }
+    
+    
 
     /**
      * Funcio sobreescrita la qual ens aporta la classe Thread per poder
@@ -197,6 +223,6 @@ public class EscoltaMsgServidor extends Thread {
     private void afegirMissatgeTextArea(String msg) {
         String dataActual = getData();
         String horaActual = getTemps();
-        msgArr.append("[" + dataActual + " || " + horaActual + "]: " + msg + "\n");
+        msgArr.append(this.getNomUsuari() + "[" + dataActual + " || " + horaActual + "]: " + msg + "\n");
     }
 }

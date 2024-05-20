@@ -63,8 +63,6 @@ public class Client {
     public void setNomUsuari(String nomUsuari) {
         this.nomUsuari = nomUsuari;
     }
-    
-    
 
     /**
      * Main que farem servir per poder fer les proves entre client i servidor
@@ -196,7 +194,7 @@ public class Client {
         }
     }
 
-    public void crearConnexio(JTextArea textAreaMissatge,String nom) {
+    public void crearConnexio(JTextArea textAreaMissatge, String nom) {
 
         try {
             Socket socket = new Socket();
@@ -209,19 +207,21 @@ public class Client {
 
             this.setSocket(socket);
             this.setOs(os);
-
+            os.write(nom.getBytes());
             System.out.println("Ens conectem...");
             is = socket.getInputStream();
             this.setIs(is);
 
-            new EscoltaMsgServidor(socket, is, textAreaMissatge).start();
+            new EscoltaMsgServidor(socket, is, textAreaMissatge, this.getNomUsuari()).start();
         } catch (IOException e) {
             System.out.println("No s'ha pogut connectar al servidor");
         }
     }
+
     /**
      * Funcio diferent parametrizada.
-     * @param textAreaMissatge 
+     *
+     * @param textAreaMissatge
      */
     public void crearConnexio(JTextArea textAreaMissatge) {
 
@@ -239,6 +239,7 @@ public class Client {
             System.out.println("Ens conectem...");
             is = socket.getInputStream();
             this.setIs(is);
+            enviarMissatgeServidor(this.getOs(), this.getSocket(), this.getNomUsuari());
 
             new EscoltaMsgServidor(socket, is, textAreaMissatge).start();
         } catch (IOException e) {

@@ -338,7 +338,7 @@ public class Login extends javax.swing.JFrame {
                     String[] opcions = {"Acceptar"};
 
                     jop.showOptionDialog(
-                            null,
+                             null,
                             "La contrasenya no es correcta.",
                             "La contrasenya es erronea",
                             jop.DEFAULT_OPTION,
