@@ -276,29 +276,31 @@ public class Atendre_Clients extends Thread {
             InputStream is = socket.getInputStream();
             os = socket.getOutputStream();
             arrClients.add(os);
+            
+            this.enviarClientsConectats(servidor.arrSocket);
 
             byte[] buffer = new byte[1024];
             int intBuffer;
             boolean semafor = false;
             while (!semafor) {
                 intBuffer = is.read(buffer);
-//                if (intBuffer == -1) {
-//                    semafor = true;
-//                }
 
                 String msg = new String(buffer, 0, intBuffer);
 
                 if (msg.equalsIgnoreCase("exit")) {
-                    boolean desconnexio = servidor.eliminarSocket(servidor.arrSocket, socket);
-                    if (desconnexio) {
+                    boolean isTrobat = this.isSocketTrobat(servidor.arrSocket, this.socket);
+                    if (isTrobat) {
                         this.eliminarClientArray(this.arrClients, this.os);
+                        this.enviarMissatgeDesconexio(servidor.arrSocket, this.socket);
+                        this.eliminarSocketArray(servidor.arrSocket, this.socket);
+                        //enviarMissatge("El usuari amb socket " + this.socket + " s'ha desconectat satisfactoriament...");
                         semafor = true;
                         /**
                          * TODO: Investigar alternativa al us del break degut a
                          * que NO es una bona practica per utilitzar per sortir
-                         * del bucle.
+                         * de un bucle.
                          */
-                        break;  
+                        break;
                     }
                 }
 
@@ -311,7 +313,7 @@ public class Atendre_Clients extends Thread {
             //arrClients.remove(os);
             //socket.close();
             servidor.decrementarClientsConnectats(socket);
-            
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -343,21 +345,95 @@ public class Atendre_Clients extends Thread {
             e.printStackTrace();
         }
     }
-    
-    private void mostrarMissatgeUsuari(Socket socket,String msg) {
+
+    private void mostrarMissatgeUsuari(Socket socket, String msg) {
         if (!msg.isEmpty()) {
-            System.out.println("Missatge enviat per el usuari amb socket: " + socket + " que hem rebut en el servidor: " + msg);
+            System.out.println("\nMissatge enviat per el usuari amb el port del socket: " + socket.getPort() + " que hem rebut en el servidor: " + msg);
         }
     }
-    
-    private void enviarMissatge(String mensaje) {
+
+    private void enviarMissatge(String msg) {
+        System.out.println();
         for (OutputStream clients : arrClients) {
             try {
-                clients.write((mensaje + "\n").getBytes());
+                clients.write((msg + "\n").getBytes());
                 clients.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void enviarMissatgeDesconexio(ArrayList<Socket> arrClients, Socket socket) {
+        Socket socketClient = null;
+        for (Socket row : arrClients) {
+            if (row.equals(socket)) {
+                socketClient = row;
+            }
+        }
+
+        //boolean isExistent = this.isSocketExistent(arrClients, socketClient);
+        //if (isExistent) {
+        String msgDesconexio = "\nEl client " + socketClient + " s'ha desconectat satisfactoriament";
+        enviarMissatge(msgDesconexio);
+//        } else {
+//            System.out.println("\nEl client no s'ha trobat i per tant, no es pot enviar cap missatge");
+//        }
+    }
+
+    private boolean eliminarSocketArray(ArrayList<Socket> arrSockets, Socket socket) {
+        boolean isTrobat = false;
+        Socket socketClient = null;
+        for (Socket row : arrSockets) {
+            if (row.equals(socket)) {
+                socketClient = row;
+            }
+        }
+
+        boolean isBorrat = this.isArrayListSocketExistent(arrSockets, socketClient);
+        
+        if (isBorrat) {
+            return isTrobat = true;
+        }
+        
+        System.out.println("\nEl client NO s'ha borrat del array correctament");
+        return isTrobat;
+
+    }
+
+    private boolean isArrayListSocketExistent(ArrayList<Socket> arrSockets, Socket socket) {
+        boolean isTrobat = false;
+        try {
+            if (!socket.equals(null)) {
+                arrSockets.remove(socket);
+                isTrobat = true;
+            }
+        } catch (NullPointerException npe) {
+            System.out.println("El objecte es null");
+        } catch (Exception e) {
+            System.out.println("Error general");
+        }
+        return isTrobat;
+    }
+    
+    private boolean isSocketTrobat (ArrayList<Socket> arrSockets, Socket socket) {
+        boolean isTrobat = false;
+        for (Socket row: arrSockets) {
+            if (row.equals(socket)) {
+                isTrobat = true;
+            }
+        }
+        return isTrobat;
+    }
+    
+    private void enviarClientsConectats(ArrayList<Socket> arrSockets) {
+        System.out.println("------------Aquestos son els usuaris conectats actualment...-----------------");
+        if (arrSockets.size () > 0) {
+            for (Socket row: arrSockets) {
+                enviarMissatge(String.valueOf(row));
+            }
+        } else {
+            enviarMissatge("NO hi ha cap client conectat");
         }
     }
 }

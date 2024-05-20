@@ -13,6 +13,7 @@ import javax.swing.JTextArea;
  * @version 1.0
  */
 public class EscoltaMsgServidor extends Thread {
+
     private JTextArea msgArr;
     private Socket socket;
     private InputStream inputStream;
@@ -39,10 +40,14 @@ public class EscoltaMsgServidor extends Thread {
         this.socket = socket;
         this.inputStream = inputStream;
     }
-    
+
     public EscoltaMsgServidor(Socket socket, InputStream inputStream, JTextArea msgArr) {
         this.socket = socket;
         this.inputStream = inputStream;
+        this.msgArr = msgArr;
+    }
+
+    public EscoltaMsgServidor(JTextArea msgArr) {
         this.msgArr = msgArr;
     }
 
@@ -87,7 +92,11 @@ public class EscoltaMsgServidor extends Thread {
         this.inputStream = is;
     }
 
-    public EscoltaMsgServidor(JTextArea msgArr) {
+    public JTextArea getMsgArr() {
+        return msgArr;
+    }
+
+    public void setMsgArr(JTextArea msgArr) {
         this.msgArr = msgArr;
     }
 
@@ -96,38 +105,16 @@ public class EscoltaMsgServidor extends Thread {
      * inicialitzar fils correctament definits i que realitzaran la funcio de
      * rebre missatges per part del Servidor.
      */
-    @Override
-//    public void run() {
-//        try {
-//            System.out.print("Escriu el missatge que vulguis al servidor: ");
-//            byte[] buffer = new byte[1024];
-//            while (!this.socket.isClosed()) {
-//                int intBytes = this.inputStream.read(buffer);
-//                if (intBytes != -1) {
-//                    String msg = new String(buffer, 0, intBytes);
-//                    System.out.println("\nMissatge del servidor: " + msg);
-//                    System.out.print("Escriu el missatge que vulguis al servidor: ");
-//                }
-//            }
-//        } catch (IOException ioe) {
-//            ioe.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-    
-    public void run() {
+//    @Override
+    public void run2() {
         try {
             System.out.print("Escriu el missatge que vulguis al servidor: ");
             byte[] buffer = new byte[1024];
             while (!this.socket.isClosed()) {
                 int intBytes = this.inputStream.read(buffer);
                 if (intBytes != -1) {
-                    String dataActual = getData();
-                    String horaActual = getTemps();
                     String msg = new String(buffer, 0, intBytes);
                     System.out.println("\nMissatge del servidor: " + msg);
-                    msgArr.append("[" + dataActual + " || " + horaActual + "]: " + msg + "\n");
                     System.out.print("Escriu el missatge que vulguis al servidor: ");
                 }
             }
@@ -138,7 +125,29 @@ public class EscoltaMsgServidor extends Thread {
             e.printStackTrace();
         }
     }
-    
+
+    @Override
+    public void run() {
+        try {
+            System.out.print("Escriu el missatge que vulguis al servidor: ");
+            byte[] buffer = new byte[1024];
+            while (!this.socket.isClosed()) {
+                int intBytes = this.inputStream.read(buffer);
+                if (intBytes != -1) {
+                    String msg = new String(buffer, 0, intBytes);
+                    System.out.println("\nMissatge del servidor: " + msg);
+                    System.out.print("Escriu el missatge que vulguis al servidor: ");
+                    this.afegirMissatgeTextArea(msg);
+                }
+            }
+        } catch (IOException ioe) {
+            //ioe.printStackTrace();
+            System.out.println("El socket s'ha tancat");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Funcio desenvolupada per poder retornar la data la qual ens trobem en
      * aquell moment en format cadena de text
@@ -158,7 +167,7 @@ public class EscoltaMsgServidor extends Thread {
 
         return "";
     }
-    
+
     /**
      * Funcio desenvolupada per obtenir la hora, minuts i segons actuals en el
      * moment que fem la crida de la funcio
@@ -179,10 +188,15 @@ public class EscoltaMsgServidor extends Thread {
         }
         return "";
     }
-    
+
     private String tractarTemps(int temps) {
         String tempsActual = String.valueOf(temps);
         return tempsActual;
     }
 
+    private void afegirMissatgeTextArea(String msg) {
+        String dataActual = getData();
+        String horaActual = getTemps();
+        msgArr.append("[" + dataActual + " || " + horaActual + "]: " + msg + "\n");
+    }
 }

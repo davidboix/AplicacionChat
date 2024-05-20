@@ -6,6 +6,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import java.util.Date;
 import org.bson.Document;
 
 /**
@@ -124,7 +125,6 @@ public class CrudMONGO {
         }
         return md;
     }
-    
 
     private MongoCollection<Document> getColeccio() {
         MongoCollection<Document> comptes = null;
@@ -163,22 +163,22 @@ public class CrudMONGO {
         }
     }
 
-    private void recorrerUsers (MongoCollection<Document> mc,String nomUsuari) {
+    private void recorrerUsers(MongoCollection<Document> mc, String nomUsuari) {
         try {
-            FindIterable<Document> resUsuaris  = mc.find(Filters.eq("nomUser",nomUsuari));
-            for (Document row: resUsuaris) {
+            FindIterable<Document> resUsuaris = mc.find(Filters.eq("nomUser", nomUsuari));
+            for (Document row : resUsuaris) {
                 System.out.println("Nom usuari: " + row.getString("nomUser"));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     public void getUsers(String nomUsuari) {
         this.setUrlConnexio(this.inicialitzarServidor());
         MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
-        
-        try (MongoClient mc = new MongoClient(mcu)) {
+
+        try ( MongoClient mc = new MongoClient(mcu)) {
             MongoDatabase db = mc.getDatabase(this.getUsuariServidor());
             MongoCollection<Document> mongoC = db.getCollection(this.getNomColeccio());
             long numDocuments = mongoC.countDocuments(Filters.eq("nomUser", nomUsuari));
@@ -189,7 +189,31 @@ public class CrudMONGO {
             e.printStackTrace();
         }
     }
-    
-    
+
+    private MongoCollection<Document> accedirColeccions(MongoClient mc, String nomColeccio) {
+        MongoDatabase db = mc.getDatabase(this.getUsuariServidor());
+        MongoCollection<Document> mongoC = db.getCollection(nomColeccio);
+        return mongoC;
+
+    }
+
+    private void setDadesMsg(String nomUser, String msg, Date date) {
+
+        this.setUrlConnexio(this.inicialitzarServidor());
+        MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
+        try ( MongoClient mc = new MongoClient(mcu)) {
+
+            MongoCollection<Document> mongoC = this.accedirColeccions(mc, this.getNomColeccio());
+            Document missatgeNou = new Document("nomUsuari", "david")
+                    .append("missatgeUsuari", msg)
+                    .append("dataMissatge", date);
+            mongoC.insertOne(missatgeNou);
+            System.out.println("S'ha introduit un nou missatge...");
+            
+        } catch (Exception e) {
+
+        }
+
+    }
 
 }

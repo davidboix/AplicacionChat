@@ -109,7 +109,7 @@ public class Servidor {
      */
     public void augmentarClientsConnectats() {
         this.qtClients++;
-        System.out.println("Clients connectats actualment: " + this.qtClients);
+        System.out.println("\nClients connectats actualment: " + this.qtClients);
     }
 
     /**
@@ -124,15 +124,14 @@ public class Servidor {
 
     public static void main(String[] args) {
         Servidor servidor = new Servidor();
-        //servidor.setArrMsg(servidor.arrMsg);
 
         try {
             System.out.println("Creem el socket servidor");
             ServerSocket serverSocket = new ServerSocket();
-            
+
             //Adreça utilitzada per fer les proves.
             InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
-            
+
             //Adreça utilitzada per aixecar el servidor utilitzant interficie grafica.
             //InetSocketAddress addr = new InetSocketAddress(ipServidor, 5556);
             serverSocket.bind(addr);
@@ -141,24 +140,15 @@ public class Servidor {
 
             System.out.println("Servidor preparat per escoltar!");
             while (true) {
-                /**
-                 * TODO: En aquest moment, estem començant a aceptar les
-                 * connexions que estem rebent del client.
-                 *
-                 */
                 Socket newSocket = serverSocket.accept();
-                //String nomUser = server.llegirUsuaris(newSocket);
-                //server.inserirDadesMemoria(arrUsuaris, arrSockets, newSocket.getPort(),nomUser);
-                /**
-                 * TODO: Hem de mirar de llegir el missatge en el servidor per
-                 * poder baixar el qtClients i d'aquesta manera tenir un control
-                 * sobre el contador.<- Creiem que aquest funcionament l'hem de
-                 * realitzar en el fil i NO en el servidor
-                 */
+                
                 servidor.augmentarClientsConnectats();
                 servidor.guardarClientsArrayList(servidor.arrSocket, newSocket);
-                servidor.mostrarClientsConectats(servidor.arrSocket);
-                //new Atendre_Clients(newSocket, servidor.arrSocket).start();
+                
+                //servidor.mostrarClientsConectats(servidor.arrSocket);
+                
+                servidor.getUltimClientConectat(servidor.arrSocket);
+                                
                 new Atendre_Clients(newSocket).start();
             }
         } catch (SocketException se) {
@@ -336,12 +326,26 @@ public class Servidor {
             arrMsg.add(msg);
         }
     }
-    
-    private void mostrarClientsConectats (ArrayList<Socket> arrSocket) {
+
+    private void mostrarClientsConectats(ArrayList<Socket> arrSocket) {
         System.out.println("Aquestos son els clients que estan conectats: ");
-        for (Socket socket: arrSocket) {
+        for (Socket socket : arrSocket) {
             System.out.println(socket);
         }
+    }
+
+    /**
+     * Funcio que ens mostra el ultim client que s'ha conectat en el nostre
+     * servidor i que haura d'enviar al client quan es conecta...
+     *
+     * @param arrSocket ArrayList amb tots els clients conectats...
+     */
+    private void getUltimClientConectat(ArrayList<Socket> arrSocket) {
+        Socket socketClient = null;
+        for (Socket socket : arrSocket) {
+            socketClient = socket;
+        }
+        System.out.println("Aquest es el ultim client que s'ha connectat al servidor: " + socketClient);
     }
 }
 
