@@ -24,6 +24,11 @@ import javax.swing.ImageIcon;
  */
 public class InterficieXat extends javax.swing.JFrame {
 
+    /**
+     * TODO: Hem de canviar el llistat d'usuaris que ara mateix es un boto per
+     * un JTextArea perque utilitzarem la mateixa funcio per a ficar els
+     * missatges un sota el altre.
+     */
     String resFinal = "";
     //inicialitzaem el socket per a poder entrar al servidor
     Socket socket = new Socket();
@@ -214,10 +219,6 @@ public class InterficieXat extends javax.swing.JFrame {
         if (!msg.isEmpty()) {
             cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msg);
             System.out.println("Aquest es el nom del usuari: " + cl.getNomUsuari());
-
-            if (msg.equalsIgnoreCase("exit")) {
-                this.dispose();
-            }
         }
 
         //aquest try agafara els misstages del textarea i els enviara al servidor
@@ -256,15 +257,14 @@ public class InterficieXat extends javax.swing.JFrame {
      * @param evt
      */
     private void botoLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoLogoutActionPerformed
-        //quan es premi el boto de logout, enviara un missatge al servidor per a que resti el contador i tancara el socket
         try {
             String msg = "exit";
-            InputStream is = socket.getInputStream();
-            OutputStream os = socket.getOutputStream();
-            os.write(msg.getBytes());
-            socket.close();
-        } catch (IOException ex) {
-            Logger.getLogger(InterficieXat.class.getName()).log(Level.SEVERE, null, ex);
+            if (msg.equalsIgnoreCase("exit")) {
+                cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msg);
+                this.dispose();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }//GEN-LAST:event_botoLogoutActionPerformed
     /**
