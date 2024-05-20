@@ -221,8 +221,15 @@ public class EscoltaMsgServidor extends Thread {
     }
 
     private void afegirMissatgeTextArea(String msg) {
+        //System.out.println("msg: "+msg);
         String dataActual = getData();
         String horaActual = getTemps();
-        msgArr.append(this.getNomUsuari() + "[" + dataActual + " || " + horaActual + "]: " + msg + "\n");
+        String[] msgGood = msg.split("-/0/u/i/4/9<<z");
+        //System.out.println("msgGood: "+msgGood[0]);
+        if(msgGood.length>1){
+            msgArr.append("[" + msgGood[1] + ": " + dataActual + " || " + horaActual + "]: " + msgGood[0] + "\n");
+        } else {
+            msgArr.append("[" + dataActual + " || " + horaActual + "]: " + msgGood[0] + "\n");
+        }
     }
 }

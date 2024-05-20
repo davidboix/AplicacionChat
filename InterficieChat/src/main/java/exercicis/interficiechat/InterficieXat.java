@@ -33,11 +33,14 @@ public class InterficieXat extends javax.swing.JFrame {
     //inicialitzaem el socket per a poder entrar al servidor
     Socket socket = new Socket();
     String msgArr[];
+    String nomUsuari;
     Client cl = new Client();
 
     /**
      * Creates new form InterficieXat
      */
+    
+    
     public InterficieXat() {
         initComponents();
         inicialitzarInputs();
@@ -50,6 +53,7 @@ public class InterficieXat extends javax.swing.JFrame {
         initComponents();
         inicialitzarInputs();
         inicialitzarIconos();
+        this.nomUsuari = nom;
         //obrim el socket per a connectar al servidor
         cl.crearConnexio(this.textAreaMissatge, nom);
     }
@@ -210,14 +214,16 @@ public class InterficieXat extends javax.swing.JFrame {
      * @param evt El event que activara la funcio
      */
     private void botoEnviarMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoEnviarMsgActionPerformed
-
+        System.out.println(nomUsuari);
         String msg = this.inputMsg.getText();
+        String msgG = msg + "-/0/u/i/4/9<<z" + nomUsuari;
         if (msg.isEmpty()) {
             System.out.println("NO pots enviar un missatge en blanc!");
             return;
         }
         if (!msg.isEmpty()) {
-            cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msg);
+            
+            cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msgG);
             System.out.println("Aquest es el nom del usuari: " + cl.getNomUsuari());
         }
 

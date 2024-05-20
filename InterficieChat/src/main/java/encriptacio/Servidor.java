@@ -34,7 +34,8 @@ import java.util.ArrayList;
  * s'ha desconnectat.
  *
  */
-public class Servidor {
+//public class Servidor implements enDesconnexio{
+public class Servidor{
     // IP MongoDB al nuvol: 57.129.5.24
     //Port MongodBD al nuvol: 27017
 
@@ -158,6 +159,7 @@ public class Servidor {
                 String nomUsuari = new String(buffer, 0, intBuffer);
                 System.out.println(nomUsuari);
                 servidor.guardarNomClients(servidor.arrNoms,nomUsuari);
+                servidor.augmentarClientsConnectats();
                 System.out.println("Clients guardats....");
                 for (String row: servidor.arrNoms) {
                     System.out.println(row);
@@ -165,9 +167,19 @@ public class Servidor {
                 //servidor.mostrarClientsConectats(servidor.arrSocket);
 
                 servidor.getUltimClientConectat(servidor.arrSocket);
-
-                new Atendre_Clients(newSocket).start();
+                
+                new Atendre_Clients(newSocket,servidor.arrSocket).start();
+                int i = 0;
+                for (Socket row : arrSocket) {
+                    i++;
+                    System.out.println("Total sockets: " + i);
+                    if(row.isClosed()){
+                        arrSocket.remove(row);
+                    }
+                    System.out.println("Total sockets: " + i);
+                }
             }
+            
         } catch (SocketException se) {
             se.printStackTrace();
             System.err.println("\nERROR!\nLa connexio ha sigut detinguda inesperadament!");
@@ -324,6 +336,17 @@ public class Servidor {
         }
         return false;
     }
+    
+//    @Override
+//    public void onClientDisconnect(Socket socket) {
+//        System.out.println("Client disconnectat: " + socket);
+//        try {
+//            socket.close();
+//            arrSocket.remove(socket);
+//        } catch (IOException e) {
+//            System.out.println("Eliminacio del socket de l'array fallida");
+//        }
+//    }
 
     private String llegirMissatgeClient(InputStream is) throws IOException {
         byte[] buffer = new byte[500];

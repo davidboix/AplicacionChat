@@ -259,8 +259,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Atendre_Clients extends Thread {
 
+    
     private Socket socket;
+    static ArrayList<Socket> arrSocket;
     private OutputStream os;
+    private enDesconnexio desconnectatListener;
     /**
      * TODO: Revisar alternativa al us de aquest arraylist en especial.
      */
@@ -268,6 +271,11 @@ public class Atendre_Clients extends Thread {
 
     public Atendre_Clients(Socket socket) {
         this.socket = socket;
+    }
+    
+    public Atendre_Clients(Socket socket,ArrayList<Socket> arrSocket) {
+        this.socket = socket;
+        this.arrSocket = arrSocket;
     }
 
     public Atendre_Clients(Socket socket, OutputStream os) {
@@ -319,12 +327,18 @@ public class Atendre_Clients extends Thread {
             }
             //arrClients.remove(os);
             //socket.close();
+            
             servidor.decrementarClientsConnectats(socket);
 
+//            if (desconnectatListener != null) {
+//                desconnectatListener.onClientDisconnect(socket);
+//            }
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    
 
     private void eliminarClientArray(CopyOnWriteArrayList<OutputStream> arrClients, OutputStream os) {
         if (!arrClients.isEmpty()) {
