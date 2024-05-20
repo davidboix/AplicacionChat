@@ -34,12 +34,19 @@ public class InterficieXat extends javax.swing.JFrame {
      * Creates new form InterficieXat
      */
     public InterficieXat() {
-
         initComponents();
         inicialitzarInputs();
         inicialitzarIconos();
         //obrim el socket per a connectar al servidor
         cl.crearConnexio(this.textAreaMissatge);
+    }
+
+    public InterficieXat(String nom) {
+        initComponents();
+        inicialitzarInputs();
+        inicialitzarIconos();
+        //obrim el socket per a connectar al servidor
+        cl.crearConnexio(this.textAreaMissatge, nom);
     }
 
     /**
@@ -204,12 +211,15 @@ public class InterficieXat extends javax.swing.JFrame {
             System.out.println("NO pots enviar un missatge en blanc!");
             return;
         }
+        if (!msg.isEmpty()) {
+            cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msg);
+            System.out.println("Aquest es el nom del usuari: " + cl.getNomUsuari());
 
-        cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msg);
-
-        if (msg.equalsIgnoreCase("exit")) {
-            this.dispose();
+            if (msg.equalsIgnoreCase("exit")) {
+                this.dispose();
+            }
         }
+
         //aquest try agafara els misstages del textarea i els enviara al servidor
 //            try {
 ////                InputStream is = socket.getInputStream();
@@ -239,7 +249,6 @@ public class InterficieXat extends javax.swing.JFrame {
 //            for (String misg : arrayListMsg) {
 //                resFinal += misg;
 //            }
-
 
     }//GEN-LAST:event_botoEnviarMsgActionPerformed
     /**

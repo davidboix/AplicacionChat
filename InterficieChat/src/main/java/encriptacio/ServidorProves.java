@@ -155,7 +155,7 @@ public class ServidorProves {
                  * TODO: Aquest es el fil que utilitzarem per poder escoltar
                  * tots els missatges que envien els clients al servidor.
                  */
-                new Atendre_Clients(newSocket, servidor.arrSocket).start();
+                //new Atendre_Clients(newSocket, servidor.arrSocket).start();
 
             }
         } catch (SocketException se) {

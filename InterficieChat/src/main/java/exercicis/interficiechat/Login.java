@@ -250,10 +250,9 @@ public class Login extends javax.swing.JFrame {
         final String DB_URL = "57.129.5.24";
         final String DB_PORT = "27017";
         String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
+        String nomUser = null;
 
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
-
-        InterficieXat interficieXat = new InterficieXat();
 
         try ( MongoClient mongoClient = new MongoClient(uri)) {
             String nomUsuari = this.usuariText.getText();
@@ -297,8 +296,10 @@ public class Login extends javax.swing.JFrame {
                         FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", passwordEncriptada)));
                         for (Document infoUsuaris : resultatUsuaris) {
                             System.out.print("\nNom Usuari: " + infoUsuaris.getString("nomUser"));
+                            nomUser = infoUsuaris.getString("nomUser");
                             System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenyaUsuari"));
                         }
+                        InterficieXat interficieXat = new InterficieXat(nomUsuari);
                         this.mostrarFinestra(interficieXat);
                         this.tancarFinestraActual();
                     } else {

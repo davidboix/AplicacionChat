@@ -17,6 +17,7 @@ public class Client {
     private Socket socket;
     private InputStream is;
     private OutputStream os;
+    private String nomUsuari;
     public static String missatgeClient;
 
     public Client() {
@@ -54,6 +55,16 @@ public class Client {
     public static void setMissatgeClient(String missatgeClient) {
         Client.missatgeClient = missatgeClient;
     }
+
+    public String getNomUsuari() {
+        return nomUsuari;
+    }
+
+    public void setNomUsuari(String nomUsuari) {
+        this.nomUsuari = nomUsuari;
+    }
+    
+    
 
     /**
      * Main que farem servir per poder fer les proves entre client i servidor
@@ -185,6 +196,33 @@ public class Client {
         }
     }
 
+    public void crearConnexio(JTextArea textAreaMissatge,String nom) {
+
+        try {
+            Socket socket = new Socket();
+            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+            socket.connect(addr);
+            this.setNomUsuari(nom);
+
+            InputStream is = socket.getInputStream();
+            OutputStream os = socket.getOutputStream();
+
+            this.setSocket(socket);
+            this.setOs(os);
+
+            System.out.println("Ens conectem...");
+            is = socket.getInputStream();
+            this.setIs(is);
+
+            new EscoltaMsgServidor(socket, is, textAreaMissatge).start();
+        } catch (IOException e) {
+            System.out.println("No s'ha pogut connectar al servidor");
+        }
+    }
+    /**
+     * Funcio diferent parametrizada.
+     * @param textAreaMissatge 
+     */
     public void crearConnexio(JTextArea textAreaMissatge) {
 
         try {
@@ -251,20 +289,16 @@ public class Client {
         System.out.println("\n\nAquest es el client: " + socket);
         boolean sortir = false;
         try {
-            while (!sortir) {
-                String msg = missatgeClient;
-                //if (msg.equalsIgnoreCase("exit")) {
-                if (missatge.equalsIgnoreCase("exit")) {
-                    //os.write(msg.getBytes());
-                    os.write(missatge.getBytes());
-                    System.out.println("Ens hem desconnectat del servidor correctament...");
-                    sortir = true;
-                    socket.close();
-                    return sortir;
-                }
+            if (missatge.equalsIgnoreCase("exit")) {
                 //os.write(msg.getBytes());
                 os.write(missatge.getBytes());
+                System.out.println("Ens hem desconnectat del servidor correctament...");
+                sortir = true;
+                socket.close();
+                return sortir;
             }
+
+            os.write(missatge.getBytes());
         } catch (IOException ioe) {
             ioe.printStackTrace();
         } catch (Exception e) {

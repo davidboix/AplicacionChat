@@ -270,6 +270,13 @@ public class Atendre_Clients extends Thread {
         this.socket = socket;
     }
 
+    public Atendre_Clients(Socket socket, OutputStream os) {
+        this.socket = socket;
+        this.os = os;
+    }
+    
+    
+
     public void run() {
         try {
             Servidor servidor = new Servidor();
