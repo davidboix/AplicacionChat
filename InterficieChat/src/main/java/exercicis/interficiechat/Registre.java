@@ -330,7 +330,8 @@ public class Registre extends javax.swing.JFrame {
         String password = tractarPassword(this.inputPassword);
         String contrasenyaEncriptada = "";
         if (!password.isEmpty()) {
-            boolean isPasswordValid = validarPassword(password);
+            //boolean isPasswordValid = validarPassword(password);
+            boolean isPasswordValid = true;
 
             if (isPasswordValid) {
 //                En aquest punt la contrasenya sera encriptada

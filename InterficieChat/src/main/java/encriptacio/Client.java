@@ -172,8 +172,10 @@ public class Client {
             Scanner lector = new Scanner(System.in);
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
-
-            new EscoltaMsgServidor(socket, is).start();
+            Client cl = new Client();
+            cl.setNomUsuari("oleh");
+            //new EscoltaMsgServidor(socket, is).start();
+            new EscoltaMsgServidor(socket, is, cl).start();
 
             //boolean semafor = enviarMissatgeServidor(os, socket);
             boolean semafor = enviarMissatgeServidor(lector, os, socket);
@@ -264,9 +266,9 @@ public class Client {
      * consequencia, es realitzara la desconexio.
      */
     public static boolean enviarMissatgeServidor(Scanner lector, OutputStream os, Socket socket) {
-
         boolean sortir = false;
         try {
+            os.write("oleh".getBytes());
             while (!sortir) {
                 String msg = lector.nextLine();
                 if (msg.equalsIgnoreCase("exit")) {
@@ -291,7 +293,6 @@ public class Client {
         boolean sortir = false;
         try {
             if (missatge.equalsIgnoreCase("exit")) {
-                //os.write(msg.getBytes());
                 os.write(missatge.getBytes());
                 System.out.println("Ens hem desconnectat del servidor correctament...");
                 sortir = true;
@@ -306,5 +307,18 @@ public class Client {
             e.printStackTrace();
         }
         return sortir;
+    }
+
+    public void mostrarClientsConnectats() {
+        System.out.println("\nAquestos son els clients conectats...");
+        for (String nomClients : Servidor.arrNoms) {
+            System.out.println(nomClients);
+        }
+    }
+
+    public void setNomClients(String nomUsuari) {
+        if (!nomUsuari.isEmpty()) {
+            Servidor.arrNoms.add(nomUsuari);
+        }
     }
 }

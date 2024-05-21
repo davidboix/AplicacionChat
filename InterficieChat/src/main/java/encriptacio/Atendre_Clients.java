@@ -259,11 +259,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Atendre_Clients extends Thread {
 
-    
     private Socket socket;
     static ArrayList<Socket> arrSocket;
     private OutputStream os;
-    private enDesconnexio desconnectatListener;
     /**
      * TODO: Revisar alternativa al us de aquest arraylist en especial.
      */
@@ -272,8 +270,8 @@ public class Atendre_Clients extends Thread {
     public Atendre_Clients(Socket socket) {
         this.socket = socket;
     }
-    
-    public Atendre_Clients(Socket socket,ArrayList<Socket> arrSocket) {
+
+    public Atendre_Clients(Socket socket, ArrayList<Socket> arrSocket) {
         this.socket = socket;
         this.arrSocket = arrSocket;
     }
@@ -282,8 +280,6 @@ public class Atendre_Clients extends Thread {
         this.socket = socket;
         this.os = os;
     }
-    
-    
 
     public void run() {
         try {
@@ -291,15 +287,19 @@ public class Atendre_Clients extends Thread {
             InputStream is = socket.getInputStream();
             os = socket.getOutputStream();
             arrClients.add(os);
-            
-            this.enviarClientsConectats(servidor.arrSocket);
+
+            String nomClient = servidor.setNomClients(servidor.arrNoms, is);
+            servidor.getNomArrClients(servidor.arrNoms);
+
+            //this.enviarClientsConectats(servidor.arrSocket);
+            this.enviarNomsClientsConectats(servidor.arrNoms);
 
             byte[] buffer = new byte[1024];
             int intBuffer;
             boolean semafor = false;
             while (!semafor) {
                 intBuffer = is.read(buffer);
-
+                
                 String msg = new String(buffer, 0, intBuffer);
 
                 if (msg.equalsIgnoreCase("exit")) {
@@ -308,7 +308,10 @@ public class Atendre_Clients extends Thread {
                         this.eliminarClientArray(this.arrClients, this.os);
                         this.enviarMissatgeDesconexio(servidor.arrSocket, this.socket);
                         this.eliminarSocketArray(servidor.arrSocket, this.socket);
-                        //enviarMissatge("El usuari amb socket " + this.socket + " s'ha desconectat satisfactoriament...");
+                        
+                        this.deleteNomClient(servidor.arrNoms, nomClient);
+                        servidor.getNomArrClients(servidor.arrNoms);
+                        //this.enviarMissatge("El usuari amb socket " + this.socket + " s'ha desconectat satisfactoriament...");
                         semafor = true;
                         /**
                          * TODO: Investigar alternativa al us del break degut a
@@ -322,23 +325,21 @@ public class Atendre_Clients extends Thread {
                 this.guardarMissatgesArrayList(servidor.arrMsg2, msg);
                 this.mostrarMissatgesArrayList(servidor.arrMsg2);
                 this.mostrarMissatgeUsuari(socket, msg);
-                enviarMissatge(msg);
+                this.enviarMissatge(msg);
 
             }
             //arrClients.remove(os);
             //socket.close();
-            
+
             servidor.decrementarClientsConnectats(socket);
 
 //            if (desconnectatListener != null) {
 //                desconnectatListener.onClientDisconnect(socket);
 //            }
-            
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
 
     private void eliminarClientArray(CopyOnWriteArrayList<OutputStream> arrClients, OutputStream os) {
         if (!arrClients.isEmpty()) {
@@ -393,13 +394,8 @@ public class Atendre_Clients extends Thread {
             }
         }
 
-        //boolean isExistent = this.isSocketExistent(arrClients, socketClient);
-        //if (isExistent) {
         String msgDesconexio = "\nEl client " + socketClient + " s'ha desconectat satisfactoriament";
-        enviarMissatge(msgDesconexio);
-//        } else {
-//            System.out.println("\nEl client no s'ha trobat i per tant, no es pot enviar cap missatge");
-//        }
+        this.enviarMissatge(msgDesconexio);
     }
 
     private boolean eliminarSocketArray(ArrayList<Socket> arrSockets, Socket socket) {
@@ -412,11 +408,11 @@ public class Atendre_Clients extends Thread {
         }
 
         boolean isBorrat = this.isArrayListSocketExistent(arrSockets, socketClient);
-        
+
         if (isBorrat) {
             return isTrobat = true;
         }
-        
+
         System.out.println("\nEl client NO s'ha borrat del array correctament");
         return isTrobat;
 
@@ -436,25 +432,46 @@ public class Atendre_Clients extends Thread {
         }
         return isTrobat;
     }
-    
-    private boolean isSocketTrobat (ArrayList<Socket> arrSockets, Socket socket) {
+
+    private boolean isSocketTrobat(ArrayList<Socket> arrSockets, Socket socket) {
         boolean isTrobat = false;
-        for (Socket row: arrSockets) {
+        for (Socket row : arrSockets) {
             if (row.equals(socket)) {
                 isTrobat = true;
             }
         }
         return isTrobat;
     }
-    
+
     private void enviarClientsConectats(ArrayList<Socket> arrSockets) {
         System.out.println("------------Aquestos son els usuaris conectats actualment...-----------------");
-        if (arrSockets.size () > 0) {
-            for (Socket row: arrSockets) {
+        if (arrSockets.size() > 0) {
+            for (Socket row : arrSockets) {
                 enviarMissatge(String.valueOf(row));
             }
         } else {
             enviarMissatge("NO hi ha cap client conectat");
         }
+    }
+
+    private void enviarNomsClientsConectats(ArrayList<String> arrClients) {
+        if (arrClients.size() > 0) {
+            for (String row : arrClients) {
+                this.enviarMissatge(row);
+            }
+        }
+    }
+
+    public void deleteNomClient(ArrayList<String> arrNomsClients, String nom) {
+        if (arrNomsClients.size() > 0) {
+            for (String row : arrNomsClients) {
+                if (row.equalsIgnoreCase(nom)) {
+                    arrNomsClients.remove(nom);
+                }
+            }
+        }
+        String msgDesconexio = "El client amb nom: " + nom + " s'ha desconectat satisfactoriament";
+        System.out.println("El client amb nom: " + nom + " s'ha desconectat satisfactoriament");
+        this.enviarMissatge(msgDesconexio);
     }
 }

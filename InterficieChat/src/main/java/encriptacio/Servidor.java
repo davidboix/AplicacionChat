@@ -12,16 +12,6 @@ import java.net.SocketException;
 import java.util.ArrayList;
 
 /**
- * TODO: Prova de realitzar aquestos passos per no haver de crear nous
- * arraylists cada cop que
- *
- * 1 - Crearem el ArrayList al Servidor en ves de el fil Atendre_Clients.
- *
- * 2 - En el bucle while assignare una variable per guardar el ArrayList.
- *
- * 3 - Llavors li passarem el ArrayList per parametres a la instancia de
- * Atendre_Clients.
- *
  * Solucio Alternativa:
  *
  * Guardar el socket en la BD de MongoDB.
@@ -35,7 +25,7 @@ import java.util.ArrayList;
  *
  */
 //public class Servidor implements enDesconnexio{
-public class Servidor{
+public class Servidor {
     // IP MongoDB al nuvol: 57.129.5.24
     //Port MongodBD al nuvol: 27017
 
@@ -45,7 +35,7 @@ public class Servidor{
     private static int qtClients;
     public static String ipServidor;
     static ArrayList<Socket> arrSocket = new ArrayList<>();
-    private static ArrayList<String> arrNoms = new ArrayList<>();
+    public static ArrayList<String> arrNoms = new ArrayList<>();
     private ArrayList<String> arrMsg = new ArrayList<>();
     static ArrayList<String> arrMsg2 = new ArrayList<>();
 
@@ -88,7 +78,6 @@ public class Servidor{
 //    public static void setArrNoms(ArrayList<Socket> arrNoms) {
 //        Servidor.arrNoms = arrNoms;
 //    }
-
     public ArrayList<Socket> getArrSocket() {
         return arrSocket;
     }
@@ -151,35 +140,31 @@ public class Servidor{
             System.out.println("Servidor preparat per escoltar!");
             while (true) {
                 Socket newSocket = serverSocket.accept();
+                Client cl = new Client();
                 InputStream is = newSocket.getInputStream();
+
                 servidor.augmentarClientsConnectats();
                 servidor.guardarClientsArrayList(servidor.arrSocket, newSocket);
-                byte[] buffer = new byte[1024];
-                int intBuffer = is.read(buffer);
-                String nomUsuari = new String(buffer, 0, intBuffer);
-                System.out.println(nomUsuari);
-                servidor.guardarNomClients(servidor.arrNoms,nomUsuari);
-                servidor.augmentarClientsConnectats();
-                System.out.println("Clients guardats....");
-                for (String row: servidor.arrNoms) {
-                    System.out.println(row);
-                }
-                //servidor.mostrarClientsConectats(servidor.arrSocket);
 
+                //servidor.guardarNomClients(servidor.arrNoms,cl.getNomUsuari());
+                //servidor.mostrarClientsConectats(servidor.arrSocket);
                 servidor.getUltimClientConectat(servidor.arrSocket);
-                
-                new Atendre_Clients(newSocket,servidor.arrSocket).start();
-                int i = 0;
-                for (Socket row : arrSocket) {
-                    i++;
-                    System.out.println("Total sockets: " + i);
-                    if(row.isClosed()){
-                        arrSocket.remove(row);
-                    }
-                    System.out.println("Total sockets: " + i);
-                }
+
+                new Atendre_Clients(newSocket, servidor.arrSocket).start();
+                //new Atendre_Clients(newSocket).start();
+
+//                int i = 0;
+//                
+//                for (Socket row : arrSocket) {
+//                    i++;
+//                    System.out.println("Total sockets: " + i);
+//                    if(row.isClosed()){
+//                        arrSocket.remove(row);
+//                    }
+//                    System.out.println("Total sockets: " + i);
+//                }
             }
-            
+
         } catch (SocketException se) {
             se.printStackTrace();
             System.err.println("\nERROR!\nLa connexio ha sigut detinguda inesperadament!");
@@ -336,7 +321,7 @@ public class Servidor{
         }
         return false;
     }
-    
+
 //    @Override
 //    public void onClientDisconnect(Socket socket) {
 //        System.out.println("Client disconnectat: " + socket);
@@ -347,7 +332,6 @@ public class Servidor{
 //            System.out.println("Eliminacio del socket de l'array fallida");
 //        }
 //    }
-
     private String llegirMissatgeClient(InputStream is) throws IOException {
         byte[] buffer = new byte[500];
         int intBuffer = is.read(buffer);
@@ -388,9 +372,58 @@ public class Servidor{
         System.out.println("Aquest es el ultim client que s'ha connectat al servidor: " + socketClient);
     }
 
-    private static void guardarNomClients(ArrayList<String> arrNom, String nomClient) {
+    private void mostrarClientsGuardats(ArrayList<String> arrNom) {
+        if (arrNom.size() > 0) {
+            System.out.println("Clients conectats: ");
+            for (String row : arrNom) {
+                System.out.println(row);
+            }
+        }
+    }
+
+    public static String setNomClients(ArrayList<String> arrNomsClients, InputStream is) {
+        String nomUsuari = null;
+        try {
+            byte[] buffer = new byte[1024];
+            int intBuffer = is.read(buffer);
+            nomUsuari = new String(buffer, 0, intBuffer);
+            if (!nomUsuari.isEmpty()) {
+                setNomArrClients(arrNomsClients, nomUsuari);
+            }
+            if (nomUsuari != null) {
+                return nomUsuari;
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return "";
+    }
+
+    private static void setNomArrClients(ArrayList<String> arrNomsClients, String nomClient) {
         if (!nomClient.isEmpty()) {
-            arrNom.add(nomClient);
+            arrNomsClients.add(nomClient);
+        }
+    }
+
+    public static void getNomArrClients(ArrayList<String> arrNomsClients) {
+        if (arrNomsClients.size() > 0) {
+            System.out.println("\n\nNoms clients: ");
+            for (String row : arrNomsClients) {
+                System.out.println(row);
+            }
+        }
+    }
+
+    public static void deleteNomClient(ArrayList<String> arrNomsClients, String nom) {
+        if (arrNomsClients.size() > 0) {
+            for (String row : arrNomsClients) {
+                if (row.equalsIgnoreCase(nom)) {
+                    arrNomsClients.remove(nom);
+                }
+            }
         }
     }
 }

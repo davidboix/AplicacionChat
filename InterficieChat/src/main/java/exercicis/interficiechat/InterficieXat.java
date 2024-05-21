@@ -2,6 +2,7 @@ package exercicis.interficiechat;
 
 import encriptacio.Client;
 import encriptacio.EscoltaMsgServidor;
+import encriptacio.Servidor;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.IOException;
@@ -16,6 +17,8 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -30,17 +33,13 @@ public class InterficieXat extends javax.swing.JFrame {
      * missatges un sota el altre.
      */
     String resFinal = "";
-    //inicialitzaem el socket per a poder entrar al servidor
-    Socket socket = new Socket();
-    String msgArr[];
     String nomUsuari;
     Client cl = new Client();
+    JOptionPane jop = new JOptionPane();
 
     /**
      * Creates new form InterficieXat
      */
-    
-    
     public InterficieXat() {
         initComponents();
         inicialitzarInputs();
@@ -54,7 +53,6 @@ public class InterficieXat extends javax.swing.JFrame {
         inicialitzarInputs();
         inicialitzarIconos();
         this.nomUsuari = nom;
-        //obrim el socket per a connectar al servidor
         cl.crearConnexio(this.textAreaMissatge, nom);
     }
 
@@ -214,7 +212,6 @@ public class InterficieXat extends javax.swing.JFrame {
      * @param evt El event que activara la funcio
      */
     private void botoEnviarMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoEnviarMsgActionPerformed
-        System.out.println(nomUsuari);
         String msg = this.inputMsg.getText();
         String msgG = msg + "-/0/u/i/4/9<<z" + nomUsuari;
         if (msg.isEmpty()) {
@@ -222,9 +219,21 @@ public class InterficieXat extends javax.swing.JFrame {
             return;
         }
         if (!msg.isEmpty()) {
-            
             cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msgG);
-            System.out.println("Aquest es el nom del usuari: " + cl.getNomUsuari());
+            this.netejarInput(this.inputMsg);
+            
+//            String[] opcions = {"Acceptar"};
+//            jop.showOptionDialog(
+//                    null,
+//                    "El missatge s'ha enviat correctamnet a TOTS els usuaris!",
+//                    "Dades erronees",
+//                    jop.DEFAULT_OPTION,
+//                    jop.WARNING_MESSAGE,
+//                    null,
+//                    opcions,
+//                    opcions[0]
+//            );
+
         }
 
         //aquest try agafara els misstages del textarea i els enviara al servidor
@@ -266,9 +275,40 @@ public class InterficieXat extends javax.swing.JFrame {
         try {
             String msg = "exit";
             if (msg.equalsIgnoreCase("exit")) {
-                cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msg);
-                this.dispose();
+                /**
+                 * TODO: Crear un metode per el JOptionPane pasant els missatge
+                 * que volem que aparegui, i les opcions.s
+                 */
+                String[] opcions = {"Acceptar", "Rebutjar"};
+                int resposta = jop.showOptionDialog(
+                        null,
+                        "Esteu segurs que voleu tancar sessió?",
+                        "Sortida xat",
+                        jop.DEFAULT_OPTION,
+                        jop.WARNING_MESSAGE,
+                        null,
+                        opcions,
+                        opcions[0]
+                );
+
+                if (resposta < 1) {
+                    cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msg);
+                    this.dispose();
+                } else {
+                    String[] noSortida = {"Acceptar"};
+                    jop.showOptionDialog(
+                            null,
+                            "No heu sortit de la aplicatiu, i per tant, NO heu tancat sessió.",
+                            "Sortida xat",
+                            jop.DEFAULT_OPTION,
+                            jop.WARNING_MESSAGE,
+                            null,
+                            noSortida,
+                            noSortida[0]
+                    );
+                }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -362,6 +402,13 @@ public class InterficieXat extends javax.swing.JFrame {
         this.botoXatGrupal.setIcon(iconoXatGrupal);
         this.botoLogout.setIcon(iconoSettings);
         this.botoEnviarMsg.setIcon(iconoEnviar);
+    }
+
+    private void netejarInput(JTextField msg) {
+
+        if (!msg.getText().isEmpty()) {
+            msg.setText(null);
+        }
     }
 
     /**

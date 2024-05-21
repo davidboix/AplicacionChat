@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import org.bson.Document;
@@ -67,9 +66,9 @@ public class Login extends javax.swing.JFrame {
         mainVista = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         etiquetaPassword = new javax.swing.JLabel();
-        inputPassword = new componentsPersonalitzats.JPasswordPlaceholder();
         etiquetaUsuari = new javax.swing.JLabel();
         usuariText = new componentsPersonalitzats.JTextFieldPersonalitzat();
+        inputPassword = new javax.swing.JPasswordField();
         jPanel3 = new javax.swing.JPanel();
         footerVista = new javax.swing.JPanel();
         botoLogin = new javax.swing.JButton();
@@ -115,18 +114,6 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         jPanel2.add(etiquetaPassword, gridBagConstraints);
 
-        inputPassword.setToolTipText("Contrasenya de l'usuari");
-        inputPassword.setEchoChar('\u0000');
-        inputPassword.setFocusCycleRoot(true);
-        inputPassword.setPreferredSize(new java.awt.Dimension(200, 30));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        jPanel2.add(inputPassword, gridBagConstraints);
-
         etiquetaUsuari.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         etiquetaUsuari.setText("Usuari");
         etiquetaUsuari.setToolTipText("Usuari");
@@ -145,6 +132,13 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel2.add(usuariText, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        jPanel2.add(inputPassword, gridBagConstraints);
 
         mainVista.add(jPanel2, java.awt.BorderLayout.CENTER);
 
@@ -417,8 +411,8 @@ public class Login extends javax.swing.JFrame {
      */
     private void inicialitzarInput() {
         String psw = new String(this.inputPassword.getPassword());
-        this.inputPassword.setPlaceHolder("Introdueix el nom...");
-        this.inputPassword.setText(this.inputPassword.getPlaceHolder());
+        //this.inputPassword.setPlaceHolder("Introdueix el nom...");
+        //this.inputPassword.setText(this.inputPassword.getPlaceHolder());
     }
 
     /**
@@ -656,7 +650,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel etiquetaUsuari;
     private javax.swing.JPanel footerVista;
     private javax.swing.JPanel headerVista;
-    private componentsPersonalitzats.JPasswordPlaceholder inputPassword;
+    private javax.swing.JPasswordField inputPassword;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel1;
