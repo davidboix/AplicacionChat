@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -220,8 +221,22 @@ public class InterficieXat extends javax.swing.JFrame {
         }
         if (!msg.isEmpty()) {
             cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msgG);
+            JOptionPane jop = new JOptionPane();
+            Icon imagenLabel = new ImageIcon("src\\main\\java\\img\\check.png");
+            String[] opcions = {"Acceptar"};
+
+            jop.showOptionDialog(
+                    null,
+                    "Missatge Enviat",
+                    "Missatge enviat correctament",
+                    jop.DEFAULT_OPTION,
+                    jop.WARNING_MESSAGE,
+                    imagenLabel,
+                    opcions,
+                    opcions[0]
+            );
             this.netejarInput(this.inputMsg);
-            
+
 //            String[] opcions = {"Acceptar"};
 //            jop.showOptionDialog(
 //                    null,
@@ -233,7 +248,6 @@ public class InterficieXat extends javax.swing.JFrame {
 //                    opcions,
 //                    opcions[0]
 //            );
-
         }
 
         //aquest try agafara els misstages del textarea i els enviara al servidor
