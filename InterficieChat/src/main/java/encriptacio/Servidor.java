@@ -355,7 +355,7 @@ public class Servidor {
 
     private static void setNomArrClients(ArrayList<String> arrNomsClients, String nomClient) {
         if (!nomClient.isEmpty()) {
-            arrNomsClients.add(nomClient);
+            arrNomsClients.add(nomClient + "\n");
         }
     }
 

@@ -247,7 +247,7 @@ public class EscoltaMsgServidor extends Thread {
             this.saltLiniaTextArea(this.msgArr);
         } else {
             //this.msgArr.append("[" + dataActual + " || " + horaActual + "]: " + msgGood[0] + "\n");
-            this.msgArr.append("Clients conectats: " + msgGood[0]);
+            //this.msgArr.append("Clients conectats: " + msgGood[0]);
         }
     }
     
@@ -261,8 +261,8 @@ public class EscoltaMsgServidor extends Thread {
             //this.clientArr.append(nomClient);
             //this.saltLiniaTextArea(this.msgArr);
         } else {
-            this.clientArr.append("\n"+msgGood[0]);
-            this.saltLiniaTextArea(clientArr);
+            this.clientArr.append(msgGood[0]);
+            //this.saltLiniaTextArea(clientArr);
         }
     }
 

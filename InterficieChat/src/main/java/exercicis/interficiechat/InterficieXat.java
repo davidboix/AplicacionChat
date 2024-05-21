@@ -215,7 +215,7 @@ public class InterficieXat extends javax.swing.JFrame {
      */
     private void botoEnviarMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoEnviarMsgActionPerformed
         String msg = this.inputMsg.getText();
-        String msgG = msg + "-/0/u/i/4/9<<z" + "///8923" + nomUsuari;
+        String msgG = msg + "-/0/u/i/4/9<<z" + nomUsuari;
         if (msg.isEmpty()) {
             System.out.println("NO pots enviar un missatge en blanc!");
             return;
