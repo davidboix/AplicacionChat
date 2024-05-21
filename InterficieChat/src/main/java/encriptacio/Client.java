@@ -173,7 +173,6 @@ public class Client {
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
             Client cl = new Client();
-            cl.setNomUsuari("oleh");
             //new EscoltaMsgServidor(socket, is).start();
             new EscoltaMsgServidor(socket, is, cl).start();
 
@@ -196,7 +195,7 @@ public class Client {
         }
     }
 
-    public void crearConnexio(JTextArea textAreaMissatge, String nom) {
+    public void crearConnexio(JTextArea textAreaMissatge, String nom, JTextArea clientsConnectats) {
 
         try {
             Socket socket = new Socket();
@@ -214,7 +213,7 @@ public class Client {
             is = socket.getInputStream();
             this.setIs(is);
 
-            new EscoltaMsgServidor(socket, is, textAreaMissatge, this.getNomUsuari()).start();
+            new EscoltaMsgServidor(socket, is, textAreaMissatge, this.getNomUsuari(), clientsConnectats).start();
         } catch (IOException e) {
             System.out.println("No s'ha pogut connectar al servidor");
         }

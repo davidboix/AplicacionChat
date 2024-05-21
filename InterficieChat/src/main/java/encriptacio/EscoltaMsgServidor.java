@@ -17,6 +17,7 @@ import javax.swing.JTextArea;
 public class EscoltaMsgServidor extends Thread {
 
     private JTextArea msgArr;
+    private JTextArea clientArr;
     private Socket socket;
     private InputStream inputStream;
     private String nomUsuari;
@@ -58,6 +59,23 @@ public class EscoltaMsgServidor extends Thread {
         this.inputStream = inputStream;
         this.msgArr = msgArr;
         this.nomUsuari = nomUsuari;
+    }
+
+    public EscoltaMsgServidor(JTextArea msgArr, JTextArea clientArr, Socket socket, InputStream inputStream, String nomUsuari, Client client) {
+        this.msgArr = msgArr;
+        this.clientArr = clientArr;
+        this.socket = socket;
+        this.inputStream = inputStream;
+        this.nomUsuari = nomUsuari;
+        this.client = client;
+    }
+    
+    public EscoltaMsgServidor(Socket socket, InputStream inputStream, JTextArea msgArr, String nomUsuari, JTextArea clientArr) {
+        this.socket = socket;
+        this.inputStream = inputStream;
+        this.msgArr = msgArr;
+        this.nomUsuari = nomUsuari;
+        this.clientArr = clientArr;
     }
 
     public EscoltaMsgServidor(JTextArea msgArr) {
@@ -156,6 +174,7 @@ public class EscoltaMsgServidor extends Thread {
                     System.out.println("\nMissatge del servidor: " + msg);
                     System.out.print("Escriu el missatge que vulguis al servidor: ");
                     this.afegirMissatgeTextArea(msg);
+                    this.afegirClientsConnectats(msg);
                 }
             }
         } catch (IOException ioe) {
@@ -229,6 +248,21 @@ public class EscoltaMsgServidor extends Thread {
         } else {
             //this.msgArr.append("[" + dataActual + " || " + horaActual + "]: " + msgGood[0] + "\n");
             this.msgArr.append("Clients conectats: " + msgGood[0]);
+        }
+    }
+    
+    private void afegirClientsConnectats(String msg){
+        String[] msgGood = msg.split("-/0/u/i/4/9<<z");
+        System.out.println("msgGood: " + msgGood[0]);
+        //msgArr.append(msg);
+        String nomClient = this.getNomClient(msgGood);
+        String msgClient = this.getMsgClient(msgGood);
+        if (msgGood.length > 1) {
+            //this.clientArr.append(nomClient);
+            //this.saltLiniaTextArea(this.msgArr);
+        } else {
+            this.clientArr.append("\n"+msgGood[0]);
+            this.saltLiniaTextArea(clientArr);
         }
     }
 

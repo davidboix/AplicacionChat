@@ -54,7 +54,7 @@ public class InterficieXat extends javax.swing.JFrame {
         inicialitzarInputs();
         inicialitzarIconos();
         this.nomUsuari = nom;
-        cl.crearConnexio(this.textAreaMissatge, nom);
+        cl.crearConnexio(this.textAreaMissatge, nom, this.clientsConnectats);
     }
 
     /**
@@ -83,8 +83,8 @@ public class InterficieXat extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         textAreaMissatge = new javax.swing.JTextArea();
         llistatVista = new javax.swing.JPanel();
-        llistatClient = new javax.swing.JButton();
         textLlistatUsuarisConectats = new javax.swing.JLabel();
+        clientsConnectats = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CostaXat (Provisional)");
@@ -184,12 +184,13 @@ public class InterficieXat extends javax.swing.JFrame {
         llistatVista.setBackground(new java.awt.Color(203, 219, 242));
         llistatVista.setLayout(new java.awt.BorderLayout());
 
-        llistatClient.setText("Client 1");
-        llistatVista.add(llistatClient, java.awt.BorderLayout.CENTER);
-
         textLlistatUsuarisConectats.setFont(new Font("Segoe UI",Font.PLAIN,12));
         textLlistatUsuarisConectats.setText("Llistat usuaris connectats");
         llistatVista.add(textLlistatUsuarisConectats, java.awt.BorderLayout.PAGE_START);
+
+        clientsConnectats.setColumns(20);
+        clientsConnectats.setRows(5);
+        llistatVista.add(clientsConnectats, java.awt.BorderLayout.CENTER);
 
         vistaGeneral.add(llistatVista, java.awt.BorderLayout.LINE_START);
 
@@ -214,7 +215,7 @@ public class InterficieXat extends javax.swing.JFrame {
      */
     private void botoEnviarMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoEnviarMsgActionPerformed
         String msg = this.inputMsg.getText();
-        String msgG = msg + "-/0/u/i/4/9<<z" + nomUsuari;
+        String msgG = msg + "-/0/u/i/4/9<<z" + "///8923" + nomUsuari;
         if (msg.isEmpty()) {
             System.out.println("NO pots enviar un missatge en blanc!");
             return;
@@ -465,6 +466,7 @@ public class InterficieXat extends javax.swing.JFrame {
     private javax.swing.JButton botoLogout;
     private javax.swing.JButton botoXatGrupal;
     private javax.swing.JButton botoXatPrivat;
+    private javax.swing.JTextArea clientsConnectats;
     private javax.swing.JPanel espaiControlMissatge;
     private javax.swing.JPanel espaiMissatges;
     private javax.swing.JPanel espaiSeleccioXat;
@@ -472,7 +474,6 @@ public class InterficieXat extends javax.swing.JFrame {
     private javax.swing.JPanel headerVista;
     private componentsPersonalitzats.JTextFieldPersonalitzat inputMsg;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton llistatClient;
     private javax.swing.JPanel llistatVista;
     private javax.swing.JPanel mainVista;
     private javax.swing.JTextArea textAreaMissatge;
