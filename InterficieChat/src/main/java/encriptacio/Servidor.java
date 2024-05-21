@@ -462,7 +462,7 @@ public class Servidor {
                 //servidor.guardarNomClients(servidor.arrNoms,cl.getNomUsuari());
                 //servidor.mostrarClientsConectats(servidor.arrSocket);
                 servidor.getUltimClientConectat(servidor.arrSocket);
-
+                
                 new Atendre_Clients(newSocket, servidor.arrSocket).start();
                 //new Atendre_Clients(newSocket).start();
 

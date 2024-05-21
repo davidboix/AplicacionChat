@@ -306,7 +306,7 @@ public class Atendre_Clients extends Thread {
                     boolean isTrobat = this.isSocketTrobat(servidor.arrSocket, this.socket);
                     if (isTrobat) {
                         this.eliminarClientArray(this.arrClients, this.os);
-                        this.enviarMissatgeDesconexio(servidor.arrSocket, this.socket);
+                        //this.enviarMissatgeDesconexio(servidor.arrSocket, this.socket);
                         this.eliminarSocketArray(servidor.arrSocket, this.socket);
                         
                         this.deleteNomClient(servidor.arrNoms, nomClient);
