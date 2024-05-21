@@ -1,7 +1,11 @@
 package exercicis.interficiechat;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import metatron.CrudMONGO;
 
 /**
@@ -208,7 +212,23 @@ public class proves extends javax.swing.JFrame {
     }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         CrudMONGO cm = this.inicialitzarMongo();
-        cm.getUsers("david");
+        cm.setNomColeccio("missatges");
+        System.out.println("Aquest es el nom de la coleccio: " + cm.getNomColeccio());
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+        String data = formatter.format(date);
+
+        String[] arrData = data.split(" ");
+
+        String dataFormat = arrData[0];
+
+        System.out.println("Aquesta es la data actual: " + dataFormat);
+
+        //System.out.println("Data de avui: " + data);
+        //System.out.println(formatter.format(date));
+        //cm.setDadesMsg("david", "aquest es un missatge", data);
+        //cm.getUsers("david");
     }//GEN-LAST:event_jButton2ActionPerformed
     /**
      * TODO: Funcio inacabada Funcio que farem servir per poder calcular la edat

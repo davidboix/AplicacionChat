@@ -378,7 +378,7 @@ public class Atendre_Clients extends Thread {
         System.out.println();
         for (OutputStream clients : arrClients) {
             try {
-                clients.write((msg + "\n").getBytes());
+                clients.write(msg.getBytes());
                 clients.flush();
             } catch (IOException e) {
                 e.printStackTrace();

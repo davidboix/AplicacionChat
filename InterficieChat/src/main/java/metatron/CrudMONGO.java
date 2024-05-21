@@ -197,21 +197,21 @@ public class CrudMONGO {
 
     }
 
-    private void setDadesMsg(String nomUser, String msg, Date date) {
+    public void setDadesMsg(String nomUser, String msg, String data) {
 
         this.setUrlConnexio(this.inicialitzarServidor());
         MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
         try ( MongoClient mc = new MongoClient(mcu)) {
-
             MongoCollection<Document> mongoC = this.accedirColeccions(mc, this.getNomColeccio());
+            
             Document missatgeNou = new Document("nomUsuari", "david")
                     .append("missatgeUsuari", msg)
-                    .append("dataMissatge", date);
+                    .append("dataMissatge", data);
             mongoC.insertOne(missatgeNou);
             System.out.println("S'ha introduit un nou missatge...");
             
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
     }

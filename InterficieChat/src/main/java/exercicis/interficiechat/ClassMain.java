@@ -23,7 +23,8 @@ public class ClassMain extends javax.swing.JFrame {
      *
      */
     private void inicialitzarIcons() {
-        ImageIcon iconoClientAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
+        //ImageIcon iconoClientAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
+        ImageIcon iconoClientAModificar = new ImageIcon(getClass().getResource("/logoXat.png"));
         ImageIcon iconoServidorAModificar = new ImageIcon("src\\main\\java\\img\\iconoServidor.png");
         //ImageIcon iconoPrincipalAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
 
@@ -110,11 +111,21 @@ public class ClassMain extends javax.swing.JFrame {
         footer.setLayout(new java.awt.GridBagLayout());
 
         accedirClient.setText("Client");
+        accedirClient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                accedirClientActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 50);
         footer.add(accedirClient, gridBagConstraints);
 
         accedirServidor.setText("Servidor");
+        accedirServidor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                accedirServidorActionPerformed(evt);
+            }
+        });
         footer.add(accedirServidor, new java.awt.GridBagConstraints());
 
         panelGeneral.add(footer, java.awt.BorderLayout.PAGE_END);
@@ -233,6 +244,18 @@ public class ClassMain extends javax.swing.JFrame {
     private void opcioSortirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcioSortirActionPerformed
         this.dispose();
     }//GEN-LAST:event_opcioSortirActionPerformed
+
+    private void accedirClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accedirClientActionPerformed
+        VistaPrincipal vp = new VistaPrincipal();
+        this.mostrarInterficie(vp);
+        this.tancarFinestra();
+    }//GEN-LAST:event_accedirClientActionPerformed
+
+    private void accedirServidorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accedirServidorActionPerformed
+        IniciServidor is = new IniciServidor();
+        this.mostrarInterficie(is);
+        this.tancarFinestra();
+    }//GEN-LAST:event_accedirServidorActionPerformed
 
     private void tancarFinestra() {
         this.setVisible(false);

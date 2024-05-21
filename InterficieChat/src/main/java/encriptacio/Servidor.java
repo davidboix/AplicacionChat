@@ -43,6 +43,10 @@ public class Servidor {
 
     }
 
+    public Servidor(String ipServidor) {
+        this.ipServidor = ipServidor;
+    }
+
     /**
      *
      * @param qtClients
@@ -94,11 +98,11 @@ public class Servidor {
         this.arrMsg = arrMsg;
     }
 
-    public static String getIpServidor() {
+    public String getIpServidor() {
         return ipServidor;
     }
 
-    public static void setIpServidor(String ipServidor) {
+    public void setIpServidor(String ipServidor) {
         Servidor.ipServidor = ipServidor;
     }
 
@@ -122,60 +126,7 @@ public class Servidor {
     }
 
     public static void main(String[] args) {
-        Servidor servidor = new Servidor();
-
-        try {
-            System.out.println("Creem el socket servidor");
-            ServerSocket serverSocket = new ServerSocket();
-
-            //Adreça utilitzada per fer les proves.
-            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
-
-            //Adreça utilitzada per aixecar el servidor utilitzant interficie grafica.
-            //InetSocketAddress addr = new InetSocketAddress(ipServidor, 5556);
-            serverSocket.bind(addr);
-
-            boolean semafor = false;
-
-            System.out.println("Servidor preparat per escoltar!");
-            while (true) {
-                Socket newSocket = serverSocket.accept();
-                Client cl = new Client();
-                InputStream is = newSocket.getInputStream();
-
-                servidor.augmentarClientsConnectats();
-                servidor.guardarClientsArrayList(servidor.arrSocket, newSocket);
-
-                //servidor.guardarNomClients(servidor.arrNoms,cl.getNomUsuari());
-                //servidor.mostrarClientsConectats(servidor.arrSocket);
-                servidor.getUltimClientConectat(servidor.arrSocket);
-
-                new Atendre_Clients(newSocket, servidor.arrSocket).start();
-                //new Atendre_Clients(newSocket).start();
-
-//                int i = 0;
-//                
-//                for (Socket row : arrSocket) {
-//                    i++;
-//                    System.out.println("Total sockets: " + i);
-//                    if(row.isClosed()){
-//                        arrSocket.remove(row);
-//                    }
-//                    System.out.println("Total sockets: " + i);
-//                }
-            }
-
-        } catch (SocketException se) {
-            se.printStackTrace();
-            System.err.println("\nERROR!\nLa connexio ha sigut detinguda inesperadament!");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("\nERROR!\nHi ha hagut un error i per tant no s'ha executat correctament el servidor!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("\nERROR!\nHi ha hagut un error general i per tant el servidor no ha funcionat com toca!");
-        }
-
+        iniciServidor();
     }
 
     /**
@@ -398,7 +349,7 @@ public class Servidor {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return "";
     }
 
@@ -424,6 +375,118 @@ public class Servidor {
                     arrNomsClients.remove(nom);
                 }
             }
+        }
+    }
+
+    public void iniciServidor(String ipServidor) {
+        Servidor servidor = new Servidor();
+
+        try {
+            System.out.println("Creem el socket servidor");
+            ServerSocket serverSocket = new ServerSocket();
+
+            //Adreça utilitzada per fer les proves.
+            InetSocketAddress addr = new InetSocketAddress(ipServidor, 5556);
+
+            //Adreça utilitzada per aixecar el servidor utilitzant interficie grafica.
+            //InetSocketAddress addr = new InetSocketAddress(ipServidor, 5556);
+            serverSocket.bind(addr);
+
+            boolean semafor = false;
+
+            System.out.println("Servidor preparat per escoltar!");
+            while (true) {
+                Socket newSocket = serverSocket.accept();
+                Client cl = new Client();
+                InputStream is = newSocket.getInputStream();
+
+                servidor.augmentarClientsConnectats();
+                servidor.guardarClientsArrayList(servidor.arrSocket, newSocket);
+
+                //servidor.guardarNomClients(servidor.arrNoms,cl.getNomUsuari());
+                //servidor.mostrarClientsConectats(servidor.arrSocket);
+                servidor.getUltimClientConectat(servidor.arrSocket);
+
+                new Atendre_Clients(newSocket, servidor.arrSocket).start();
+                //new Atendre_Clients(newSocket).start();
+
+//                int i = 0;
+//                
+//                for (Socket row : arrSocket) {
+//                    i++;
+//                    System.out.println("Total sockets: " + i);
+//                    if(row.isClosed()){
+//                        arrSocket.remove(row);
+//                    }
+//                    System.out.println("Total sockets: " + i);
+//                }
+            }
+
+        } catch (SocketException se) {
+            se.printStackTrace();
+            System.err.println("\nERROR!\nLa connexio ha sigut detinguda inesperadament!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un error i per tant no s'ha executat correctament el servidor!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("\nERROR!\nHi ha hagut un error general i per tant el servidor no ha funcionat com toca!");
+        }
+    }
+
+    public static void iniciServidor() {
+        Servidor servidor = new Servidor();
+
+        try {
+            System.out.println("Creem el socket servidor");
+            ServerSocket serverSocket = new ServerSocket();
+
+            //Adreça utilitzada per fer les proves.
+            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+
+            //Adreça utilitzada per aixecar el servidor utilitzant interficie grafica.
+            //InetSocketAddress addr = new InetSocketAddress(ipServidor, 5556);
+            serverSocket.bind(addr);
+
+            boolean semafor = false;
+
+            System.out.println("Servidor preparat per escoltar!");
+            while (true) {
+                Socket newSocket = serverSocket.accept();
+                Client cl = new Client();
+                InputStream is = newSocket.getInputStream();
+
+                servidor.augmentarClientsConnectats();
+                servidor.guardarClientsArrayList(servidor.arrSocket, newSocket);
+
+                //servidor.guardarNomClients(servidor.arrNoms,cl.getNomUsuari());
+                //servidor.mostrarClientsConectats(servidor.arrSocket);
+                servidor.getUltimClientConectat(servidor.arrSocket);
+
+                new Atendre_Clients(newSocket, servidor.arrSocket).start();
+                //new Atendre_Clients(newSocket).start();
+
+//                int i = 0;
+//                
+//                for (Socket row : arrSocket) {
+//                    i++;
+//                    System.out.println("Total sockets: " + i);
+//                    if(row.isClosed()){
+//                        arrSocket.remove(row);
+//                    }
+//                    System.out.println("Total sockets: " + i);
+//                }
+            }
+
+        } catch (SocketException se) {
+            se.printStackTrace();
+            System.err.println("\nERROR!\nLa connexio ha sigut detinguda inesperadament!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("\nERROR!\nHi ha hagut un error i per tant no s'ha executat correctament el servidor!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("\nERROR!\nHi ha hagut un error general i per tant el servidor no ha funcionat com toca!");
         }
     }
 }

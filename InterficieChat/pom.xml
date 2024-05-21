@@ -4,6 +4,15 @@
     <groupId>exercicis.interficiechat</groupId>
     <artifactId>InterficieChat</artifactId>
     <version>1.0</version>
+    <build>
+        <resources>
+            <resource>
+                <directory>
+                    src/main/java/img
+                </directory>
+            </resource>
+        </resources>
+    </build>
     <repositories>
         <repository>
             <id>unknown-jars-temp-repo</id>

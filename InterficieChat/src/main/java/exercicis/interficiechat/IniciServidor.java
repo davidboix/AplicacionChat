@@ -136,12 +136,12 @@ public class IniciServidor extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String [] i = {};
         String ipServidor = this.inputServidor.getText();
-        //Comentat per a que no done error
-        //Pose la ip que s'ha introduit a la interficie per a crear el servidor
-        //Servidor.setIpServidor(ipServidor);
+        Servidor servidor = new Servidor();
+        servidor.setIpServidor(ipServidor);
+        servidor.iniciServidor(servidor.getIpServidor());
         
         if (!ipServidor.isEmpty()) {
-            Servidor.main(i);
+            
             //this.comprovacioIP(ipServidor);
         } else {
             System.out.println("No pot quedar buit!");
