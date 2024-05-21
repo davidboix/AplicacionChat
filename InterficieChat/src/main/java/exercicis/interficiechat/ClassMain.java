@@ -25,7 +25,7 @@ public class ClassMain extends javax.swing.JFrame {
     private void inicialitzarIcons() {
         //ImageIcon iconoClientAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
         ImageIcon iconoClientAModificar = new ImageIcon(getClass().getResource("/logoXat.png"));
-        ImageIcon iconoServidorAModificar = new ImageIcon("src\\main\\java\\img\\iconoServidor.png");
+        ImageIcon iconoServidorAModificar = new ImageIcon(getClass().getResource("/iconoServidor.png"));
         //ImageIcon iconoPrincipalAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
 
         Image iconoServidorModificat = iconoServidorAModificar.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);

@@ -301,7 +301,7 @@ public class Registre extends javax.swing.JFrame {
                  * missatge avisant al usuari en que ha fallat.
                  */
                 JOptionPane jop = new JOptionPane();
-                Icon imagenLabel = new ImageIcon("src\\main\\java\\img\\passwordErroni.png");
+                Icon imagenLabel = new ImageIcon(getClass().getResource("/passwordErroni.png"));
                 String[] opcions = {"Acceptar"};
 
                 int correcte = jop.showOptionDialog(
@@ -464,7 +464,7 @@ public class Registre extends javax.swing.JFrame {
      * usuari per a que el usuari tingui una idea de el que fa aquell boto
      */
     private void afegirIcono() {
-        ImageIcon iconoUsuari = new ImageIcon("src\\main\\java\\img\\altaUsuari.png");
+        ImageIcon iconoUsuari = new ImageIcon(getClass().getResource("/altaUsuari.png"));
         Image iconoUsuariModificar = iconoUsuari.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
         ImageIcon iconoBuscar = new ImageIcon(iconoUsuariModificar);
         this.botoAltaUsuari.setIcon(iconoBuscar);

@@ -328,7 +328,7 @@ public class Login extends javax.swing.JFrame {
                      * de que esta passant.
                      */
                     JOptionPane jop = new JOptionPane();
-                    Icon imagenLabel = new ImageIcon("src\\main\\java\\img\\passwordErroni.png");
+                    Icon imagenLabel = new ImageIcon(getClass().getResource("/passwordErroni.png"));
                     String[] opcions = {"Acceptar"};
 
                     jop.showOptionDialog(
@@ -351,7 +351,7 @@ public class Login extends javax.swing.JFrame {
                  * tant el erroni funcionament de la nostra aplicacio.
                  */
                 JOptionPane jop = new JOptionPane();
-                Icon imagenLabel = new ImageIcon("src\\main\\java\\img\\usuariInexistent.png");
+                Icon imagenLabel = new ImageIcon(getClass().getResource("/usuariInexistent.png"));
                 String[] opcions = {"Acceptar"};
 
                 jop.showOptionDialog(

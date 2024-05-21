@@ -209,7 +209,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
      * s'inicia la aplicació.
      */
     private void inicialitzarIconos() {
-        ImageIcon logoXatAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
+        ImageIcon logoXatAModificar = new ImageIcon(getClass().getResource("/logoXat.png"));
         Image logoXatModificat = logoXatAModificar.getImage().getScaledInstance(512, 512, Image.SCALE_SMOOTH);
         ImageIcon logoXat = new ImageIcon(logoXatModificat);
         this.iconoImatge.setIcon(logoXat);

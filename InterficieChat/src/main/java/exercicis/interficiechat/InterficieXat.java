@@ -222,7 +222,7 @@ public class InterficieXat extends javax.swing.JFrame {
         if (!msg.isEmpty()) {
             cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msgG);
             JOptionPane jop = new JOptionPane();
-            Icon imagenLabel = new ImageIcon("src\\main\\java\\img\\check.png");
+            Icon imagenLabel = new ImageIcon(getClass().getResource("/check.png"));
             String[] opcions = {"Acceptar"};
 
             jop.showOptionDialog(
@@ -397,10 +397,10 @@ public class InterficieXat extends javax.swing.JFrame {
      */
     private void inicialitzarIconos() {
 
-        ImageIcon iconoXatPrivatAModificar = new ImageIcon("src\\main\\java\\img\\iconoXatPrivat.png");
-        ImageIcon iconoXatGrupalAModificar = new ImageIcon("src\\main\\java\\img\\iconoXatGrupal.png");
-        ImageIcon iconoSettingAModificar = new ImageIcon("src\\main\\java\\img\\iconoLogout.png");
-        ImageIcon iconoEnviarModificar = new ImageIcon("src\\main\\java\\img\\iconoEnviar.png");
+        ImageIcon iconoXatPrivatAModificar = new ImageIcon(getClass().getResource("/iconoXatPrivat.png"));
+        ImageIcon iconoXatGrupalAModificar = new ImageIcon(getClass().getResource("/iconoXatGrupal.png"));
+        ImageIcon iconoSettingAModificar = new ImageIcon(getClass().getResource("/iconoLogout.png"));
+        ImageIcon iconoEnviarModificar = new ImageIcon(getClass().getResource("/iconoEnviar.png"));
 
         Image iconoXatPrivatModificat = iconoXatPrivatAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         Image iconoXatGrupalModificat = iconoXatGrupalAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
