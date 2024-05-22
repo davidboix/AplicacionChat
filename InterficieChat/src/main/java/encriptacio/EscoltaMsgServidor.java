@@ -192,6 +192,10 @@ public class EscoltaMsgServidor extends Thread {
                     System.out.print("Escriu el missatge que vulguis al servidor: ");
                     this.afegirMissatgeTextArea(msg);
                     System.out.println("Aquest es el msg: " + msg);
+                    //TODO: if per provar de borrar el textfield de clients connectats per a que no s'acumulin els clients
+//                    if(!msg.contains("-/0/u/i/4/9<<z")){
+//                        netejarTextArea();
+//                    }
                     this.afegirClientsConnectats(msg);
                 }
             }
