@@ -36,8 +36,8 @@ public class Servidor {
     private static int qtClients;
     public static String ipServidor;
     static ArrayList<Socket> arrSocket = new ArrayList<>();
-    //public static ArrayList<String> arrNoms = new ArrayList<>();
-    public static CopyOnWriteArrayList<String> arrNoms = new CopyOnWriteArrayList<>();
+    public static ArrayList<String> arrNoms = new ArrayList<>();
+    //public static CopyOnWriteArrayList<String> arrNoms = new CopyOnWriteArrayList<>();
     private ArrayList<String> arrMsg = new ArrayList<>();
     static ArrayList<String> arrMsg2 = new ArrayList<>();
 
@@ -384,6 +384,7 @@ public class Servidor {
 
         return "";
     }
+    
 
     private static void setNomArrClients(ArrayList<String> arrNomsClients, String nomClient) {
         if (!nomClient.isEmpty()) {

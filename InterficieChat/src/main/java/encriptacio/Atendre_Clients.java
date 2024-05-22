@@ -301,7 +301,7 @@ public class Atendre_Clients extends Thread {
             //this.enviarNomsClientsConectats(servidor.arrNoms);
             
             this.enviarNomsClientsConectats(Servidor.arrNoms);
-
+            
             byte[] buffer = new byte[1024];
             int intBuffer;
             boolean semafor = false;
@@ -313,11 +313,13 @@ public class Atendre_Clients extends Thread {
                 if (msg.equalsIgnoreCase("exit")) {
                     boolean isTrobat = this.isSocketTrobat(servidor.arrSocket, this.socket);
                     if (isTrobat) {
+                        System.out.println("Passem per el exit...");
                         this.eliminarClientArray(this.arrClients, this.os);
                         //this.enviarMissatgeDesconexio(servidor.arrSocket, this.socket);
-                        //this.eliminarSocketArray(servidor.arrSocket, this.socket);
                         this.eliminarSocketArray(Servidor.arrSocket, this.socket);
-
+                        EscoltaMsgServidor ems = new EscoltaMsgServidor();
+                        ems.netejarTextArea();
+                       
                         //this.deleteNomClient(servidor.arrNoms, nomClient);
                         Servidor.deleteNomClient(Servidor.arrNoms, nomClient);
                         //servidor.deleteNomClient(servidor.arrNoms, nomClient.trim());

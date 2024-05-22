@@ -186,7 +186,6 @@ public class EscoltaMsgServidor extends Thread {
             byte[] buffer = new byte[1024];
             while (!this.socket.isClosed()) {
                 int intBytes = this.inputStream.read(buffer);
-                this.inputStream.close();
                 if (intBytes != -1) {
                     String msg = new String(buffer, 0, intBytes);
                     System.out.println("\nMissatge del servidor: " + msg);
@@ -270,11 +269,17 @@ public class EscoltaMsgServidor extends Thread {
         }
     }
 
-    private void afegirClientsConnectats(String msg) {
+    public void afegirClientsConnectats(String msg) {
         ArrayList<String> prova = new ArrayList<>();
-
-        System.out.println("EscoltaMsgServidor: Clients conectats: ");
-        Servidor.getNomArrClients(Servidor.arrNoms);
+        
+//        Servidor.getNomArrClients(Servidor.arrNoms);
+//        
+//        for (String row: prova) {
+//            System.out.println(row);
+//        }
+//        
+//        System.out.println("EscoltaMsgServidor: Clients conectats: ");
+//        Servidor.getNomArrClients(Servidor.arrNoms);
 
         String[] msgGood = msg.split("-/0/u/i/4/9<<z");
         //System.out.println("msgGood: " + msgGood[0]);
@@ -285,14 +290,16 @@ public class EscoltaMsgServidor extends Thread {
             //this.clientArr.append(nomClient);
             //this.saltLiniaTextArea(this.msgArr);
         } else {
-            this.clientArr.append(msgGood[0]);
-//            prova.add(msgGood[0]);
-//            this.netejarTextArea();
-//            for (String row: prova) {
-//                System.out.println(row);
-//                this.clientArr.append(row);
+//            String nomsClients = msgGood[0];
+//            String [] arrNomsClients = nomsClients.split("l");
+////            
+//            for (int i = 0; i < arrNomsClients.length; i++) {
+//                System.out.println(i + ": " + arrNomsClients[i]);
+//                this.clientArr.append(arrNomsClients[i]);
 //            }
-            //msgGood[0] = "";
+//           
+            //this.netejarTextArea();
+            this.clientArr.append(msgGood[0]);
             //this.saltLiniaTextArea(clientArr);
         }
     }
@@ -351,7 +358,7 @@ public class EscoltaMsgServidor extends Thread {
         if (msgGood.length < 1) {
             this.clientArr.append(clientsConectats);
         }
-    }
+    }       
 
     public void netejarTextArea() {
         int infoTextArea = this.clientArr.getText().length();
