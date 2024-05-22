@@ -386,11 +386,24 @@ public class Atendre_Clients extends Thread {
         for (OutputStream clients : arrClients) {
             try {
                 clients.write(msg.getBytes());
+                //clients.writeObject(arrClients.getBytes());
                 clients.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+    
+    private void enviarMissatge(ArrayList<String> arrClients) {
+        System.out.println();
+        
+        //for (String clients : arrClients) {
+            try {
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        //}
     }
 
     private void enviarMissatgeDesconexio(ArrayList<Socket> arrClients, Socket socket) {
@@ -464,10 +477,10 @@ public class Atendre_Clients extends Thread {
     private void enviarNomsClientsConectats(ArrayList<String> arrClients) {
         
         if (arrClients.size() > 0) {
-            for (String row : arrClients) {
-                this.enviarMissatge(row);
+            //for (String row : arrClients) {
+                this.enviarMissatge(arrClients);
                 
-            }
+            //}
         }
     }
     

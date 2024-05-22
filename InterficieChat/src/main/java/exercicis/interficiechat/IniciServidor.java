@@ -1,6 +1,8 @@
 package exercicis.interficiechat;
 
 import encriptacio.Servidor;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -145,6 +147,20 @@ public class IniciServidor extends javax.swing.JFrame {
             //this.comprovacioIP(ipServidor);
         } else {
             System.out.println("No pot quedar buit!");
+            JOptionPane jop = new JOptionPane();
+            Icon imagenLabel = new ImageIcon(getClass().getResource("/cross.png"));
+            String[] opcions = {"Acceptar"};
+
+            jop.showOptionDialog(
+                    null,
+                    "IP no pot estar buida",
+                    "Escribiu una ip per al servidor",
+                    jop.DEFAULT_OPTION,
+                    jop.WARNING_MESSAGE,
+                    imagenLabel,
+                    opcions,
+                    opcions[0]
+            );
         }
     }//GEN-LAST:event_jButton1ActionPerformed
     /**

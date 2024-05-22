@@ -280,7 +280,7 @@ public class EscoltaMsgServidor extends Thread {
 //        
 //        System.out.println("EscoltaMsgServidor: Clients conectats: ");
 //        Servidor.getNomArrClients(Servidor.arrNoms);
-
+        System.out.println("msg: " + msg);
         String[] msgGood = msg.split("-/0/u/i/4/9<<z");
         //System.out.println("msgGood: " + msgGood[0]);
         //msgArr.append(msg);
@@ -289,7 +289,7 @@ public class EscoltaMsgServidor extends Thread {
         if (msgGood.length > 1) {
             //this.clientArr.append(nomClient);
             //this.saltLiniaTextArea(this.msgArr);
-        } else {
+        }else {
 //            String nomsClients = msgGood[0];
 //            String [] arrNomsClients = nomsClients.split("l");
 ////            
@@ -309,9 +309,9 @@ public class EscoltaMsgServidor extends Thread {
         for (String row : arrClients) {
             System.out.println(row);
         }
-        //String[] msgGood = msg.split("-/0/u/i/4/9<<z");
-        //System.out.println("msgGood: " + msgGood[0]);
-        //msgArr.append(msg);
+//        //String[] msgGood = msg.split("-/0/u/i/4/9<<z");
+//        System.out.println("msgGood: " + msgGood[0]);
+//        //msgArr.append(msg);
 //        String nomClient = this.getNomClient(msgGood);
 //        String msgClient = this.getMsgClient(msgGood);
 //        if (msgGood.length > 1) {
