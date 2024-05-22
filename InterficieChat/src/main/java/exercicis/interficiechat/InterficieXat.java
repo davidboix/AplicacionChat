@@ -20,6 +20,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import metatron.CrudMONGO;
 
 /**
  *
@@ -37,6 +38,7 @@ public class InterficieXat extends javax.swing.JFrame {
     String nomUsuari;
     Client cl = new Client();
     JOptionPane jop = new JOptionPane();
+    CrudMONGO cm = new CrudMONGO("57.129.5.24", 27017, "grup1", "gat123", "comptes");
 
     /**
      * Creates new form InterficieXat
@@ -219,19 +221,21 @@ public class InterficieXat extends javax.swing.JFrame {
         String msg = this.inputMsg.getText();
         String msgG = msg + "-/0/u/i/4/9<<z" + nomUsuari;
         String msgComprovacio = "Escriu el teu missatge...";
-        
+
         if (msg.isEmpty() || msg.equalsIgnoreCase(msgComprovacio)) {
             System.out.println("NO pots enviar un missatge en blanc!");
             return;
         }
-        
+
         if (!msg.isEmpty()) {
             cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msgG);
             JOptionPane jop = new JOptionPane();
             Icon imagenLabel = new ImageIcon(getClass().getResource("/check.png"));
             String[] opcions = {"Acceptar"};
+            cm.setNomColeccio("missatges");
+            String data = cm.tractarData();
 
-            jop.showOptionDialog(
+            int msgEnviat = jop.showOptionDialog(
                     null,
                     "Missatge Enviat",
                     "Missatge enviat correctament",
@@ -241,7 +245,12 @@ public class InterficieXat extends javax.swing.JFrame {
                     opcions,
                     opcions[0]
             );
-            this.netejarInput(this.inputMsg);
+            System.out.println("Aixo es la opcio: " + msgEnviat);
+            if (msgEnviat < 1) {
+                cm.setNomColeccio("missatges");
+                cm.setDadesMsg(this.nomUsuari, msg, data);
+                this.netejarInput(this.inputMsg);
+            }
 
 //            String[] opcions = {"Acceptar"};
 //            jop.showOptionDialog(
@@ -430,7 +439,7 @@ public class InterficieXat extends javax.swing.JFrame {
             msg.setText(null);
         }
     }
-    
+
     private void tancarFinestra() {
         this.dispose();
         System.exit(0);

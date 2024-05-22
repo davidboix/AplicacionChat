@@ -200,6 +200,7 @@ public class Client {
         try {
             Socket socket = new Socket();
             InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+            //InetSocketAddress addr = new InetSocketAddress("192.168.1.59", 5556);
             socket.connect(addr);
             this.setNomUsuari(nom);
 

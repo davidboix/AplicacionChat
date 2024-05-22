@@ -6,6 +6,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.bson.Document;
 
@@ -101,6 +102,42 @@ public class CrudMONGO {
 
     public void setUrlConnexio(String urlConnexio) {
         this.urlConnexio = urlConnexio;
+    }
+
+    public CrudMONGO inicialitzarMongo() {
+        final String DB_SRV_USR = "grup1";
+        final String DB_SRV_PWD = "gat123";
+        final String DB_URL = "57.129.5.24";
+        final int DB_PORT = 27017;
+        final String nomColeccio = "comptes";
+        CrudMONGO cm = new CrudMONGO();
+
+        cm.setUsuariServidor(DB_SRV_USR);
+        cm.setPasswordServidor(DB_SRV_PWD);
+        cm.setIpServidor(DB_URL);
+        cm.setPortServidor(DB_PORT);
+        cm.setNomColeccio(nomColeccio);
+        return cm;
+    }
+
+    public CrudMONGO(String ipServidor, int portServidor, String usuariServidor, String passwordServidor, String nomColeccio) {
+        this.ipServidor = ipServidor;
+        this.nomColeccio = nomColeccio;
+        this.usuariServidor = usuariServidor;
+        this.passwordServidor = passwordServidor;
+        this.portServidor = portServidor;
+    }
+    
+    public CrudMONGO(String ipServidor, int portServidor, String usuariServidor, String passwordServidor) {
+        this.ipServidor = ipServidor;
+        this.portServidor = portServidor;
+        this.usuariServidor = usuariServidor;
+        this.passwordServidor = passwordServidor;
+    }
+
+    @Override
+    public String toString() {
+        return "CrudMONGO{" + "ipServidor=" + ipServidor + ", nomColeccio=" + nomColeccio + ", nomDocument=" + nomDocument + ", usuariServidor=" + usuariServidor + ", passwordServidor=" + passwordServidor + ", portServidor=" + portServidor + ", urlConnexio=" + urlConnexio + '}';
     }
 
     private String inicialitzarServidor() {
@@ -203,17 +240,28 @@ public class CrudMONGO {
         MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
         try ( MongoClient mc = new MongoClient(mcu)) {
             MongoCollection<Document> mongoC = this.accedirColeccions(mc, this.getNomColeccio());
-            
+
             Document missatgeNou = new Document("nomUsuari", "david")
                     .append("missatgeUsuari", msg)
                     .append("dataMissatge", data);
             mongoC.insertOne(missatgeNou);
+
             System.out.println("S'ha introduit un nou missatge...");
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    public String tractarData() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+        String data = formatter.format(date);
+        String[] arrData = data.split(" ");
+        String dataFormat = arrData[0];
+        System.out.println("Aquesta es la data actual: " + dataFormat);
+        return data;
     }
 
 }

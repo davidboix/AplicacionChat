@@ -1,5 +1,6 @@
 package exercicis.interficiechat;
 
+import java.awt.Dimension;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -15,6 +16,8 @@ import metatron.CrudMONGO;
  *
  */
 public class proves extends javax.swing.JFrame {
+
+    String dato;
 
     /**
      * Creates new form proves
@@ -32,6 +35,12 @@ public class proves extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialog1 = new javax.swing.JDialog();
+        jPanel7 = new javax.swing.JPanel();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jPanel8 = new javax.swing.JPanel();
+        jTextFieldPersonalitzat1 = new componentsPersonalitzats.JTextFieldPersonalitzat();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
@@ -41,6 +50,29 @@ public class proves extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         inputData = new com.toedter.calendar.JDateChooser();
+
+        jDialog1.setTitle("Introduir IP");
+        jDialog1.setPreferredSize(new java.awt.Dimension(500, 400));
+
+        jPanel7.setLayout(new java.awt.GridBagLayout());
+
+        jButton3.setText("jButton3");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel7.add(jButton3, new java.awt.GridBagConstraints());
+
+        jButton4.setText("jButton4");
+        jPanel7.add(jButton4, new java.awt.GridBagConstraints());
+
+        jDialog1.getContentPane().add(jPanel7, java.awt.BorderLayout.PAGE_END);
+
+        jPanel8.setLayout(new java.awt.GridBagLayout());
+        jPanel8.add(jTextFieldPersonalitzat1, new java.awt.GridBagConstraints());
+
+        jDialog1.getContentPane().add(jPanel8, java.awt.BorderLayout.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -211,25 +243,27 @@ public class proves extends javax.swing.JFrame {
         return cm;
     }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        CrudMONGO cm = this.inicialitzarMongo();
-        cm.setNomColeccio("missatges");
-        System.out.println("Aquest es el nom de la coleccio: " + cm.getNomColeccio());
-
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = new Date();
-        String data = formatter.format(date);
-
-        String[] arrData = data.split(" ");
-
-        String dataFormat = arrData[0];
-
-        System.out.println("Aquesta es la data actual: " + dataFormat);
-
+//        CrudMONGO cm = this.inicialitzarMongo();
+//        cm.setNomColeccio("missatges");
+//        System.out.println("Aquest es el nom de la coleccio: " + cm.getNomColeccio());
+//        String data = cm.tractarData();
         //System.out.println("Data de avui: " + data);
         //System.out.println(formatter.format(date));
         //cm.setDadesMsg("david", "aquest es un missatge", data);
         //cm.getUsers("david");
+        //this.jDialog1.setPreferredSize(new Dimension(500, 300));
+        this.jTextFieldPersonalitzat1.setPlaceHolder("Introdueix el nom de l'usuari");
+        this.jTextFieldPersonalitzat1.setText(this.jTextFieldPersonalitzat1.getPlaceHolder());
+        this.jDialog1.setSize(500, 600);
+        this.jDialog1.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        dato = this.jTextFieldPersonalitzat1.getText();
+        System.out.println(dato);
+        this.jDialog1.dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     /**
      * TODO: Funcio inacabada Funcio que farem servir per poder calcular la edat
      * del usuari, on per parametres li passarem el any de naixement i
@@ -288,11 +322,17 @@ public class proves extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser inputData;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private componentsPersonalitzats.JTextFieldPersonalitzat jTextFieldPersonalitzat1;
     // End of variables declaration//GEN-END:variables
 }
