@@ -205,7 +205,11 @@ public class Client {
 
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
-
+            System.out.println("Client: Clients conectats....");
+            for (String row: Servidor.arrNoms) {
+                System.out.println("Clients: " + row);
+            }
+            
             this.setSocket(socket);
             this.setOs(os);
             os.write(nom.getBytes());

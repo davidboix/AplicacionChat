@@ -188,7 +188,9 @@ public class InterficieXat extends javax.swing.JFrame {
         textLlistatUsuarisConectats.setText("Llistat usuaris connectats");
         llistatVista.add(textLlistatUsuarisConectats, java.awt.BorderLayout.PAGE_START);
 
-        clientsConnectats.setColumns(20);
+        clientsConnectats.setEditable(false);
+        clientsConnectats.setColumns(12);
+        clientsConnectats.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         clientsConnectats.setRows(5);
         llistatVista.add(clientsConnectats, java.awt.BorderLayout.CENTER);
 
@@ -216,10 +218,13 @@ public class InterficieXat extends javax.swing.JFrame {
     private void botoEnviarMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoEnviarMsgActionPerformed
         String msg = this.inputMsg.getText();
         String msgG = msg + "-/0/u/i/4/9<<z" + nomUsuari;
-        if (msg.isEmpty()) {
+        String msgComprovacio = "Escriu el teu missatge...";
+        
+        if (msg.isEmpty() || msg.equalsIgnoreCase(msgComprovacio)) {
             System.out.println("NO pots enviar un missatge en blanc!");
             return;
         }
+        
         if (!msg.isEmpty()) {
             cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msgG);
             JOptionPane jop = new JOptionPane();
@@ -308,7 +313,7 @@ public class InterficieXat extends javax.swing.JFrame {
 
                 if (resposta < 1) {
                     cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msg);
-                    this.dispose();
+                    this.tancarFinestra();
                 } else {
                     String[] noSortida = {"Acceptar"};
                     jop.showOptionDialog(
@@ -424,6 +429,11 @@ public class InterficieXat extends javax.swing.JFrame {
         if (!msg.getText().isEmpty()) {
             msg.setText(null);
         }
+    }
+    
+    private void tancarFinestra() {
+        this.dispose();
+        System.exit(0);
     }
 
     /**

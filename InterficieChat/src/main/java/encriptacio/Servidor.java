@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Solucio Alternativa:
@@ -35,7 +36,8 @@ public class Servidor {
     private static int qtClients;
     public static String ipServidor;
     static ArrayList<Socket> arrSocket = new ArrayList<>();
-    public static ArrayList<String> arrNoms = new ArrayList<>();
+    //public static ArrayList<String> arrNoms = new ArrayList<>();
+    public static CopyOnWriteArrayList<String> arrNoms = new CopyOnWriteArrayList<>();
     private ArrayList<String> arrMsg = new ArrayList<>();
     static ArrayList<String> arrMsg2 = new ArrayList<>();
 
@@ -323,6 +325,14 @@ public class Servidor {
         System.out.println("Aquest es el ultim client que s'ha connectat al servidor: " + socketClient);
     }
 
+    private void getNomUltimClientConectat(ArrayList<String> arrClient) {
+        String nomClient = null;
+        for (String row : arrClient) {
+            nomClient = row;
+        }
+        System.out.println(nomClient);
+    }
+
     private void mostrarClientsGuardats(ArrayList<String> arrNom) {
         if (arrNom.size() > 0) {
             System.out.println("Clients conectats: ");
@@ -352,30 +362,91 @@ public class Servidor {
 
         return "";
     }
+    
+    public static String setNomClients(CopyOnWriteArrayList<String> arrNomsClients, InputStream is) {
+        String nomUsuari = null;
+        try {
+            byte[] buffer = new byte[1024];
+            int intBuffer = is.read(buffer);
+            nomUsuari = new String(buffer, 0, intBuffer);
+            
+            if (!nomUsuari.isEmpty()) {
+                setNomArrClients(arrNomsClients, nomUsuari);
+            }
+            if (nomUsuari != null) {
+                return nomUsuari;
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
 
     private static void setNomArrClients(ArrayList<String> arrNomsClients, String nomClient) {
         if (!nomClient.isEmpty()) {
             arrNomsClients.add(nomClient + "\n");
         }
     }
-
-    public static void getNomArrClients(ArrayList<String> arrNomsClients) {
-        if (arrNomsClients.size() > 0) {
-            System.out.println("\n\nNoms clients: ");
-            for (String row : arrNomsClients) {
-                System.out.println(row);
-            }
+    
+    private static void setNomArrClients(CopyOnWriteArrayList<String> arrNomsClients, String nomClient) {
+        if (!nomClient.isEmpty()) {
+            arrNomsClients.add(nomClient + "\n");
         }
     }
 
-    public static void deleteNomClient(ArrayList<String> arrNomsClients, String nom) {
+    public static int getNomArrClients(ArrayList<String> arrNomsClients) {
+        int i = 0;
         if (arrNomsClients.size() > 0) {
+            System.out.println("\nNoms clients: ");
             for (String row : arrNomsClients) {
-                if (row.equalsIgnoreCase(nom)) {
-                    arrNomsClients.remove(nom);
-                }
+                System.out.println(row);
+                i++;
+            }
+        } else {
+            System.out.println("No hi han clients en el array...");
+        }
+
+        return i;
+    }
+    
+    public static int getNomArrClients(CopyOnWriteArrayList<String> arrNomsClients) {
+        int i = 0;
+        if (arrNomsClients.size() > 0) {
+            System.out.println("\nNoms clients: ");
+            for (String row : arrNomsClients) {
+                System.out.println(row);
+                i++;
+            }
+        } else {
+            System.out.println("No hi han clients en el array...");
+        }
+
+        return i;
+    }
+
+    public static void deleteNomClient(ArrayList<String> arrNomsClients, String nom) {
+        for (int i = 0; i < arrNomsClients.size(); i++) {
+            if (arrNomsClients.get(i).trim().equalsIgnoreCase(nom)) {
+                arrNomsClients.remove(i);
+                System.out.println("S'ha eliminat el element satisfactoriament!");
             }
         }
+        System.out.println("Despres de eliminar...");
+        getNomArrClients(arrNomsClients);
+    }
+    
+    public static void deleteNomClient(CopyOnWriteArrayList<String> arrNomsClients, String nom) {
+        for (int i = 0; i < arrNomsClients.size(); i++) {
+            if (arrNomsClients.get(i).trim().equalsIgnoreCase(nom)) {
+                arrNomsClients.remove(i);
+                System.out.println("S'ha eliminat el element satisfactoriament!");
+            }
+        }
+        System.out.println("Despres de eliminar...");
+        getNomArrClients(arrNomsClients);
     }
 
     public void iniciServidor(String ipServidor) {
@@ -405,8 +476,7 @@ public class Servidor {
 
                 //servidor.guardarNomClients(servidor.arrNoms,cl.getNomUsuari());
                 //servidor.mostrarClientsConectats(servidor.arrSocket);
-                servidor.getUltimClientConectat(servidor.arrSocket);
-
+                //servidor.getUltimClientConectat(servidor.arrSocket);
                 new Atendre_Clients(newSocket, servidor.arrSocket).start();
                 //new Atendre_Clients(newSocket).start();
 
@@ -462,7 +532,7 @@ public class Servidor {
                 //servidor.guardarNomClients(servidor.arrNoms,cl.getNomUsuari());
                 //servidor.mostrarClientsConectats(servidor.arrSocket);
                 servidor.getUltimClientConectat(servidor.arrSocket);
-                
+
                 new Atendre_Clients(newSocket, servidor.arrSocket).start();
                 //new Atendre_Clients(newSocket).start();
 

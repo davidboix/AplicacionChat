@@ -288,18 +288,26 @@ public class Atendre_Clients extends Thread {
             os = socket.getOutputStream();
             arrClients.add(os);
 
-            String nomClient = servidor.setNomClients(servidor.arrNoms, is);
-            servidor.getNomArrClients(servidor.arrNoms);
-
+            //String nomClient = servidor.setNomClients(servidor.arrNoms, is);
+            //System.out.println("Aquest es el nom del nou client conectat: " + nomClient);
+            String nomClient = Servidor.setNomClients(Servidor.arrNoms, is);
+                        
+            //servidor.getNomArrClients(servidor.arrNoms);
+            int size = Servidor.getNomArrClients(Servidor.arrNoms);           
+            
+            //aqui tindrem el numero de clients conectats...
+            
             //this.enviarClientsConectats(servidor.arrSocket);
-            this.enviarNomsClientsConectats(servidor.arrNoms);
+            //this.enviarNomsClientsConectats(servidor.arrNoms);
+            
+            this.enviarNomsClientsConectats(Servidor.arrNoms);
 
             byte[] buffer = new byte[1024];
             int intBuffer;
             boolean semafor = false;
             while (!semafor) {
                 intBuffer = is.read(buffer);
-                
+
                 String msg = new String(buffer, 0, intBuffer);
 
                 if (msg.equalsIgnoreCase("exit")) {
@@ -307,17 +315,14 @@ public class Atendre_Clients extends Thread {
                     if (isTrobat) {
                         this.eliminarClientArray(this.arrClients, this.os);
                         //this.enviarMissatgeDesconexio(servidor.arrSocket, this.socket);
-                        this.eliminarSocketArray(servidor.arrSocket, this.socket);
-                        
-                        this.deleteNomClient(servidor.arrNoms, nomClient);
-                        servidor.getNomArrClients(servidor.arrNoms);
-                        //this.enviarMissatge("El usuari amb socket " + this.socket + " s'ha desconectat satisfactoriament...");
+                        //this.eliminarSocketArray(servidor.arrSocket, this.socket);
+                        this.eliminarSocketArray(Servidor.arrSocket, this.socket);
+
+                        //this.deleteNomClient(servidor.arrNoms, nomClient);
+                        Servidor.deleteNomClient(Servidor.arrNoms, nomClient);
+                        //servidor.deleteNomClient(servidor.arrNoms, nomClient.trim());
+                        Servidor.getNomArrClients(Servidor.arrNoms);
                         semafor = true;
-                        /**
-                         * TODO: Investigar alternativa al us del break degut a
-                         * que NO es una bona practica per utilitzar per sortir
-                         * de un bucle.
-                         */
                         break;
                     }
                 }
@@ -455,9 +460,21 @@ public class Atendre_Clients extends Thread {
     }
 
     private void enviarNomsClientsConectats(ArrayList<String> arrClients) {
+        
         if (arrClients.size() > 0) {
             for (String row : arrClients) {
                 this.enviarMissatge(row);
+                
+            }
+        }
+    }
+    
+    private void enviarNomsClientsConectats(CopyOnWriteArrayList<String> arrClients) {
+        
+        if (arrClients.size() > 0) {
+            for (String row : arrClients) {
+                this.enviarMissatge(row);
+                
             }
         }
     }
@@ -471,7 +488,6 @@ public class Atendre_Clients extends Thread {
             }
         }
         String msgDesconexio = "El client amb nom: " + nom + " s'ha desconectat satisfactoriament";
-        System.out.println("El client amb nom: " + nom + " s'ha desconectat satisfactoriament");
         this.enviarMissatge(msgDesconexio);
     }
 }
