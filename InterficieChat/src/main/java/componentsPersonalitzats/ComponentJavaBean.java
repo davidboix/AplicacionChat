@@ -17,49 +17,118 @@ import org.bson.Document;
 public class ComponentJavaBean extends JPanel {
 
     private String nom;
+    private String usuari;
+    private String contrasenya;
+    private String ip;
 
+//    public ComponentJavaBean() {
+//        this.setLayout(new BorderLayout());
+//        JPanel panelHeader = this.personalitzacioPanel(new GridBagLayout());
+//
+//        JPanel panelEsquerra = this.personalitzacioPanel(new BorderLayout());
+//        JPanel panelCentralEsquerra = this.personalitzacioPanel(new GridBagLayout());
+//
+//        JPanel panelMain = this.personalitzacioPanel(new GridBagLayout());
+//        
+//        GridBagConstraints c = new GridBagConstraints();
+//        
+//        JPanel panelDreta = this.personalitzacioPanel(new BorderLayout());
+//        JPanel panelFooter = this.personalitzacioPanel(new GridBagLayout());
+//
+//        JLabel titol = this.personalitzacioTitol();
+//        JTextField text = this.personalitzacioJTextField("Escriu aqui el nom de la coleccio: ");
+//        JButton boto = this.personalitzacioBoto();
+//
+//        JComboBox<String> comboBox = this.personalitzacioComboBox();
+//        
+//        JLabel ipLabel = this.personalitzacioTitol();
+//        JTextField textIp = this.personalitzacioJTextField("Escriu aqui la ip del servidor ");
+//        
+//        JLabel contraLabel = this.personalitzacioTitol();
+//        JTextField textContra = this.personalitzacioJTextField("Escriu aqui la contasenya del servidor ");
+//        
+//        JLabel usuariLabel = this.personalitzacioTitol();
+//        JTextField textUsuari = this.personalitzacioJTextField("Escriu aqui l'usuari del servidor ");
+//
+//        this.setVisible(true);
+//        this.setSize(400, 300);
+//
+//        //Posicio nort
+//        panelHeader.add(titol);
+//        this.add(panelHeader, BorderLayout.NORTH);
+//
+//        //Posicio centre
+//        c.gridx = 20;
+//        c.gridy = 0;
+//        panelMain.add(text);
+//        panelMain.add(textIp, c);
+//        this.add(panelMain, BorderLayout.CENTER);
+//
+//        //Posicio esquerra
+//        panelCentralEsquerra.add(comboBox);
+//        panelEsquerra.add(panelCentralEsquerra, BorderLayout.CENTER);
+//        this.add(panelEsquerra, BorderLayout.WEST);
+//
+//        //Posicio dreta
+//        this.add(panelDreta, BorderLayout.EAST);
+//
+//        //Posicio footer
+//        panelFooter.add(boto);
+//        this.add(panelFooter, BorderLayout.SOUTH);
+//
+//        this.funcionalitatBoto(boto, text, comboBox);
+//        this.realitzarOperacions(comboBox);
+//    }
+    
     public ComponentJavaBean() {
         this.setLayout(new BorderLayout());
-        JPanel panelHeader = this.personalitzacioPanel(new GridBagLayout());
 
+        JPanel panelHeader = this.personalitzacioPanel(new GridBagLayout());
         JPanel panelEsquerra = this.personalitzacioPanel(new BorderLayout());
         JPanel panelCentralEsquerra = this.personalitzacioPanel(new GridBagLayout());
-
         JPanel panelMain = this.personalitzacioPanel(new GridBagLayout());
-
         JPanel panelDreta = this.personalitzacioPanel(new BorderLayout());
         JPanel panelFooter = this.personalitzacioPanel(new GridBagLayout());
 
         JLabel titol = this.personalitzacioTitol();
-        JTextField text = this.personalitzacioJTextField("Escriu aqui el nom de la coleccio: ");
+        JTextField text = this.personalitzacioJTextField("Escriu aqui el nom de la coleccio");
         JButton boto = this.personalitzacioBoto();
-
         JComboBox<String> comboBox = this.personalitzacioComboBox();
 
+        JTextField textIp = this.personalitzacioJTextField("Escriu aqui la ip del servidor");
+        JTextField textContra = this.personalitzacioJTextField("Escriu aqui la contasenya del servidor");
+        JTextField textUsuari = this.personalitzacioJTextField("Escriu aqui l'usuari del servidor");
+        JTextField textPort = this.personalitzacioJTextField("Escriu aqui el port del servidor");
+        
         this.setVisible(true);
         this.setSize(400, 300);
 
-        //Posicio nort
         panelHeader.add(titol);
         this.add(panelHeader, BorderLayout.NORTH);
 
-        //Posicio centre
-        panelMain.add(text);
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = GridBagConstraints.RELATIVE;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(5, 5, 5, 5);
+
+        panelMain.add(textUsuari, c);
+        panelMain.add(textIp, c);
+        panelMain.add(textContra, c);
+        panelMain.add(textPort, c);
+        panelMain.add(text, c);
+
         this.add(panelMain, BorderLayout.CENTER);
 
-        //Posicio esquerra
         panelCentralEsquerra.add(comboBox);
         panelEsquerra.add(panelCentralEsquerra, BorderLayout.CENTER);
         this.add(panelEsquerra, BorderLayout.WEST);
 
-        //Posicio dreta
         this.add(panelDreta, BorderLayout.EAST);
-
-        //Posicio footer
         panelFooter.add(boto);
         this.add(panelFooter, BorderLayout.SOUTH);
 
-        this.funcionalitatBoto(boto, text, comboBox);
+        this.funcionalitatBoto(boto, text, textUsuari, textIp, textContra, textPort, comboBox);
         this.realitzarOperacions(comboBox);
     }
 
@@ -94,7 +163,7 @@ public class ComponentJavaBean extends JPanel {
     private JTextField personalitzacioJTextField(String placeHolder) {
         JTextField jtf = new JTextField();
         jtf.setSize(80, 40);
-        jtf.setPreferredSize(new Dimension(200, 30));
+        jtf.setPreferredSize(new Dimension(220, 30));
         jtf.setFont(new Font("Serif", Font.BOLD, 12));
         jtf.setForeground(Color.GRAY);
         jtf.setText(placeHolder);
@@ -121,9 +190,13 @@ public class ComponentJavaBean extends JPanel {
         return jcb;
     }
 
-    private void controlJTextField(JTextField jtf, JComboBox jcb) {
+    private void controlJTextField(JTextField jtf, JTextField usuari, JTextField ip, JTextField contra, JTextField port, JComboBox jcb) {
 
         String text = jtf.getText();
+        String usuariTxt = usuari.getText();
+        String ipTxt = ip.getText();
+        String contraTxt = contra.getText();
+        String portTxt = port.getText();
         String operacio = String.valueOf(jcb.getSelectedItem());
 
         if (text.isEmpty() || text.equalsIgnoreCase("Escriu aqui el nom de la coleccio: ")) {
@@ -133,21 +206,21 @@ public class ComponentJavaBean extends JPanel {
 
         System.out.println("Aquest es el nom de la coleccio: " + text);
         if (operacio.equalsIgnoreCase("Crear")) {
-            this.crearColeccio(text);
+            this.crearColeccio(text, usuariTxt, ipTxt, contraTxt, portTxt);
             System.out.println("Anem a crear una nova coleccio...");
             return;
         }
         
         System.out.println("Anem a borrar una coleccio...");
-        this.eliminarColeccio(text);
+        this.eliminarColeccio(text, usuariTxt, ipTxt, contraTxt, portTxt);
 
     }
 
-    private void funcionalitatBoto(JButton jb, JTextField jtf, JComboBox jcb) {
+    private void funcionalitatBoto(JButton jb, JTextField jtf, JTextField usuari,JTextField ip,JTextField contra,JTextField port, JComboBox jcb) {
         jb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlJTextField(jtf, jcb);
+                controlJTextField(jtf, usuari, ip, contra, port, jcb);
             }
         });
     }
@@ -184,15 +257,15 @@ public class ComponentJavaBean extends JPanel {
         });
     }
 
-    private void crearColeccio(String nomColeccio) {
+    private void crearColeccio(String nomColeccio, String usuari, String ip, String contra, String port) {
         try {
-//            final String DB_SRV_USR = "grup1";
-//            final String DB_SRV_PWD = "gat123";
-//            final String DB_URL = "57.129.5.24";
-//            final String DB_PORT = "27017";
-//            String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
+            final String DB_SRV_USR = usuari;
+            final String DB_SRV_PWD = contra;
+            final String DB_URL = ip;
+            final String DB_PORT = port;
+            final String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
 
-            final String URLCONNEXIO = "mongodb://localhost:27017";
+            //final String URLCONNEXIO = "mongodb://localhost:27017";
 
             MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
 
@@ -212,15 +285,15 @@ public class ComponentJavaBean extends JPanel {
         }
     }
 
-    private void eliminarColeccio(String nomColeccio) {
+    private void eliminarColeccio(String nomColeccio, String usuari, String ip, String contra, String port) {
         try {
-//            final String DB_SRV_USR = "grup1";
-//            final String DB_SRV_PWD = "gat123";
-//            final String DB_URL = "57.129.5.24";
-//            final String DB_PORT = "27017";
-//            String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
+            final String DB_SRV_USR = usuari;
+            final String DB_SRV_PWD = contra;
+            final String DB_URL = ip;
+            final String DB_PORT = port;
+            String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
 
-            final String URLCONNEXIO = "mongodb://localhost:27017";
+            //final String URLCONNEXIO = "mongodb://localhost:27017";
 
             MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
 
