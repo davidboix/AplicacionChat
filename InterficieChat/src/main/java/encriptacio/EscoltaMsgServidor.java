@@ -182,7 +182,7 @@ public class EscoltaMsgServidor extends Thread {
      */
     @Override
     public void run() {
-        try {           
+        try {
             byte[] buffer = new byte[1024];
             while (!this.socket.isClosed()) {
                 int intBytes = this.inputStream.read(buffer);
@@ -271,20 +271,26 @@ public class EscoltaMsgServidor extends Thread {
     }
 
     public void afegirClientsConnectats(String msg) {
-        ArrayList<String> prova = new ArrayList<>();
-        if (EscoltaMsgServidor.arrNoms.size() > 0) {
-            for (String row: EscoltaMsgServidor.arrNoms) {
-                System.out.println("EscoltaMsgServidor: " + row);
+        
+        for (String row : this.arrNomClients) {
+            if (!row.equalsIgnoreCase(this.nomUsuari)) {
+                this.arrNomClients.add(this.nomUsuari);        
             }
-        } else {
-            System.out.println("EscoltaMsgServidor: No hi han dades!");
+            System.out.println("EscoltaMsgServidor: " + row);
         }
-//        Servidor.getNomArrClients(Servidor.arrNoms);
-//        
-//        for (String row: prova) {
-//            System.out.println(row);
+        
+
+        for (String row : this.arrNomClients) {
+            System.out.println("EscoltaMsgServidor: " + row);
+        }
+//        if (EscoltaMsgServidor.arrNoms.size() > 0) {
+//            for (String row: EscoltaMsgServidor.arrNoms) {
+//                System.out.println("EscoltaMsgServidor: " + row);
+//            }
+//        } else {
+//            System.out.println("EscoltaMsgServidor: No hi han dades!");
 //        }
-//        
+
 //        System.out.println("EscoltaMsgServidor: Clients conectats: ");
 //        Servidor.getNomArrClients(Servidor.arrNoms);
         String[] msgGood = msg.split("-/0/u/i/4/9<<z");
@@ -295,18 +301,28 @@ public class EscoltaMsgServidor extends Thread {
         if (msgGood.length > 1) {
             //this.clientArr.append(nomClient);
             //this.saltLiniaTextArea(this.msgArr);
-        }else {
-//            String nomsClients = msgGood[0];
-//            String [] arrNomsClients = nomsClients.split("l");
-////            
-//            for (int i = 0; i < arrNomsClients.length; i++) {
-//                System.out.println(i + ": " + arrNomsClients[i]);
-//                this.clientArr.append(arrNomsClients[i]);
+        } else {
+
+//            if (EscoltaMsgServidor.getArrNoms().size() > 0) {
+//                for (String row : EscoltaMsgServidor.getArrNoms()) {
+//                    System.out.println("EscoltaMsgServidor: " + row);
+//                }
+//            } else {
+//                System.out.println("EscoltaMsgServidor: El arraylist esta buit...");
 //            }
+            this.mostrarArray();
+
+            String nomsClients = msgGood[0];
+            String[] arrNomsClients = nomsClients.split("l");
+//            
+            for (int i = 0; i < arrNomsClients.length; i++) {
+                System.out.println(i + ": " + arrNomsClients[i]);
+                this.clientArr.append(arrNomsClients[i]);
+            }
 //           
             //this.netejarTextArea();
             System.out.println("Aquestos son els clients conectats: " + msgGood[0]);
-            this.clientArr.append(msgGood[0]);
+            //this.clientArr.append(msgGood[0]);
             //this.saltLiniaTextArea(clientArr);
         }
     }
@@ -331,7 +347,6 @@ public class EscoltaMsgServidor extends Thread {
 ////            //this.saltLiniaTextArea(clientArr);
 ////        }
 //    }
-
     private void saltLiniaTextArea(JTextArea jta) {
         String saltLinia = "\n";
         if (jta.isVisible()) {
@@ -365,7 +380,7 @@ public class EscoltaMsgServidor extends Thread {
         if (msgGood.length < 1) {
             this.clientArr.append(clientsConectats);
         }
-    }       
+    }
 
     public void netejarTextArea() {
         int infoTextArea = this.clientArr.getText().length();
@@ -374,9 +389,19 @@ public class EscoltaMsgServidor extends Thread {
             this.clientArr.setText(null);
         }
     }
-    
-    public static void rebreArray(ArrayList<String> arrNoms){
-        EscoltaMsgServidor.arrNoms = arrNoms;
+
+    public static void rebreArray(ArrayList<String> llista) {
+        arrNoms = llista;
+    }
+
+    private void mostrarArray() {
+        if (this.arrNoms != null) {
+            for (String row : this.arrNoms) {
+                System.out.println("EscoltaMsgServidor: " + row);
+            }
+        } else {
+            System.out.println("EscoltaMsgServidor: Arraylist buit...");
+        }
     }
 
 //    private void guardarNomClients(ArrayList<String> arrNom, String nomClient) {

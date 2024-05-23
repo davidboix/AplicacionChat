@@ -47,7 +47,8 @@ public class Atendre_Clients extends Thread {
             //String nomClient = servidor.setNomClients(servidor.arrNoms, is);
             String nomClient = Servidor.setNomClients(Servidor.arrNoms, is);
             
-            EscoltaMsgServidor.rebreArray(Servidor.arrNoms);
+            //EscoltaMsgServidor.rebreArray(Servidor.arrNoms);
+            EscoltaMsgServidor.setArrNoms(Servidor.arrNoms);
             
             //servidor.getNomArrClients(servidor.arrNoms);
             Servidor.getNomArrClients(Servidor.arrNoms);
@@ -70,12 +71,14 @@ public class Atendre_Clients extends Thread {
                     if (isTrobat) {
                         System.out.println("Passem per el exit...");
                         this.eliminarClientArray(this.arrClients, this.os);
-                        //this.enviarMissatgeDesconexio(servidor.arrSocket, this.socket);
+                        this.enviarMissatgeDesconexio(servidor.arrSocket, this.socket);
                         this.eliminarSocketArray(Servidor.arrSocket, this.socket);
                         
                         //this.deleteNomClient(servidor.arrNoms, nomClient);
-                        Servidor.deleteNomClient(Servidor.arrNoms, nomClient);
+                        //this.enviarClientsMissatgeDesconexio(Servidor.arrNoms, msg);
+                        //Servidor.deleteNomClient(Servidor.arrNoms, nomClient);                      
                         
+                        this.deleteNomClient(Servidor.arrNoms, nomClient);
                                                 
                         semafor = true;
                         break;
@@ -156,6 +159,20 @@ public class Atendre_Clients extends Thread {
         String msgDesconexio = "\nEl client " + socketClient + " s'ha desconectat satisfactoriament";
         this.enviarMissatge(msgDesconexio);
     }
+    
+    private void enviarClientsMissatgeDesconexio(ArrayList<String> arrClients, String nom) {
+        String nomClient = null;
+        for (String row: arrClients) {
+            if (row.equalsIgnoreCase(nom)) {
+                nomClient = nom;
+            }
+        }
+        if (nomClient != null) {
+            String msgDesconexio = "\nEl client " + nomClient + " s'ha desconectat satisfactoriament";
+            this.enviarMissatge(msgDesconexio);
+        }
+        
+    }
 
     private boolean eliminarSocketArray(ArrayList<Socket> arrSockets, Socket socket) {
         boolean isTrobat = false;
@@ -220,7 +237,7 @@ public class Atendre_Clients extends Thread {
                 }
             }
         }
-        String msgDesconexio = "El client amb nom: " + nom + " s'ha desconectat satisfactoriament";
+        String msgDesconexio = "El client amb nom: " + nom + " s'ha desconectat satisfactoriament";       
         this.enviarMissatge(msgDesconexio);
     }
 }

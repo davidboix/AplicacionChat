@@ -327,7 +327,8 @@ public class Servidor {
     }
     private static void setNomArrClients(ArrayList<String> arrNomsClients, String nomClient) {
         if (!nomClient.isEmpty()) {
-            arrNomsClients.add(nomClient + "\n");
+            //arrNomsClients.add(nomClient + "\n");
+            arrNomsClients.add(nomClient + "l\n");
         }
     }
 
@@ -346,7 +347,6 @@ public class Servidor {
         for (int i = 0; i < arrNomsClients.size(); i++) {
             if (arrNomsClients.get(i).trim().equalsIgnoreCase(nom)) {
                 arrNomsClients.remove(i);
-                System.out.println("S'ha eliminat el element satisfactoriament!");
             }
         }
         System.out.println("Despres de eliminar...");

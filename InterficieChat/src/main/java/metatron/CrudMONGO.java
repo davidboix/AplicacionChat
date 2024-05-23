@@ -241,7 +241,7 @@ public class CrudMONGO {
         try ( MongoClient mc = new MongoClient(mcu)) {
             MongoCollection<Document> mongoC = this.accedirColeccions(mc, this.getNomColeccio());
 
-            Document missatgeNou = new Document("nomUsuari", "david")
+            Document missatgeNou = new Document("nomUsuari", nomUser)
                     .append("missatgeUsuari", msg)
                     .append("dataMissatge", data);
             mongoC.insertOne(missatgeNou);
