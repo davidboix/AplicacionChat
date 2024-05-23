@@ -1,7 +1,5 @@
 package encriptacio;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -10,7 +8,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Solucio Alternativa:
@@ -40,6 +37,7 @@ public class Servidor {
     //public static CopyOnWriteArrayList<String> arrNoms = new CopyOnWriteArrayList<>();
     private ArrayList<String> arrMsg = new ArrayList<>();
     static ArrayList<String> arrMsg2 = new ArrayList<>();
+    private ArrayList<String> arrNomsClients = new ArrayList<>();
 
     public Servidor() {
 
@@ -114,7 +112,7 @@ public class Servidor {
      */
     public void augmentarClientsConnectats() {
         this.qtClients++;
-        System.out.println("\nClients connectats actualment: " + this.qtClients);
+        //System.out.println("\nClients connectats actualment: " + this.qtClients);
     }
 
     /**
@@ -124,7 +122,7 @@ public class Servidor {
     public void decrementarClientsConnectats(Socket socket) {
         System.out.println("S'ha desconectat el client amb socket: " + socket);
         this.qtClients--;
-        System.out.println("Clients connectats actualment: " + this.qtClients);
+        //System.out.println("Clients connectats actualment: " + this.qtClients);
     }
 
     public static void main(String[] args) {
@@ -274,17 +272,6 @@ public class Servidor {
         }
         return false;
     }
-
-//    @Override
-//    public void onClientDisconnect(Socket socket) {
-//        System.out.println("Client disconnectat: " + socket);
-//        try {
-//            socket.close();
-//            arrSocket.remove(socket);
-//        } catch (IOException e) {
-//            System.out.println("Eliminacio del socket de l'array fallida");
-//        }
-//    }
     private String llegirMissatgeClient(InputStream is) throws IOException {
         byte[] buffer = new byte[500];
         int intBuffer = is.read(buffer);
@@ -304,13 +291,6 @@ public class Servidor {
         }
     }
 
-    private void mostrarClientsConectats(ArrayList<Socket> arrSocket) {
-        System.out.println("Aquestos son els clients que estan conectats: ");
-        for (Socket socket : arrSocket) {
-            System.out.println(socket);
-        }
-    }
-
     /**
      * Funcio que ens mostra el ultim client que s'ha conectat en el nostre
      * servidor i que haura d'enviar al client quan es conecta...
@@ -323,23 +303,6 @@ public class Servidor {
             socketClient = socket;
         }
         System.out.println("Aquest es el ultim client que s'ha connectat al servidor: " + socketClient);
-    }
-
-    private void getNomUltimClientConectat(ArrayList<String> arrClient) {
-        String nomClient = null;
-        for (String row : arrClient) {
-            nomClient = row;
-        }
-        System.out.println(nomClient);
-    }
-
-    private void mostrarClientsGuardats(ArrayList<String> arrNom) {
-        if (arrNom.size() > 0) {
-            System.out.println("Clients conectats: ");
-            for (String row : arrNom) {
-                System.out.println(row);
-            }
-        }
     }
 
     public static String setNomClients(ArrayList<String> arrNomsClients, InputStream is) {
@@ -362,70 +325,21 @@ public class Servidor {
 
         return "";
     }
-    
-    public static String setNomClients(CopyOnWriteArrayList<String> arrNomsClients, InputStream is) {
-        String nomUsuari = null;
-        try {
-            byte[] buffer = new byte[1024];
-            int intBuffer = is.read(buffer);
-            nomUsuari = new String(buffer, 0, intBuffer);
-            
-            if (!nomUsuari.isEmpty()) {
-                setNomArrClients(arrNomsClients, nomUsuari);
-            }
-            if (nomUsuari != null) {
-                return nomUsuari;
-            }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return "";
-    }
-    
-
     private static void setNomArrClients(ArrayList<String> arrNomsClients, String nomClient) {
         if (!nomClient.isEmpty()) {
             arrNomsClients.add(nomClient + "\n");
         }
     }
-    
-    private static void setNomArrClients(CopyOnWriteArrayList<String> arrNomsClients, String nomClient) {
-        if (!nomClient.isEmpty()) {
-            arrNomsClients.add(nomClient + "\n");
-        }
-    }
 
-    public static int getNomArrClients(ArrayList<String> arrNomsClients) {
-        int i = 0;
+    public static void getNomArrClients(ArrayList<String> arrNomsClients) {
         if (arrNomsClients.size() > 0) {
-            System.out.println("\nNoms clients: ");
+            System.out.println("Noms clients: ");
             for (String row : arrNomsClients) {
                 System.out.println(row);
-                i++;
             }
         } else {
             System.out.println("No hi han clients en el array...");
         }
-
-        return i;
-    }
-    
-    public static int getNomArrClients(CopyOnWriteArrayList<String> arrNomsClients) {
-        int i = 0;
-        if (arrNomsClients.size() > 0) {
-            System.out.println("\nNoms clients: ");
-            for (String row : arrNomsClients) {
-                System.out.println(row);
-                i++;
-            }
-        } else {
-            System.out.println("No hi han clients en el array...");
-        }
-
-        return i;
     }
 
     public static void deleteNomClient(ArrayList<String> arrNomsClients, String nom) {
@@ -438,21 +352,9 @@ public class Servidor {
         System.out.println("Despres de eliminar...");
         getNomArrClients(arrNomsClients);
     }
-    
-    public static void deleteNomClient(CopyOnWriteArrayList<String> arrNomsClients, String nom) {
-        for (int i = 0; i < arrNomsClients.size(); i++) {
-            if (arrNomsClients.get(i).trim().equalsIgnoreCase(nom)) {
-                arrNomsClients.remove(i);
-                System.out.println("S'ha eliminat el element satisfactoriament!");
-            }
-        }
-        System.out.println("Despres de eliminar...");
-        getNomArrClients(arrNomsClients);
-    }
 
     public void iniciServidor(String ipServidor) {
         Servidor servidor = new Servidor();
-
         try {
             System.out.println("Creem el socket servidor");
             ServerSocket serverSocket = new ServerSocket();
@@ -469,7 +371,6 @@ public class Servidor {
             System.out.println("Servidor preparat per escoltar!");
             while (true) {
                 Socket newSocket = serverSocket.accept();
-                Client cl = new Client();
                 InputStream is = newSocket.getInputStream();
 
                 servidor.augmentarClientsConnectats();
@@ -478,19 +379,8 @@ public class Servidor {
                 //servidor.guardarNomClients(servidor.arrNoms,cl.getNomUsuari());
                 //servidor.mostrarClientsConectats(servidor.arrSocket);
                 //servidor.getUltimClientConectat(servidor.arrSocket);
+                //new Atendre_Clients(newSocket, servidor.arrSocket, servidor.arrNomClients).start();
                 new Atendre_Clients(newSocket, servidor.arrSocket).start();
-                //new Atendre_Clients(newSocket).start();
-
-//                int i = 0;
-//                
-//                for (Socket row : arrSocket) {
-//                    i++;
-//                    System.out.println("Total sockets: " + i);
-//                    if(row.isClosed()){
-//                        arrSocket.remove(row);
-//                    }
-//                    System.out.println("Total sockets: " + i);
-//                }
             }
 
         } catch (SocketException se) {
@@ -512,11 +402,7 @@ public class Servidor {
             System.out.println("Creem el socket servidor");
             ServerSocket serverSocket = new ServerSocket();
 
-            //Adreça utilitzada per fer les proves.
             InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
-
-            //Adreça utilitzada per aixecar el servidor utilitzant interficie grafica.
-            //InetSocketAddress addr = new InetSocketAddress(ipServidor, 5556);
             serverSocket.bind(addr);
 
             boolean semafor = false;
@@ -524,29 +410,23 @@ public class Servidor {
             System.out.println("Servidor preparat per escoltar!");
             while (true) {
                 Socket newSocket = serverSocket.accept();
-                Client cl = new Client();
                 InputStream is = newSocket.getInputStream();
+
+//                byte[] buffer = new byte[1024];
+//                int intBuffer = is.read(buffer);
+//                String nomClient = new String(buffer, 0, intBuffer);
+//                System.out.println("Aquest es el nom del client: " + nomClient);
+//                servidor.guardarNomsClients(servidor, nomClient);
+//                for (String row : servidor.arrNomsClients) {
+//                    System.out.println("Noms clients: " + row);
+//                }
+
 
                 servidor.augmentarClientsConnectats();
                 servidor.guardarClientsArrayList(servidor.arrSocket, newSocket);
 
-                //servidor.guardarNomClients(servidor.arrNoms,cl.getNomUsuari());
-                //servidor.mostrarClientsConectats(servidor.arrSocket);
-                servidor.getUltimClientConectat(servidor.arrSocket);
+                new Atendre_Clients(newSocket, servidor.arrSocket, servidor.arrNomsClients).start();
 
-                new Atendre_Clients(newSocket, servidor.arrSocket).start();
-                //new Atendre_Clients(newSocket).start();
-
-//                int i = 0;
-//                
-//                for (Socket row : arrSocket) {
-//                    i++;
-//                    System.out.println("Total sockets: " + i);
-//                    if(row.isClosed()){
-//                        arrSocket.remove(row);
-//                    }
-//                    System.out.println("Total sockets: " + i);
-//                }
             }
 
         } catch (SocketException se) {
@@ -559,6 +439,11 @@ public class Servidor {
             e.printStackTrace();
             System.err.println("\nERROR!\nHi ha hagut un error general i per tant el servidor no ha funcionat com toca!");
         }
+
+    }
+
+    private void guardarNomsClients(Servidor servidor, String nomUsuari) {
+        servidor.arrNomsClients.add(nomUsuari);
     }
 }
 

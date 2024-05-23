@@ -173,7 +173,6 @@ public class Client {
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
             Client cl = new Client();
-            //new EscoltaMsgServidor(socket, is).start();
             new EscoltaMsgServidor(socket, is, cl).start();
 
             //boolean semafor = enviarMissatgeServidor(os, socket);
@@ -200,25 +199,29 @@ public class Client {
         try {
             Socket socket = new Socket();
             InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
-            //InetSocketAddress addr = new InetSocketAddress("192.168.1.59", 5556);
             socket.connect(addr);
-            this.setNomUsuari(nom);
-
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
-            System.out.println("Client: Clients conectats....");
-            for (String row: Servidor.arrNoms) {
-                System.out.println("Clients: " + row);
-            }
-            
+
             this.setSocket(socket);
             this.setOs(os);
-            os.write(nom.getBytes());
-            System.out.println("Ens conectem...");
-            is = socket.getInputStream();
+            this.setNomUsuari(nom);
             this.setIs(is);
 
+            /**
+             * TODO: Aqui li enviem al servidor el nom del client...
+             */
+            os.write(nom.getBytes());
+            System.out.println("Ens conectem...");
+
             new EscoltaMsgServidor(socket, is, textAreaMissatge, this.getNomUsuari(), clientsConnectats).start();
+
+            /**
+             * TODO:Posarem un altre fil per poder fer que el client estigui
+             * escoltant tot el rato nous clients que es conecten al nostre
+             * sistema.
+             */
+            //new FilUsuarisConectats(socket, this.getNomUsuari()).start();
         } catch (IOException e) {
             System.out.println("No s'ha pogut connectar al servidor");
         }
@@ -272,7 +275,6 @@ public class Client {
     public static boolean enviarMissatgeServidor(Scanner lector, OutputStream os, Socket socket) {
         boolean sortir = false;
         try {
-            os.write("oleh".getBytes());
             while (!sortir) {
                 String msg = lector.nextLine();
                 if (msg.equalsIgnoreCase("exit")) {

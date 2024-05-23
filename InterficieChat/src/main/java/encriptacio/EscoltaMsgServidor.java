@@ -26,6 +26,7 @@ public class EscoltaMsgServidor extends Thread {
     private static CopyOnWriteArrayList<OutputStream> arrClients = new CopyOnWriteArrayList<>();
     private static ArrayList<String> arrNoms = new ArrayList<>();
     public static int intClientsConectats;
+    private ArrayList<String> arrNomClients = new ArrayList<>();
 
     /**
      * Definit constructor buit per poder inicialitzar objectes de tipus
@@ -182,16 +183,16 @@ public class EscoltaMsgServidor extends Thread {
     @Override
     public void run() {
         try {           
-            
             byte[] buffer = new byte[1024];
             while (!this.socket.isClosed()) {
                 int intBytes = this.inputStream.read(buffer);
                 if (intBytes != -1) {
                     String msg = new String(buffer, 0, intBytes);
-                    System.out.println("\nMissatge del servidor: " + msg);
-                    System.out.print("Escriu el missatge que vulguis al servidor: ");
                     this.afegirMissatgeTextArea(msg);
-                    System.out.println("Aquest es el msg: " + msg);
+                    //TODO: if per provar de borrar el textfield de clients connectats per a que no s'acumulin els clients
+//                    if(!msg.contains("-/0/u/i/4/9<<z")){
+//                        netejarTextArea();
+//                    }
                     this.afegirClientsConnectats(msg);
                 }
             }
@@ -271,7 +272,13 @@ public class EscoltaMsgServidor extends Thread {
 
     public void afegirClientsConnectats(String msg) {
         ArrayList<String> prova = new ArrayList<>();
-        
+        if (EscoltaMsgServidor.arrNoms.size() > 0) {
+            for (String row: EscoltaMsgServidor.arrNoms) {
+                System.out.println("EscoltaMsgServidor: " + row);
+            }
+        } else {
+            System.out.println("EscoltaMsgServidor: No hi han dades!");
+        }
 //        Servidor.getNomArrClients(Servidor.arrNoms);
 //        
 //        for (String row: prova) {
@@ -280,7 +287,6 @@ public class EscoltaMsgServidor extends Thread {
 //        
 //        System.out.println("EscoltaMsgServidor: Clients conectats: ");
 //        Servidor.getNomArrClients(Servidor.arrNoms);
-        System.out.println("msg: " + msg);
         String[] msgGood = msg.split("-/0/u/i/4/9<<z");
         //System.out.println("msgGood: " + msgGood[0]);
         //msgArr.append(msg);
@@ -299,31 +305,32 @@ public class EscoltaMsgServidor extends Thread {
 //            }
 //           
             //this.netejarTextArea();
+            System.out.println("Aquestos son els clients conectats: " + msgGood[0]);
             this.clientArr.append(msgGood[0]);
             //this.saltLiniaTextArea(clientArr);
         }
     }
 
-    public void afegirClientsConnectats(ArrayList<String> arrClients) {
-
-        for (String row : arrClients) {
-            System.out.println(row);
-        }
-//        //String[] msgGood = msg.split("-/0/u/i/4/9<<z");
-//        System.out.println("msgGood: " + msgGood[0]);
-//        //msgArr.append(msg);
-//        String nomClient = this.getNomClient(msgGood);
-//        String msgClient = this.getMsgClient(msgGood);
-//        if (msgGood.length > 1) {
-//            //this.clientArr.append(nomClient);
-//            //this.saltLiniaTextArea(this.msgArr);
-//        } else {
-//            this.netejarTextArea();
-//            this.clientArr.append(msgGood[0]);
-//            //msgGood[0] = "";
-//            //this.saltLiniaTextArea(clientArr);
+//    public void afegirClientsConnectats(ArrayList<String> arrClients) {
+//
+//        for (String row : arrClients) {
+//            System.out.println(row);
 //        }
-    }
+////        //String[] msgGood = msg.split("-/0/u/i/4/9<<z");
+////        System.out.println("msgGood: " + msgGood[0]);
+////        //msgArr.append(msg);
+////        String nomClient = this.getNomClient(msgGood);
+////        String msgClient = this.getMsgClient(msgGood);
+////        if (msgGood.length > 1) {
+////            //this.clientArr.append(nomClient);
+////            //this.saltLiniaTextArea(this.msgArr);
+////        } else {
+////            this.netejarTextArea();
+////            this.clientArr.append(msgGood[0]);
+////            //msgGood[0] = "";
+////            //this.saltLiniaTextArea(clientArr);
+////        }
+//    }
 
     private void saltLiniaTextArea(JTextArea jta) {
         String saltLinia = "\n";
@@ -366,6 +373,10 @@ public class EscoltaMsgServidor extends Thread {
         if (infoTextArea > 0) {
             this.clientArr.setText(null);
         }
+    }
+    
+    public static void rebreArray(ArrayList<String> arrNoms){
+        EscoltaMsgServidor.arrNoms = arrNoms;
     }
 
 //    private void guardarNomClients(ArrayList<String> arrNom, String nomClient) {
