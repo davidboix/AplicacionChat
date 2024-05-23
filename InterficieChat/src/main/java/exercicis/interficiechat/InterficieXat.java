@@ -1,5 +1,6 @@
 package exercicis.interficiechat;
 
+import componentsPersonalitzats.ComponentJavaBean;
 import encriptacio.Client;
 import encriptacio.EscoltaMsgServidor;
 import encriptacio.Servidor;
@@ -18,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import metatron.CrudMONGO;
@@ -247,12 +249,24 @@ public class InterficieXat extends javax.swing.JFrame {
             );
             
             if (msgEnviat < 1) {
-                cm.setNomColeccio("missatges");
+                cm.setNomColeccio("ggep");
                 /**
                  * TODO: Aquesta funcio lha realitzara el servidor en ves del
                  * client degut a que son funcions del servidor....
                  */
-                //cm.setDadesMsg(this.nomUsuari, msg, data);
+                    
+                ComponentJavaBean cj = new ComponentJavaBean();
+                boolean visible = cm.setDadesMsg(this.nomUsuari, msg, data);
+                if(visible == false){
+                    JFrame frame = new JFrame("My Component");
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    frame.getContentPane().add(cj); 
+                    frame.pack(); 
+                    frame.setVisible(true);
+                }
+                
+                System.out.println(cm.setDadesMsg(this.nomUsuari, msg, data));
+                
                 this.netejarInput(this.inputMsg);
             }
 

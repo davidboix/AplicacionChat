@@ -7,7 +7,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
 import org.bson.Document;
 
 /**
@@ -233,26 +235,74 @@ public class CrudMONGO {
         return mongoC;
 
     }
+    
+//    public boolean collectionExists(final String collectionName) {
+//        Set<String> collectionNames = getCollectionNames();
+//        for (final String name : collectionNames) {
+//            if (name.equalsIgnoreCase(collectionName)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
-    public void setDadesMsg(String nomUser, String msg, String data) {
+//    public void setDadesMsg(String nomUser, String msg, String data) {
+//
+//        this.setUrlConnexio(this.inicialitzarServidor());
+//        MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
+//        try ( MongoClient mc = new MongoClient(mcu)) {
+//            //var collectionExists = database.ListCollectionNames().ToList().Contains("cap2");
+//            MongoCollection<Document> mongoC = this.accedirColeccions(mc, this.getNomColeccio());
+//
+//            Document missatgeNou = new Document("nomUsuari", nomUser)
+//                    .append("missatgeUsuari", msg)
+//                    .append("dataMissatge", data);
+//            mongoC.insertOne(missatgeNou);
+//
+//            System.out.println("S'ha introduit un nou missatge...");
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+    
+    public boolean setDadesMsg(String nomUser, String msg, String data) {
+    this.setUrlConnexio(this.inicialitzarServidor());
+    MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
 
-        this.setUrlConnexio(this.inicialitzarServidor());
-        MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
-        try ( MongoClient mc = new MongoClient(mcu)) {
-            MongoCollection<Document> mongoC = this.accedirColeccions(mc, this.getNomColeccio());
+    try (MongoClient mc = new MongoClient(mcu)) {
+        MongoDatabase database = mc.getDatabase(this.getUsuariServidor());
+        MongoCollection<Document> mongoC = database.getCollection(this.getNomColeccio());
 
-            Document missatgeNou = new Document("nomUsuari", nomUser)
-                    .append("missatgeUsuari", msg)
-                    .append("dataMissatge", data);
-            mongoC.insertOne(missatgeNou);
-
-            System.out.println("S'ha introduit un nou missatge...");
-
+        // Attempt to perform an operation on the collection to check existence
+        try {
+            System.out.println(mongoC.countDocuments());;
+            if(mongoC.countDocuments() < 3){
+                System.out.println("Col·leccio no existeix");
+                mongoC.drop();
+                return false;
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("La col·lecció no existeix o no es pot accedir-hi.");
+            return false;
         }
 
+        Document missatgeNou = new Document("nomUsuari", nomUser)
+                               .append("missatgeUsuari", msg)
+                               .append("dataMissatge", data);
+        mongoC.insertOne(missatgeNou);
+
+        System.out.println("S'ha introduit un nou missatge...");
+        return true;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
     }
+}
+
+
 
     public String tractarData() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
