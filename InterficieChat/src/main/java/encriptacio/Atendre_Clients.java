@@ -1,253 +1,3 @@
-//package encriptacio;
-//
-//import java.io.DataInputStream;
-//import java.io.DataOutputStream;
-//import java.io.IOException;
-//import java.io.InputStream;
-//import java.io.ObjectOutputStream;
-//import java.io.OutputStream;
-//import java.net.Socket;
-//import java.net.SocketException;
-//import java.util.ArrayList;
-//import java.util.Scanner;
-//
-///**
-// *
-// * @author David Boix Sanchez
-// * @version 1.0
-// *
-// * Correu Begoña: berritja.cicles@gmail.com
-// *
-// */
-//public class Atendre_Clients extends Thread {
-//
-//    private Socket socket;
-//    private ArrayList<String> arrMsg = new ArrayList<>();
-//    private ArrayList<Socket> arrSocket = new ArrayList<>();
-//
-//    public Atendre_Clients() {
-//
-//    }
-//
-//    public Atendre_Clients(Socket socket) {
-//        this.socket = socket;
-//    }
-//
-//    public Atendre_Clients(Socket socket, ArrayList<Socket> arrSocket) {
-//        this.socket = socket;
-//        this.arrSocket = arrSocket;
-//
-//    }
-//
-//    public Atendre_Clients(Socket socket, ArrayList<Socket> arrSocket, ArrayList<String> arrMsg) {
-//        this.socket = socket;
-//        this.arrSocket = arrSocket;
-//        this.arrMsg = arrMsg;
-//    }
-//
-//    private ArrayList guardarMissatgesArrayList(ArrayList<String> arrMsg, String msg) {
-//        if (!msg.isEmpty()) {
-//            arrMsg.add(msg);
-//        }
-//        return arrMsg;
-//    }
-//
-//    private ArrayList guardarClientsArrayList(ArrayList<Socket> arrSocket, Socket socket) {
-//        if (!socket.isClosed()) {
-//            arrSocket.add(socket);
-//        }
-//        return arrSocket;
-//    }
-//
-//    public void setSocket(Socket socket) {
-//        this.socket = socket;
-//    }
-//
-//    public Socket getSocket() {
-//        return socket;
-//    }
-//
-//    public ArrayList<String> getArrMsg() {
-//        return arrMsg;
-//    }
-//
-//    public ArrayList<Socket> getArrSocket() {
-//        return arrSocket;
-//    }
-//
-//    public void setArrMsg(ArrayList<String> arrMsg) {
-//        this.arrMsg = arrMsg;
-//    }
-//
-//    public void setArrSocket(ArrayList<Socket> arrSocket) {
-//        this.arrSocket = arrSocket;
-//    }
-//
-//    /**
-//     * TODO: El servidor llegira un missatge de desconnexio per part del client
-//     * que sera 'exit' quan el client premi al boto de desconnexio de la
-//     * interficie
-//     */
-//    public void run() {
-//        try {
-//            /**
-//             * TODO: Crearem una instancia del servidor per poder utilitzar els
-//             * metodes que hem creat en el servidor
-//             */
-//            Servidor servidor = new Servidor();
-//            Scanner entradaCliente = new Scanner(socket.getInputStream());
-//            boolean semafor = false;
-//            boolean connexioTancada = false;
-//            final String MISSATGE_DESCONNEXIO = "exit";
-//
-//            InputStream is = socket.getInputStream();
-//            OutputStream os = socket.getOutputStream();
-//
-//            /**
-//             * TODO: En aquest moment estem guardant la quantitat de clients
-//             * connectats al servidor actualment.
-//             */
-//            int qtClients = servidor.getQtClients();
-//
-//            DataInputStream dis = new DataInputStream(socket.getInputStream());
-//            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-//
-//            while (!semafor) {
-//                //ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-//                //out.writeObject(this.arrMsg);
-//                //ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-//                /**
-//                 * TODO: Hem de revisar el us dels objectes DataInputStream i el
-//                 * DataOutputStream per poder llegir els missatges que s'envien
-//                 * desde el client i aixi poder solucionar varis errors que ens
-//                 * podrem trobar en el futur
-//                 *
-//                 * byte[] keyBytes = new byte[dis.readInt()];
-//                 * dis.readFully(keyBytes);
-//                 */
-//
-//                byte[] buffer = new byte[500];
-//                int intBuffer = is.read(buffer);
-//
-//                /**
-//                 * TODO:Solucio proposada per CHATGPT
-//                 */
-//                String msg = new String(buffer, 0, intBuffer);
-//                /**
-//                 * TODO: Solucio proposada per David Boix
-//                 *
-//                 * String msg = new String(buffer);
-//                 */
-//                if (msg.equalsIgnoreCase(MISSATGE_DESCONNEXIO)) {
-//                    Thread.sleep(2000);
-//                    System.out.println("El client numero " + qtClients + " i amb socket : " + socket.getPort() + " s'ha desonnectat...");
-//                    connexioTancada = servidor.eliminarSocket(this.arrSocket, socket);
-//                    semafor = true;
-//                }
-//
-//                boolean comprovarExit = this.comprovarMsgDesconnexio(msg);
-//                String msgEnviament = null;
-//                if (!comprovarExit) {
-//                    this.guardarMissatgesArrayList(servidor.arrMsg2, msg);
-//                    //En aquest punt mostrarem els valors dels ArrayLists.
-//                    //servidor.getDadesLlistes(this.arrSocket, servidor.arrMsg2);
-//                    //Proves de enviament dels missatges al client de volta.
-//                    System.out.println("Aquestos son els missatges guardats en el array...");
-//                    System.out.println();
-//                    for (String msgClient : servidor.arrMsg2) {
-//                        System.out.println(msgClient);
-//                        msgEnviament = msgClient;
-//                    }
-//                    mostrarMissatge(msgEnviament);
-//                    for (Socket socket : this.arrSocket) {
-//                        os.write(msgEnviament.getBytes());
-//                    }
-////                    if (!connexioTancada) {
-////                        //new FilsEnviarInfoClients(socket, this.arrMsg, this.arrSocket).start();
-////                        new FilsEnviarInfoClients(socket, servidor.arrMsg2, this.arrSocket).start();
-////                    }                    
-//                }
-//            }
-//            /**
-//             * TODO: Crida de la funcio decrementarClientsConnectats de la
-//             * classe Servidor per poder realitzar la resta en 1 de clients
-//             * connectats en el servidor.
-//             */
-//            servidor.decrementarClientsConnectats();
-//        } catch (SocketException se) {
-//            se.printStackTrace();
-//            System.err.println("\nERROR!\nS'ha produit un problema al intentar connectar un fil al socket.");
-//        } catch (IOException ioe) {
-//            ioe.printStackTrace();
-//            System.err.println("\nERROR!\nHi ha hagut un error per poder connectar...");
-//        } catch (InterruptedException ie) {
-//            ie.printStackTrace();
-//            System.err.println("\nERROR!\nHi ha hagut un error de connexio");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.err.println("\nERROR!\nHi ha un metode que no ha funcionat correctament");
-//        }
-//    }
-//
-//    /**
-//     * TODO: Hem de revisar que el nom del client que fem servir actualment, es
-//     * unicament el numero de client que li ha tocat a aquell client, l'haurem
-//     * de modificar per el nom que fa servir per poder logejar-se.
-//     *
-//     * Funcio que hem desenvolupat per poder guardar en memoria les dades que fa
-//     * servir el usuari per poder connectar-se al servidor on aquestes dades
-//     * seran el nom del client i el port del socket del client que es connecta.
-//     *
-//     * @param arrUsuaris ArrayList que farem servir per poder guardar les dades
-//     * del usuari.
-//     * @param arrSockets ArrayList que farem servir per poder guardar el port
-//     * del socket del cient en especific.
-//     * @param portClient Port del client que farem servir per poder afegir-lo a
-//     * un arrayList.
-//     * @param nomClient Nom del client que farem servir per poder afegir-lo a un
-//     * ArrayList.
-//     */
-//    private void inserirDadesMemoria(ArrayList<String> arrUsuaris, ArrayList<Integer> arrSockets, int portClient, String nomClient) {
-//        arrUsuaris.add(nomClient);
-//        arrSockets.add(portClient);
-//        this.mostrarDadesArrayList(arrUsuaris, arrSockets);
-//    }
-//
-//    /**
-//     * Funcio realitzada per poder mostrar les dades dels ArrayLists creats per
-//     * veure si s'esta realitzant correctament.
-//     */
-//    private void mostrarDadesArrayList(ArrayList<String> arrUsuaris, ArrayList<Integer> arrSockets) {
-//        for (String row : arrUsuaris) {
-//            System.out.println(row + " ");
-//        }
-//        for (int row : arrSockets) {
-//            System.out.println(row + "\n");
-//        }
-//    }
-//
-//    private boolean comprovarMsgDesconnexio(String msg) {
-//        String exit = "exit";
-//        if (msg.equalsIgnoreCase(exit)) {
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    private void mostrarMissatge(String msg) {
-//        try {
-//            if (!msg.isEmpty()) {
-//                System.out.println("Aquest es el ultim missatge enviat pel client: " + msg);
-//            } else {
-//                System.out.println("El missatge NO pot quedar buit.");
-//            }
-//        } catch (NullPointerException npe) {
-//            System.out.println("El missatge NO pot ser NULL.");
-//        } catch (Exception e) {
-//            System.out.println("Hi ha hagut un error.");
-//        }
-//    }
-//}
 package encriptacio;
 
 import java.io.IOException;
@@ -266,6 +16,7 @@ public class Atendre_Clients extends Thread {
      * TODO: Revisar alternativa al us de aquest arraylist en especial.
      */
     private static CopyOnWriteArrayList<OutputStream> arrClients = new CopyOnWriteArrayList<>();
+    private ArrayList<String> arrNomClients = new ArrayList<>();
 
     public Atendre_Clients(Socket socket) {
         this.socket = socket;
@@ -280,6 +31,11 @@ public class Atendre_Clients extends Thread {
         this.socket = socket;
         this.os = os;
     }
+    public Atendre_Clients(Socket socket, ArrayList<Socket> arrSocket, ArrayList<String> arrNomClients){
+        this.socket = socket;
+        this.arrSocket = arrSocket;
+        this.arrNomClients = arrNomClients;
+    }
 
     public void run() {
         try {
@@ -287,23 +43,22 @@ public class Atendre_Clients extends Thread {
             InputStream is = socket.getInputStream();
             os = socket.getOutputStream();
             arrClients.add(os);
-
+            
             //String nomClient = servidor.setNomClients(servidor.arrNoms, is);
-            //System.out.println("Aquest es el nom del nou client conectat: " + nomClient);
             String nomClient = Servidor.setNomClients(Servidor.arrNoms, is);
-                        
+            
+            EscoltaMsgServidor.rebreArray(Servidor.arrNoms);
+            
             //servidor.getNomArrClients(servidor.arrNoms);
-            int size = Servidor.getNomArrClients(Servidor.arrNoms);           
-            
-            //aqui tindrem el numero de clients conectats...
-            
+            Servidor.getNomArrClients(Servidor.arrNoms);
+
             //this.enviarClientsConectats(servidor.arrSocket);
-            //this.enviarNomsClientsConectats(servidor.arrNoms);
-            
-            this.enviarNomsClientsConectats(Servidor.arrNoms);
-            
+            this.enviarNomsClientsConectats(servidor.arrNoms);
+            //this.enviarNomsClientsConectats(Servidor.arrNoms);
+
             byte[] buffer = new byte[1024];
             int intBuffer;
+            
             boolean semafor = false;
             while (!semafor) {
                 intBuffer = is.read(buffer);
@@ -317,13 +72,11 @@ public class Atendre_Clients extends Thread {
                         this.eliminarClientArray(this.arrClients, this.os);
                         //this.enviarMissatgeDesconexio(servidor.arrSocket, this.socket);
                         this.eliminarSocketArray(Servidor.arrSocket, this.socket);
-                        EscoltaMsgServidor ems = new EscoltaMsgServidor();
-                        ems.netejarTextArea();
-                       
+                        
                         //this.deleteNomClient(servidor.arrNoms, nomClient);
                         Servidor.deleteNomClient(Servidor.arrNoms, nomClient);
-                        //servidor.deleteNomClient(servidor.arrNoms, nomClient.trim());
-                        Servidor.getNomArrClients(Servidor.arrNoms);
+                        
+                                                
                         semafor = true;
                         break;
                     }
@@ -382,28 +135,14 @@ public class Atendre_Clients extends Thread {
     }
 
     private void enviarMissatge(String msg) {
-        System.out.println();
         for (OutputStream clients : arrClients) {
             try {
                 clients.write(msg.getBytes());
-                //clients.writeObject(arrClients.getBytes());
                 clients.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
-    
-    private void enviarMissatge(ArrayList<String> arrClients) {
-        System.out.println();
-        
-        //for (String clients : arrClients) {
-            try {
-                
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        //}
     }
 
     private void enviarMissatgeDesconexio(ArrayList<Socket> arrClients, Socket socket) {
@@ -463,33 +202,12 @@ public class Atendre_Clients extends Thread {
         return isTrobat;
     }
 
-    private void enviarClientsConectats(ArrayList<Socket> arrSockets) {
-        System.out.println("------------Aquestos son els usuaris conectats actualment...-----------------");
-        if (arrSockets.size() > 0) {
-            for (Socket row : arrSockets) {
-                enviarMissatge(String.valueOf(row));
-            }
-        } else {
-            enviarMissatge("NO hi ha cap client conectat");
-        }
-    }
-
     private void enviarNomsClientsConectats(ArrayList<String> arrClients) {
-        
-        if (arrClients.size() > 0) {
-            //for (String row : arrClients) {
-                this.enviarMissatge(arrClients);
-                
-            //}
-        }
-    }
-    
-    private void enviarNomsClientsConectats(CopyOnWriteArrayList<String> arrClients) {
-        
+
         if (arrClients.size() > 0) {
             for (String row : arrClients) {
                 this.enviarMissatge(row);
-                
+
             }
         }
     }

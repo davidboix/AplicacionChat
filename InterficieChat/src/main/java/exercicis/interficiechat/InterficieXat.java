@@ -245,10 +245,14 @@ public class InterficieXat extends javax.swing.JFrame {
                     opcions,
                     opcions[0]
             );
-            System.out.println("Aixo es la opcio: " + msgEnviat);
+            
             if (msgEnviat < 1) {
                 cm.setNomColeccio("missatges");
-                cm.setDadesMsg(this.nomUsuari, msg, data);
+                /**
+                 * TODO: Aquesta funcio lha realitzara el servidor en ves del
+                 * client degut a que son funcions del servidor....
+                 */
+                //cm.setDadesMsg(this.nomUsuari, msg, data);
                 this.netejarInput(this.inputMsg);
             }
 
