@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -234,9 +236,19 @@ public class InterficieXat extends javax.swing.JFrame {
             JOptionPane jop = new JOptionPane();
             Icon imagenLabel = new ImageIcon(getClass().getResource("/check.png"));
             String[] opcions = {"Acceptar"};
-            cm.setNomColeccio("missatges");
-            String data = cm.tractarData();
+            String pattern = "MM/dd/yyyy HH:mm:ss";
 
+            DateFormat df = new SimpleDateFormat(pattern);
+
+            Date today = Calendar.getInstance().getTime();        
+            String todayAsString = df.format(today);
+            String todayCollection[] = todayAsString.split(" ");
+                
+
+            System.out.println("Today is: " + todayCollection[0]);
+            cm.setNomColeccio(todayCollection[0]);
+            String data = cm.tractarData();
+            cm.setDadesMsg(this.nomUsuari, msg, data);
             int msgEnviat = jop.showOptionDialog(
                     null,
                     "Missatge Enviat",
@@ -249,7 +261,8 @@ public class InterficieXat extends javax.swing.JFrame {
             );
 
             if (msgEnviat < 1) {
-                //cm.setNomColeccio("ggep");
+                
+                //cm.setNomColeccio(todayCollection[0]);
                 /**
                  * TODO: Aquesta funcio lha realitzara el servidor en ves del
                  * client degut a que son funcions del servidor....

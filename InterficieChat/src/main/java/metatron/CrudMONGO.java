@@ -275,14 +275,13 @@ public class CrudMONGO {
         MongoDatabase database = mc.getDatabase(this.getUsuariServidor());
         MongoCollection<Document> mongoC = database.getCollection(this.getNomColeccio());
 
-        // Attempt to perform an operation on the collection to check existence
         try {
             System.out.println(mongoC.countDocuments());;
-            if(mongoC.countDocuments() < 3){
-                System.out.println("Col·leccio no existeix");
-                mongoC.drop();
-                return false;
-            }
+//            if(mongoC.countDocuments() < 3){
+//                System.out.println("Col·leccio no existeix");
+//                mongoC.drop();
+//                return false;
+//            }
         } catch (Exception e) {
             System.out.println("La col·lecció no existeix o no es pot accedir-hi.");
             return false;
