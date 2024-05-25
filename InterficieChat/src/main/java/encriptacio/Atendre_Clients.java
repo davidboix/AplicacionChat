@@ -12,107 +12,136 @@ public class Atendre_Clients extends Thread {
     private Socket socket;
     static ArrayList<Socket> arrSocket;
     private OutputStream os;
-    /**
-     * TODO: Revisar alternativa al us de aquest arraylist en especial.
-     */
     private static CopyOnWriteArrayList<OutputStream> arrClients = new CopyOnWriteArrayList<>();
     private ArrayList<String> arrNomClients = new ArrayList<>();
 
+    /**
+     * Constructor buit per poder realitzar instancies de la classe
+     * Atendre_Clients.
+     */
+    public Atendre_Clients() {
+
+    }
+
+    /**
+     * Constructor parametritzat creat per poder realitzar instancies de la
+     * classe Atendre_Clients.
+     *
+     * @param socket Socket amb el qual inicialitzarem el atribut socket.
+     */
     public Atendre_Clients(Socket socket) {
         this.socket = socket;
     }
 
+    /**
+     * Constructor parametritzat creat per poder realitzar instancies de la
+     * classe Atendre_Clients.
+     *
+     * @param socket Socket amb el qual inicialitzarem el atribut socket.
+     * @param arrSocket ArrayList de tipus Socket per inicialitzar el atribut
+     * arrSocket.
+     */
     public Atendre_Clients(Socket socket, ArrayList<Socket> arrSocket) {
         this.socket = socket;
         this.arrSocket = arrSocket;
     }
 
+    /**
+     * Constructor parametritzat creat per poder realitzar instancies de la
+     * classe Atendre_Clients.
+     *
+     * @param socket Socket amb el qual inicialitzarem el atribut socket.
+     * @param os OutputStream que utilitzarem per inicialitzar el atribut
+     * anomenat os.
+     */
     public Atendre_Clients(Socket socket, OutputStream os) {
         this.socket = socket;
         this.os = os;
     }
-    public Atendre_Clients(Socket socket, ArrayList<Socket> arrSocket, ArrayList<String> arrNomClients){
+
+    /**
+     * Constructor parametritzat creat per poder realitzar instancies de la
+     * classe Atendre_Clients.
+     *
+     * @param socket Socket amb el qual inicialitzarem el atribut socket.
+     * @param arrSocket ArrayList de tipus Socket per inicialitzar el atribut
+     * arrSocket,.
+     * @param arrNomClients ArrayList de tipus String per inicialitzar el
+     * atribut arrNomClients.
+     */
+    public Atendre_Clients(Socket socket, ArrayList<Socket> arrSocket, ArrayList<String> arrNomClients) {
         this.socket = socket;
         this.arrSocket = arrSocket;
         this.arrNomClients = arrNomClients;
     }
 
+    /**
+     * Metode sobreescrit que heredem de la classe Thread per poder utilitzar la
+     * classe com un fil.
+     */
+    @Override
     public void run() {
         try {
             Servidor servidor = new Servidor();
-            InputStream is = socket.getInputStream();
-            os = socket.getOutputStream();
-            arrClients.add(os);
-            
-            //String nomClient = servidor.setNomClients(servidor.arrNoms, is);
+            InputStream is = this.socket.getInputStream();
+            this.os = this.socket.getOutputStream();
+            this.arrClients.add(os);
             String nomClient = Servidor.setNomClients(Servidor.arrNoms, is);
-            
-            //EscoltaMsgServidor.rebreArray(Servidor.arrNoms);
-            EscoltaMsgServidor.setArrNoms(Servidor.arrNoms);
-            
-            //servidor.getNomArrClients(servidor.arrNoms);
+            this.enviarNomClient(nomClient);
             Servidor.getNomArrClients(Servidor.arrNoms);
-
-            //this.enviarClientsConectats(servidor.arrSocket);
             this.enviarNomsClientsConectats(servidor.arrNoms);
-            //this.enviarNomsClientsConectats(Servidor.arrNoms);
-
             byte[] buffer = new byte[1024];
             int intBuffer;
-            
             boolean semafor = false;
             while (!semafor) {
                 intBuffer = is.read(buffer);
-
                 String msg = new String(buffer, 0, intBuffer);
-
                 if (msg.equalsIgnoreCase("exit")) {
                     boolean isTrobat = this.isSocketTrobat(servidor.arrSocket, this.socket);
                     if (isTrobat) {
-                        System.out.println("Passem per el exit...");
                         this.eliminarClientArray(this.arrClients, this.os);
-                        this.enviarMissatgeDesconexio(servidor.arrSocket, this.socket);
                         this.eliminarSocketArray(Servidor.arrSocket, this.socket);
-                        
-                        //this.deleteNomClient(servidor.arrNoms, nomClient);
-                        //this.enviarClientsMissatgeDesconexio(Servidor.arrNoms, msg);
-                        //Servidor.deleteNomClient(Servidor.arrNoms, nomClient);                      
-                        
                         this.deleteNomClient(Servidor.arrNoms, nomClient);
-                                                
+                        this.enviarNomsClientsConectats(servidor.arrNoms);
                         semafor = true;
                         break;
                     }
                 }
-
                 this.guardarMissatgesArrayList(servidor.arrMsg2, msg);
                 this.mostrarMissatgesArrayList(servidor.arrMsg2);
                 this.mostrarMissatgeUsuari(socket, msg);
                 this.enviarMissatge(msg);
-
             }
-            //arrClients.remove(os);
-            //socket.close();
-
             servidor.decrementarClientsConnectats(socket);
-
-//            if (desconnectatListener != null) {
-//                desconnectatListener.onClientDisconnect(socket);
-//            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Funcio desenvolupada per poder eliminar els clients que son emmagatzemats
+     * dins del ArrayList un cop aquests clients han realitzat l'operació de
+     * l'exit.
+     *
+     * @param arrClients ArrayList on estan emmagatzemats els clients.
+     * @param os El client que busquem dins del ArrayList.
+     */
     private void eliminarClientArray(CopyOnWriteArrayList<OutputStream> arrClients, OutputStream os) {
         if (!arrClients.isEmpty()) {
             arrClients.remove(os);
         } else {
             System.out.println("El Array no te cap client per poder borrar.");
         }
-
     }
 
+    /**
+     * Funcio desenvolupada per poder guardar els diferents missatges que han
+     * enviat els usuaris a un ArrayList.
+     *
+     * @param arrMsg ArrayList on es guardaran els missatges.
+     * @param msg Missatge pertinent enviat per el usuari a guardar.
+     * @return
+     */
     private ArrayList guardarMissatgesArrayList(ArrayList<String> arrMsg, String msg) {
         if (!msg.isEmpty()) {
             arrMsg.add(msg);
@@ -120,6 +149,14 @@ public class Atendre_Clients extends Thread {
         return arrMsg;
     }
 
+    /**
+     * Funcio realitzada per poder veure per consola tots els missatges
+     * emmagatzemats dins del ArrayList on guardem els missatges enviats per els
+     * diferents clients conectats.
+     *
+     * @param arrMsg ArrayList que utilitzarem per poder veure els missatges per
+     * consola.
+     */
     private void mostrarMissatgesArrayList(ArrayList<String> arrMsg) {
         try {
             System.out.println("Aquestos son els missatges guardats en el ArrayList: ");
@@ -131,12 +168,27 @@ public class Atendre_Clients extends Thread {
         }
     }
 
+    /**
+     * Funcio realitzada per veure per consola el missatge que acaba de enviar
+     * un client especificant en la sortida, quin socket ho han realitzat i el
+     * missatge en questio.
+     *
+     * @param socket Socket del client que ha enviat el missatge.
+     * @param msg El missatge que ha enviat aquell client.
+     */
     private void mostrarMissatgeUsuari(Socket socket, String msg) {
         if (!msg.isEmpty()) {
             System.out.println("\nMissatge enviat per el usuari amb el port del socket: " + socket.getPort() + " que hem rebut en el servidor: " + msg);
         }
     }
 
+    /**
+     * Funcio desenvolupada per poder enviar el missatge que ha enviat un
+     * client, a tots els clients que es troben emmagatzemats en el ArrayList i
+     * que estan conectats en el servidor.
+     *
+     * @param msg Missatge enviat per el usuari.
+     */
     private void enviarMissatge(String msg) {
         for (OutputStream clients : arrClients) {
             try {
@@ -148,32 +200,35 @@ public class Atendre_Clients extends Thread {
         }
     }
 
-    private void enviarMissatgeDesconexio(ArrayList<Socket> arrClients, Socket socket) {
-        Socket socketClient = null;
-        for (Socket row : arrClients) {
-            if (row.equals(socket)) {
-                socketClient = row;
+    /**
+     * Funcio desenvolupada per poder enviar als clients que es troben conectats
+     * en el servidor, l'entrada de un nou usuari en el servidor.
+     *
+     * @param nomClient El nom del client que s'ha conectat.
+     */
+    private void enviarMissatgeClientConectats(String nomClient) {
+        String nomClientConnectat = "\nEl client amb nom: " + nomClient + " s'ha connectat satisfactoriament!\n";
+        for (OutputStream clients : arrClients) {
+            try {
+                clients.write(nomClientConnectat.getBytes());
+                clients.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-
-        String msgDesconexio = "\nEl client " + socketClient + " s'ha desconectat satisfactoriament";
-        this.enviarMissatge(msgDesconexio);
-    }
-    
-    private void enviarClientsMissatgeDesconexio(ArrayList<String> arrClients, String nom) {
-        String nomClient = null;
-        for (String row: arrClients) {
-            if (row.equalsIgnoreCase(nom)) {
-                nomClient = nom;
-            }
-        }
-        if (nomClient != null) {
-            String msgDesconexio = "\nEl client " + nomClient + " s'ha desconectat satisfactoriament";
-            this.enviarMissatge(msgDesconexio);
-        }
-        
     }
 
+    /**
+     * Aquesta funcio la podrem utilitzar per poder borrar un socket el qual es
+     * troba guardat en el ArrayList de sockets passant per parametres el
+     * ArrayList en questio i el socket que volem eliminar.
+     *
+     * @param arrSockets ArrayList amb els sockets que tenim guardats.
+     * @param socket El socket que volem eliminar.
+     * @return En cas de que el socket hagui sigut eliminat correctament, ens
+     * retornara TRUE, en canvi, si NO s'ha trobat el socket en el ArrayList,
+     * ens retornara FALSE.
+     */
     private boolean eliminarSocketArray(ArrayList<Socket> arrSockets, Socket socket) {
         boolean isTrobat = false;
         Socket socketClient = null;
@@ -194,6 +249,16 @@ public class Atendre_Clients extends Thread {
 
     }
 
+    /**
+     * Funcio desenvolupada per a la eliminacio del socket que es troba guardat
+     * en el ArrayList de sockets.
+     *
+     * @param arrSockets ArrayList on estan guardats tots els sockets.
+     * @param socket Socket que volem eliminar.
+     * @return Retornara TRUE si l'operacio de eliminacio ha sigut satisfactori,
+     * en cas contrari, el socket NO haura sigut eliminat o be, ens hem trobat
+     * amb algun tipus de error.
+     */
     private boolean isArrayListSocketExistent(ArrayList<Socket> arrSockets, Socket socket) {
         boolean isTrobat = false;
         try {
@@ -209,6 +274,15 @@ public class Atendre_Clients extends Thread {
         return isTrobat;
     }
 
+    /**
+     * Funcio desenvolupada per poder saber si el socket que estem buscant
+     * existeix dins del ArrayList amb els sockets restants.
+     *
+     * @param arrSockets ArrayList de tipus Socket amb els sockets guardats.
+     * @param socket El socket que estem buscant dins del ArrayList.
+     * @return En cas de que, el socket hagui sigut trobat dins del ArrayList,
+     * retornarem TRUE, en cas contrari retornarem FALSE.
+     */
     private boolean isSocketTrobat(ArrayList<Socket> arrSockets, Socket socket) {
         boolean isTrobat = false;
         for (Socket row : arrSockets) {
@@ -219,25 +293,56 @@ public class Atendre_Clients extends Thread {
         return isTrobat;
     }
 
+    /**
+     * Funcio desenvolupada per poder enviar a tots els clients conectats en el
+     * servidor, els clients que es troben conectats.
+     *
+     * @param arrClients ArrayList de tipus String amb els clients conectats.
+     */
     private void enviarNomsClientsConectats(ArrayList<String> arrClients) {
 
         if (arrClients.size() > 0) {
             for (String row : arrClients) {
                 this.enviarMissatge(row);
-
             }
         }
     }
 
+    /**
+     * Funcio desenvolupada per poder borrar el client que es troba conectat en
+     * aquell moment amb el missatge clau que el client ens ha enviat.
+     *
+     * @param arrNomsClients ArrayList de tipus String amb els noms dels
+     * clients.
+     * @param nom El nom del client a borrar.
+     */
     public void deleteNomClient(ArrayList<String> arrNomsClients, String nom) {
         if (arrNomsClients.size() > 0) {
-            for (String row : arrNomsClients) {
-                if (row.equalsIgnoreCase(nom)) {
-                    arrNomsClients.remove(nom);
+            for (int i = 0; i < arrNomsClients.size(); i++) {
+                if (arrNomsClients.get(i).trim().equalsIgnoreCase(nom.trim())) {
+                    arrNomsClients.remove(i);
                 }
             }
         }
-        String msgDesconexio = "El client amb nom: " + nom + " s'ha desconectat satisfactoriament";       
+        String msgDesconexio = "\nEl client amb nom: " + nom + " s'ha desconectat satisfactoriament\n";
+        //TODO: Eliminar els souts.
+        System.out.println("Despres de eliminar....");
+        for (String row : arrNomsClients) {
+            System.out.println(row);
+        }
+
         this.enviarMissatge(msgDesconexio);
+    }
+
+    /**
+     * Funcio desenvolupada per enviar el nom del client a tots els clients
+     * conectats el missatge de que s'ha conectat.
+     *
+     * @param nom Nom del client que s'ha conectat.
+     */
+    private void enviarNomClient(String nom) {
+        if (!nom.isEmpty() && nom != null) {
+            this.enviarMissatgeClientConectats(nom);
+        }
     }
 }

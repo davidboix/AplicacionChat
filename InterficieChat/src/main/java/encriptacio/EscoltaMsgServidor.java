@@ -271,6 +271,9 @@ public class EscoltaMsgServidor extends Thread {
     }
 
     public void afegirClientsConnectats(String msg) {
+        System.out.println("\nPassem per aqui...\n");
+        Servidor servidor = new Servidor();
+        servidor.augmentarClientsConnectats();
         
         for (String row : this.arrNomClients) {
             if (!row.equalsIgnoreCase(this.nomUsuari)) {
@@ -293,6 +296,7 @@ public class EscoltaMsgServidor extends Thread {
 
 //        System.out.println("EscoltaMsgServidor: Clients conectats: ");
 //        Servidor.getNomArrClients(Servidor.arrNoms);
+
         String[] msgGood = msg.split("-/0/u/i/4/9<<z");
         //System.out.println("msgGood: " + msgGood[0]);
         //msgArr.append(msg);
@@ -310,43 +314,22 @@ public class EscoltaMsgServidor extends Thread {
 //            } else {
 //                System.out.println("EscoltaMsgServidor: El arraylist esta buit...");
 //            }
-            this.mostrarArray();
+            //this.mostrarArray();
 
-            String nomsClients = msgGood[0];
-            String[] arrNomsClients = nomsClients.split("l");
-//            
-            for (int i = 0; i < arrNomsClients.length; i++) {
-                System.out.println(i + ": " + arrNomsClients[i]);
-                this.clientArr.append(arrNomsClients[i]);
-            }
+//            String nomsClients = msgGood[0];
+//            String[] arrNomsClients = nomsClients.split(",");
+//            //this.clientArr.setText("");
+//            for (int i = 0; i < arrNomsClients.length; i++) {
+//                System.out.println(i + ": " + arrNomsClients[i]);
+//                this.clientArr.append(arrNomsClients[i]);
+//            }
 //           
             //this.netejarTextArea();
             System.out.println("Aquestos son els clients conectats: " + msgGood[0]);
-            //this.clientArr.append(msgGood[0]);
+            this.clientArr.append(msgGood[0]);
             //this.saltLiniaTextArea(clientArr);
         }
     }
-
-//    public void afegirClientsConnectats(ArrayList<String> arrClients) {
-//
-//        for (String row : arrClients) {
-//            System.out.println(row);
-//        }
-////        //String[] msgGood = msg.split("-/0/u/i/4/9<<z");
-////        System.out.println("msgGood: " + msgGood[0]);
-////        //msgArr.append(msg);
-////        String nomClient = this.getNomClient(msgGood);
-////        String msgClient = this.getMsgClient(msgGood);
-////        if (msgGood.length > 1) {
-////            //this.clientArr.append(nomClient);
-////            //this.saltLiniaTextArea(this.msgArr);
-////        } else {
-////            this.netejarTextArea();
-////            this.clientArr.append(msgGood[0]);
-////            //msgGood[0] = "";
-////            //this.saltLiniaTextArea(clientArr);
-////        }
-//    }
     private void saltLiniaTextArea(JTextArea jta) {
         String saltLinia = "\n";
         if (jta.isVisible()) {

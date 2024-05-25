@@ -173,7 +173,7 @@ public class Client {
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
             Client cl = new Client();
-            new EscoltaMsgServidor(socket, is, cl).start();
+//            new EscoltaMsgServidor(socket, is, cl).start();
 
             //boolean semafor = enviarMissatgeServidor(os, socket);
             boolean semafor = enviarMissatgeServidor(lector, os, socket);
@@ -211,9 +211,12 @@ public class Client {
             /**
              * TODO: Aqui li enviem al servidor el nom del client...
              */
-            os.write(nom.getBytes());
+            if (!this.getNomUsuari().equalsIgnoreCase("exit")) {
+                os.write(this.getNomUsuari().getBytes());
+            }
+            
             System.out.println("Ens conectem...");
-
+            //new FilUsuarisConectats(socket, is, clientsConnectats, this.getNomUsuari()).start();
             new EscoltaMsgServidor(socket, is, textAreaMissatge, this.getNomUsuari(), clientsConnectats).start();
 
             /**
@@ -221,7 +224,6 @@ public class Client {
              * escoltant tot el rato nous clients que es conecten al nostre
              * sistema.
              */
-            //new FilUsuarisConectats(socket, this.getNomUsuari()).start();
         } catch (IOException e) {
             System.out.println("No s'ha pogut connectar al servidor");
         }
@@ -250,7 +252,7 @@ public class Client {
             this.setIs(is);
             enviarMissatgeServidor(this.getOs(), this.getSocket(), this.getNomUsuari());
 
-            new EscoltaMsgServidor(socket, is, textAreaMissatge).start();
+            //new EscoltaMsgServidor(socket, is, textAreaMissatge).start();
         } catch (IOException e) {
             System.out.println("No s'ha pogut connectar al servidor");
         }

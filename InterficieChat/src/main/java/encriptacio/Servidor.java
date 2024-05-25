@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Solucio Alternativa:
@@ -37,7 +38,8 @@ public class Servidor {
     //public static CopyOnWriteArrayList<String> arrNoms = new CopyOnWriteArrayList<>();
     private ArrayList<String> arrMsg = new ArrayList<>();
     static ArrayList<String> arrMsg2 = new ArrayList<>();
-    private ArrayList<String> arrNomsClients = new ArrayList<>();
+    public static ArrayList<String> arrNomsClients = new ArrayList<>();
+    private static ArrayList<OutputStream> arrNomsOS = new ArrayList<>();
 
     public Servidor() {
 
@@ -112,16 +114,16 @@ public class Servidor {
      */
     public void augmentarClientsConnectats() {
         this.qtClients++;
-        //System.out.println("\nClients connectats actualment: " + this.qtClients);
+        System.out.println("\nClients connectats actualment: " + this.qtClients);
     }
 
     /**
      * Funcio desenvolupada per poder decrementar el numero de clients que s'han
      * desconnectat en aquell moment.
      */
-    public void decrementarClientsConnectats(Socket socket) {
+    public static void decrementarClientsConnectats(Socket socket) {
         System.out.println("S'ha desconectat el client amb socket: " + socket);
-        this.qtClients--;
+        qtClients--;
         //System.out.println("Clients connectats actualment: " + this.qtClients);
     }
 
@@ -272,6 +274,7 @@ public class Servidor {
         }
         return false;
     }
+
     private String llegirMissatgeClient(InputStream is) throws IOException {
         byte[] buffer = new byte[500];
         int intBuffer = is.read(buffer);
@@ -325,10 +328,42 @@ public class Servidor {
 
         return "";
     }
+
+    public String setNomClients(InputStream is) {
+        String nomUsuari = null;
+        try {
+            byte[] buffer = new byte[1024];
+            int intBuffer = is.read(buffer);
+            nomUsuari = new String(buffer, 0, intBuffer);
+
+            if (!nomUsuari.isEmpty()) {
+                this.setNomClients(nomUsuari);
+            }
+
+            if (nomUsuari != null) {
+                return nomUsuari;
+            }
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
     private static void setNomArrClients(ArrayList<String> arrNomsClients, String nomClient) {
         if (!nomClient.isEmpty()) {
+            arrNomsClients.add(nomClient + "\n");
+            //arrNomsClients.add(nomClient + ",\n");
+        }
+    }
+
+    private void setNomClients(String nomClient) {
+        if (!nomClient.isEmpty()) {
             //arrNomsClients.add(nomClient + "\n");
-            arrNomsClients.add(nomClient + "l\n");
+            this.arrNomsClients.add(nomClient + ",\n");
         }
     }
 
@@ -336,6 +371,17 @@ public class Servidor {
         if (arrNomsClients.size() > 0) {
             System.out.println("Noms clients: ");
             for (String row : arrNomsClients) {
+                System.out.println(row);
+            }
+        } else {
+            System.out.println("No hi han clients en el array...");
+        }
+    }
+
+    public void getNomArrClients() {
+        if (this.arrNomsClients.size() > 0) {
+            System.out.println("Noms clients: ");
+            for (String row : this.arrNomsClients) {
                 System.out.println(row);
             }
         } else {
@@ -412,16 +458,7 @@ public class Servidor {
                 Socket newSocket = serverSocket.accept();
                 InputStream is = newSocket.getInputStream();
 
-//                byte[] buffer = new byte[1024];
-//                int intBuffer = is.read(buffer);
-//                String nomClient = new String(buffer, 0, intBuffer);
-//                System.out.println("Aquest es el nom del client: " + nomClient);
-//                servidor.guardarNomsClients(servidor, nomClient);
-//                for (String row : servidor.arrNomsClients) {
-//                    System.out.println("Noms clients: " + row);
-//                }
-
-
+                //servidor.getNomClient(is);
                 servidor.augmentarClientsConnectats();
                 servidor.guardarClientsArrayList(servidor.arrSocket, newSocket);
 
@@ -442,87 +479,65 @@ public class Servidor {
 
     }
 
-    private void guardarNomsClients(Servidor servidor, String nomUsuari) {
-        servidor.arrNomsClients.add(nomUsuari);
+    //private void guardarNomsClients(Servidor servidor, String nomUsuari) {
+    private void guardarNomsClients(String nomUsuari) {
+        this.arrNomsClients.add(nomUsuari);
+    }
+
+    private void getNomClient(InputStream is) {
+        try {
+            byte[] buffer = new byte[1024];
+            int intBuffer = is.read(buffer);
+            String nomClient = new String(buffer, 0, intBuffer);
+            this.guardarNomsClients(nomClient);
+            for (String row : this.arrNomsClients) {
+                System.out.println("Nom clients..." + row);
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void enviarNomsClientsConectats(CopyOnWriteArrayList<OutputStream> OS) {
+        if (this.arrNomsClients.size() > 0) {
+            for (String row : this.arrNomsClients) {
+                this.enviarMissatge(row, OS);
+            }
+        }
+    }
+
+    private void enviarMissatge(String msg, CopyOnWriteArrayList<OutputStream> arrClients) {
+        for (OutputStream os : arrClients) {
+            try {
+                os.write(msg.getBytes());
+                os.flush();
+            } catch (Exception e) {
+
+            }
+        }
+    }
+
+    public void deleteNomClient(String nom, CopyOnWriteArrayList<OutputStream> arrClients) {
+        if (this.arrNomsClients.size() > 0) {
+            for (int i = 0; i < this.arrNomsClients.size(); i++) {
+                if (this.arrNomsClients.get(i).equalsIgnoreCase(nom)) {
+                    this.arrNomsClients.remove(i);
+                }
+            }
+        }
+        String msgDesconexio = "\nEl client amb nom: " + nom + " s'ha desconectat satisfactoriament\n";
+        System.out.println(msgDesconexio);
+        this.enviarMissatge(msgDesconexio, arrClients);
+    }
+ 
+    public void coneixerUltimConectat(CopyOnWriteArrayList<OutputStream> arrClients) {
+        String nomUsuari = null;
+        for (String row : this.arrNomsClients) {
+            nomUsuari = row;
+        }
+        System.out.println("Ultim client connectat: " + nomUsuari);
+        this.enviarMissatge(nomUsuari, arrClients);
     }
 }
-
-//import java.io.InputStream;
-//import java.io.OutputStream;
-//import java.net.InetSocketAddress;
-//import java.net.ServerSocket;
-//import java.net.Socket;
-//
-//public class Servidor {
-//
-//    public static void main(String[] args) {
-//        try {
-//            final String DEMANAR_CONNEXIO = "DESCONNEXIO";
-//            System.out.println("Creem el socket servidor");
-//            ServerSocket serverSocket = new ServerSocket();
-//
-//            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
-//
-//            System.out.println("Fem el bind. Ja acceptem connexions...");
-//            serverSocket.bind(addr);
-//
-//            
-//
-//            // Thread to handle new connections
-//            Thread acceptThread = new Thread(() -> {
-//                int qtClients = 0;
-//                boolean semafor = false;
-//                while (true) {
-//                    try {
-//                        System.out.println("Acceptant connexions");
-//                        Socket newSocket = serverSocket.accept();
-//                        qtClients++;
-//                        System.out.println("Conexió rebuda: " + qtClients + " clients connectats");
-//
-//                        // Create a new thread for each client
-//                        new Atendre_Clients(newSocket).start();
-//                        InputStream is = newSocket.getInputStream();
-//                        OutputStream os = newSocket.getOutputStream();
-//
-//                        boolean cagar = llegirDesconnexio(newSocket, is, os, DEMANAR_CONNEXIO, qtClients);
-//                        if (cagar) {
-//                            newSocket.close();
-//                            qtClients--;
-//                            System.out.println("Connexions actuals: " + qtClients);
-//                            semafor = !semafor;
-//
-//                        }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                }
-//            });
-//            acceptThread.start();
-//
-//            // Main thread to read disconnection messages
-//            while (true) {
-//                Thread.sleep(1000); // Sleep for 1 second to avoid busy-waiting
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    private static boolean llegirDesconnexio(Socket socket, InputStream is, OutputStream os, String msgDesconnexio, int i) throws Exception {
-//        try {
-//            byte[] msg = new byte[500];
-//            is.read(msg);
-//            String desconnexio = new String(msg).trim(); // trim() removes leading and trailing whitespaces
-//            System.out.println(desconnexio);
-//            if (msgDesconnexio.equalsIgnoreCase(desconnexio)) {
-//                return true;
-//            } else {
-//                System.out.println("NO TANQUEM CONNEXIO");
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.err.println("\nERROR!\n El metode valoraNom ha petat :( ");
-//        }
-//        return false;
-//    }
-//}
