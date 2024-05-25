@@ -244,8 +244,7 @@ public class InterficieXat extends javax.swing.JFrame {
             String todayAsString = df.format(today);
             String todayCollection[] = todayAsString.split(" ");
                 
-
-            System.out.println("Today is: " + todayCollection[0]);
+            //Anomenem la coleccio amb la data actual
             cm.setNomColeccio(todayCollection[0]);
             String data = cm.tractarData();
             cm.setDadesMsg(this.nomUsuari, msg, data);

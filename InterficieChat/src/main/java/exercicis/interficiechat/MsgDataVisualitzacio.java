@@ -118,6 +118,7 @@ public class MsgDataVisualitzacio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void veureMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_veureMsgActionPerformed
+        //Ens connectem a la base de dades
         String passwordEncriptada = null;
         final String DB_SRV_USR = "grup1";
         final String DB_SRV_PWD = "gat123";
@@ -131,23 +132,24 @@ public class MsgDataVisualitzacio extends javax.swing.JFrame {
         try (MongoClient mongoClient = new MongoClient(uri)) {
         String data = this.dataMsg.getText();
         MongoDatabase database = mongoClient.getDatabase(DB_SRV_USR);
+        //Busquem la col·leccio amb la data del dia introduit
         MongoCollection<Document> msgCollection = database.getCollection(data);
 
-        // Retrieve all documents in the collection
+        // Agafem tots els documents de la Col·leccio
         FindIterable<Document> documents = msgCollection.find();
         
-        // Clear the msgArea before displaying new messages
+        // Netejem el textArea abans de mostrar els missatges
         msgArea.setText("");
         
-        // Iterate over the documents and append their content to the msgArea
+        // Passem tots els documents i posem les dades que volem al textArea
         for (Document doc : documents) {
-            // Assuming the messages are stored in a field named "message"
             String message = doc.getString("missatgeUsuari");
             String usuari = doc.getString("nomUsuari");
+            String dataM = doc.getString("dataMissatge");
+            String dataDivided[] = dataM.split(" ");
+            
             if (message != null) {
-                
-                msgArea.append(usuari + "\n");
-                msgArea.append(message + "\n\n");
+                msgArea.append(usuari + ": [" + dataDivided[1] + "] " + message + "\n");
             }
         }
     } catch (Exception e) {
