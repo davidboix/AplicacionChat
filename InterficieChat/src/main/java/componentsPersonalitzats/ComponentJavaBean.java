@@ -80,6 +80,9 @@ public class ComponentJavaBean extends JPanel {
 //        this.realitzarOperacions(comboBox);
 //    }
     
+    /**
+     * Classe main del component JavaBean
+     */
     public ComponentJavaBean() {
         this.setLayout(new BorderLayout());
 
@@ -132,24 +135,45 @@ public class ComponentJavaBean extends JPanel {
         this.realitzarOperacions(comboBox);
     }
 
+    /**
+     * Constructor per a inicialitzar objectes del javaBean
+     * @param nom Nom del client
+     */
     public ComponentJavaBean(String nom) {
         this.nom = nom;
     }
 
+    /**
+     *  Getter per a agafar el nom del client
+     * @return El nom del client
+     */
     public String getNom() {
         return nom;
     }
 
+    /**
+     * Setter per a inicialitzar el nom del client
+     * @param nom Nom del client a inicialitzar
+     */
     public void setNom(String nom) {
         this.nom = nom;
     }
 
+    /**
+     * Funcio per a personalitzar el Jpanel
+     * @param lm LayoutManager per a personalitzar el layout del jPanel
+     * @return El JPanel
+     */
     private JPanel personalitzacioPanel(LayoutManager lm) {
         JPanel jp = new JPanel();
         jp.setLayout(lm);
         return jp;
     }
 
+    /**
+     * Personalitza el titol del JavaBean
+     * @return El titol personalitzat
+     */
     private JLabel personalitzacioTitol() {
         JLabel jl = new JLabel();
         jl.setBackground(Color.GREEN);
@@ -160,6 +184,12 @@ public class ComponentJavaBean extends JPanel {
         return jl;
     }
 
+    
+    /**
+     * Personalitza el textfield del JavaBean
+     * @param placeHolder El placeholder que volem posar al textField
+     * @return El textfield personalitzat
+     */
     private JTextField personalitzacioJTextField(String placeHolder) {
         JTextField jtf = new JTextField();
         jtf.setSize(80, 40);
@@ -171,6 +201,10 @@ public class ComponentJavaBean extends JPanel {
         return jtf;
     }
 
+    /**
+     * Personalitza el boto de javaBean
+     * @return El boto personalitzat
+     */
     private JButton personalitzacioBoto() {
         JButton jb = new JButton();
         jb.setForeground(Color.GREEN);
@@ -180,6 +214,10 @@ public class ComponentJavaBean extends JPanel {
         return jb;
     }
 
+    /**
+     * Personalitza el comboBox del JavaBean
+     * @return El comboBox personalitzat
+     */
     private JComboBox<String> personalitzacioComboBox() {
         JComboBox<String> jcb = new JComboBox<>();
         jcb.setFont(new Font("Serif", Font.PLAIN, 12));
@@ -190,6 +228,15 @@ public class ComponentJavaBean extends JPanel {
         return jcb;
     }
 
+    /**
+     * Funcio la qual agafara el que s'escriu al textfield i creara una colecio amb el text o borrara una existent
+     * @param jtf Contingut del textfield
+     * @param usuari Usuari del missatge del mongoDB
+     * @param ip Ip del servidor
+     * @param contra Contrasenya del servidor
+     * @param port Port del servidor
+     * @param jcb Combo box del JavaBean
+     */
     private void controlJTextField(JTextField jtf, JTextField usuari, JTextField ip, JTextField contra, JTextField port, JComboBox jcb) {
 
         String text = jtf.getText();
@@ -216,6 +263,16 @@ public class ComponentJavaBean extends JPanel {
 
     }
 
+    /**
+     * Funcio que ens direccionara a una altra funcio per fer la funcio del boto
+     * @param jb El boto que fa la funcio
+     * @param jtf Contingut del textfield
+     * @param usuari Usuari del missatge del mongoDB
+     * @param ip Ip del servidor
+     * @param contra Contrasenya del servidor
+     * @param port ort del servidor
+     * @param jcb ombo box del JavaBean
+     */
     private void funcionalitatBoto(JButton jb, JTextField jtf, JTextField usuari,JTextField ip,JTextField contra,JTextField port, JComboBox jcb) {
         jb.addActionListener(new ActionListener() {
             @Override
@@ -225,6 +282,10 @@ public class ComponentJavaBean extends JPanel {
         });
     }
 
+    /**
+     * Funcio per aa realitzar les operacions
+     * @param jcb ComboBox del JavaBean
+     */
     private void realitzarOperacions(JComboBox jcb) {
         jcb.addActionListener(new ActionListener() {
             @Override
@@ -235,6 +296,11 @@ public class ComponentJavaBean extends JPanel {
         });
     }
 
+    /**
+     * Funcio la qual fara apareixer i desapareixer el placeholder quan l'usuari cliqui al TextField
+     * @param jtf El textfield on anira el placeholder
+     * @param placeHolder El contingut del placeholder
+     */
     private void controlPlaceHolder(JTextField jtf, String placeHolder) {
         jtf.addFocusListener(new FocusListener() {
             @Override
@@ -257,6 +323,14 @@ public class ComponentJavaBean extends JPanel {
         });
     }
 
+    /**
+     * Funcio la qual està encargada de crear la coleccio a la base de dades
+     * @param nomColeccio El nom de la nova coleccio
+     * @param usuari L'usuari de la base de dades
+     * @param ip La Ip de la base de dades
+     * @param contra La contrasenya de la base de dades
+     * @param port El port de la base de dades
+     */
     private void crearColeccio(String nomColeccio, String usuari, String ip, String contra, String port) {
         try {
             final String DB_SRV_USR = usuari;
@@ -285,6 +359,14 @@ public class ComponentJavaBean extends JPanel {
         }
     }
 
+    /**
+     * Funcio la qual està encargada de eliminar la coleccio a la base de dades
+     * @param nomColeccio El nom de la nova coleccio
+     * @param usuari L'usuari de la base de dades
+     * @param ip La Ip de la base de dades
+     * @param contra La contrasenya de la base de dades
+     * @param port El port de la base de dades
+     */
     private void eliminarColeccio(String nomColeccio, String usuari, String ip, String contra, String port) {
         try {
             final String DB_SRV_USR = usuari;

@@ -2,6 +2,7 @@ package exercicis.interficiechat;
 
 import encriptacio.Servidor;
 import static java.awt.Frame.MAXIMIZED_BOTH;
+import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -23,6 +24,7 @@ public class IniciServidor extends javax.swing.JFrame {
      */
     public IniciServidor() {
         initComponents();
+        inicialitzarIcons();
     }
 
     /**
@@ -258,6 +260,25 @@ public class IniciServidor extends javax.swing.JFrame {
     private void mostrarFinestra(JFrame jframe) {
         jframe.setVisible(true);
         jframe.setExtendedState(MAXIMIZED_BOTH);
+    }
+    
+    /**
+     * Funcio que farem servir per poder inicialitzar les icones en la
+     * interficie grafica per a que el usuari que ho utilitzi tingui una idea
+     * mes gràfica del menu.
+     */
+    private void inicialitzarIcons() {
+        ImageIcon iconoNavegarAModificar = new ImageIcon(getClass().getResource("/navegar.png"));
+        ImageIcon iconoLogoutAModificar = new ImageIcon(getClass().getResource("/iconoLogout.png"));
+
+        Image iconoNavegarModificat = iconoNavegarAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        Image iconoLogoutModificat = iconoLogoutAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+
+        ImageIcon iconoNavegar = new ImageIcon(iconoNavegarModificat);
+        ImageIcon iconoLogout = new ImageIcon(iconoLogoutModificat);
+
+        this.menuNavegacio.setIcon(iconoNavegar);
+        this.menuSortir.setIcon(iconoLogout);
     }
 
     /**

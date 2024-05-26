@@ -484,9 +484,20 @@ public class Registre extends javax.swing.JFrame {
      */
     private void afegirIcono() {
         ImageIcon iconoUsuari = new ImageIcon(getClass().getResource("/altaUsuari.png"));
+        ImageIcon iconoNavegarAModificar = new ImageIcon(getClass().getResource("/navegar.png"));
+        ImageIcon iconoLogoutAModificar = new ImageIcon(getClass().getResource("/iconoLogout.png"));
+        
         Image iconoUsuariModificar = iconoUsuari.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
+        Image iconoNavegarModificat = iconoNavegarAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        Image iconoLogoutModificat = iconoLogoutAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        
         ImageIcon iconoBuscar = new ImageIcon(iconoUsuariModificar);
+        ImageIcon iconoNavegar = new ImageIcon(iconoNavegarModificat);
+        ImageIcon iconoLogout = new ImageIcon(iconoLogoutModificat);
+        
         this.botoAltaUsuari.setIcon(iconoBuscar);
+        this.menuNavegacio.setIcon(iconoNavegar);
+        this.menuSortir.setIcon(iconoLogout);
     }
 
     /**
@@ -747,7 +758,7 @@ public class Registre extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
+        /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -762,7 +773,7 @@ public class Registre extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Registre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Registre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        }*/
         //</editor-fold>
 
         /* Create and display the form */

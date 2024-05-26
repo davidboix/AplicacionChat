@@ -225,9 +225,20 @@ public class VistaPrincipal extends javax.swing.JFrame {
      */
     private void inicialitzarIconos() {
         ImageIcon logoXatAModificar = new ImageIcon(getClass().getResource("/logoXat.png"));
+        ImageIcon iconoNavegarAModificar = new ImageIcon(getClass().getResource("/navegar.png"));
+        ImageIcon iconoLogoutAModificar = new ImageIcon(getClass().getResource("/iconoLogout.png"));
+        
+        Image iconoNavegarModificat = iconoNavegarAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        Image iconoLogoutModificat = iconoLogoutAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         Image logoXatModificat = logoXatAModificar.getImage().getScaledInstance(512, 512, Image.SCALE_SMOOTH);
+        
         ImageIcon logoXat = new ImageIcon(logoXatModificat);
+        ImageIcon iconoNavegar = new ImageIcon(iconoNavegarModificat);
+        ImageIcon iconoLogout = new ImageIcon(iconoLogoutModificat);
+        
         this.iconoImatge.setIcon(logoXat);
+        this.menuDesplegableOpcions.setIcon(iconoNavegar);
+        this.menuDesplegableSortir.setIcon(iconoLogout);
     }
 
     /**

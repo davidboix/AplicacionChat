@@ -603,10 +603,21 @@ public class Login extends javax.swing.JFrame {
     }
 
     private void inicialitzarIconos() {
-        ImageIcon iconoBuscarAModificar = new ImageIcon(getClass().getResource("/iconoIniciSessio.png"));
+        ImageIcon iconoBuscarAModificar = new ImageIcon(getClass().getResource("/login.png"));
+        ImageIcon iconoNavegarAModificar = new ImageIcon(getClass().getResource("/navegar.png"));
+        ImageIcon iconoLogoutAModificar = new ImageIcon(getClass().getResource("/iconoLogout.png"));
+        
         Image iconoBuscarModificat = iconoBuscarAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        Image iconoNavegarModificat = iconoNavegarAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        Image iconoLogoutModificat = iconoLogoutAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        
         ImageIcon iconoBuscar = new ImageIcon(iconoBuscarModificat);
+        ImageIcon iconoNavegar = new ImageIcon(iconoNavegarModificat);
+        ImageIcon iconoLogout = new ImageIcon(iconoLogoutModificat);
+        
         this.botoLogin.setIcon(iconoBuscar);
+        this.jMenu1.setIcon(iconoNavegar);
+        this.jMenu2.setIcon(iconoLogout);
     }
 
     /**
