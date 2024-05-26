@@ -13,18 +13,10 @@ import javax.swing.JPasswordField;
 public class JPasswordPlaceholder extends JPasswordField implements FocusListener {
 
     private String placeHolder;
-    private String pt;
-
-    public String getPt() {
-        return pt;
-    }
-
-    public void setPt(String pt) {
-        this.pt = pt;
-    }
 
     /**
-     *
+     * Constructor creat per inicialitzar el JPassword amb uns atributs en
+     * especific.
      */
     private void JPasswordPlaceholder() {
         this.setForeground(Color.GRAY);
@@ -35,21 +27,22 @@ public class JPasswordPlaceholder extends JPasswordField implements FocusListene
     }
 
     /**
-     *
-     * @return
-     */
-    public String getPlaceHolder() {
-        return placeHolder;
-    }
-
-    /**
      * Setter de la classe JPasswordField que es fara servir per poder
      * inicialitzar un missatge personalitzat
      *
-     * @param placeHolder
+     * @param placeHolder Placeholder que assignarem a l'atribut.
      */
     public void setPlaceHolder(String placeHolder) {
         this.placeHolder = placeHolder;
+    }
+
+    /**
+     * Getter desenvolupat per poder agafar el valor del placeholder en questio.
+     *
+     * @return Retornar el valor assignat del placeholder.
+     */
+    public String getPlaceHolder() {
+        return placeHolder;
     }
 
     /**
@@ -57,11 +50,11 @@ public class JPasswordPlaceholder extends JPasswordField implements FocusListene
      * servir per fer desapareixer el placeholder quan començem a escriure dins
      * de ell.
      *
-     * @param e
+     * @param e Event que se li passara per poder activar la funcio ja sigui per
+     * teclat o bé, utilitzant el ratolí.
      */
     @Override
     public void focusGained(FocusEvent e) {
-        // TODO: Investigar alternativa al us del new String.
         String password = new String(this.getPassword());
 
         if (password.equalsIgnoreCase(getPlaceHolder())) {
@@ -79,11 +72,11 @@ public class JPasswordPlaceholder extends JPasswordField implements FocusListene
      * per a que el usuari tingui clar quin tipus de dada haura de anotar dins
      * del input.
      *
-     * @param e
+     * @param e Event que se li passara per poder activar la funcio ja sigui per
+     * teclat o bé, utilitzant el ratolí.
      */
     @Override
     public void focusLost(FocusEvent e) {
-        // TODO: Investigar alternativa al us del new String.
         String password = new String(this.getPassword());
 
         if (password.isEmpty()) {
@@ -92,6 +85,13 @@ public class JPasswordPlaceholder extends JPasswordField implements FocusListene
         }
     }
 
+    /**
+     * Tractament de la cadena per poder assignar-ho tot a una variable de tipus
+     * char.
+     *
+     * @param cadena Cadena que tractarem.
+     * @return Retornara la variable caracter inicialitzada.
+     */
     private char cadenaACaracter(String cadena) {
         char retorn = '\\';
         for (int i = 0; i < cadena.length(); i++) {
