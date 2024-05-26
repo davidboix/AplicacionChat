@@ -252,8 +252,11 @@ public class Client {
     public void crearConnexio(JTextArea textAreaMissatge, String nom, JTextArea clientsConnectats) {
 
         try {
+            Socket socket = new Socket();
             InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
             socket.connect(addr);
+            InputStream is = socket.getInputStream();
+            OutputStream os = socket.getOutputStream();
 
             this.setSocket(socket);
             this.setOs(os);

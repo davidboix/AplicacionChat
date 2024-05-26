@@ -251,6 +251,8 @@ public class CrudMONGO {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
         String data = formatter.format(date);
+        String[] arrData = data.split(" ");
+        String dataFormat = arrData[0];
         return data;
     }
 

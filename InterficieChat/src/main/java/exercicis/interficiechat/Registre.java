@@ -285,6 +285,8 @@ public class Registre extends javax.swing.JFrame {
      * utilitzant el ratoli o el teclat
      */
     private void botoAltaUsuariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoAltaUsuariActionPerformed
+        boolean isNomValid = validarInputs(this.inputNom, this.etiquetaNom);
+        boolean isCognomValid = validarInputs(this.inputCognom, this.etiquetaCognom);
 
         boolean isCorreuValid = validarInputs(this.inputCorreu, this.etiquetaCorreu);
 
@@ -309,7 +311,7 @@ public class Registre extends javax.swing.JFrame {
                 );
             }
         }
-
+        boolean isUsuariValid = validarInputs(this.inputUsuari, this.etiquetaUsuari);
 
         String password = tractarPassword(this.inputPassword);
         String contrasenyaEncriptada = "";

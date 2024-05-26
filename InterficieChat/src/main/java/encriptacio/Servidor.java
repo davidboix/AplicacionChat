@@ -379,7 +379,6 @@ public class Servidor {
             ServerSocket serverSocket = new ServerSocket();
             InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
             serverSocket.bind(addr);
-            boolean semafor = false;
             while (true) {
                 Socket newSocket = serverSocket.accept();
                 InputStream is = newSocket.getInputStream();

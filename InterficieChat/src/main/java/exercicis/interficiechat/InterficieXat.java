@@ -349,6 +349,57 @@ public class InterficieXat extends javax.swing.JFrame {
         this.botoLogout.setIcon(iconoSettings);
         this.botoEnviarMsg.setIcon(iconoEnviar);
     }
+    
+    /**
+     * Funcio desenvolupada per poder retornar la data la qual ens trobem en
+     * aquell moment en format cadena de text
+     *
+     * @return La data de avui en format cadena de text.
+     */
+    private String getData() {
+        Calendar cal = Calendar.getInstance();
+        int dia = cal.get(Calendar.DAY_OF_MONTH);
+        int mes = cal.get(Calendar.MONTH) + 1;
+        int any = cal.get(Calendar.YEAR);
+        String data = dia + "/" + mes + "/" + any;
+
+        if (!data.isEmpty()) {
+            return data;
+        }
+
+        return "";
+    }
+
+    /**
+     * Funcio desenvolupada per obtenir la hora, minuts i segons actuals en el
+     * moment que fem la crida de la funcio
+     *
+     * @return Hora, Minuts i Segons com una cadena de text.
+     */
+    private String getTemps() {
+        LocalTime myObj = LocalTime.now();
+        String hora = tractarTemps(myObj.getHour());
+        String minuts = tractarTemps(myObj.getMinute());
+        String segons = tractarTemps(myObj.getSecond());
+        String temps = hora + ":" + minuts + ":" + segons;
+        if (!temps.isEmpty()) {
+            return temps;
+        }
+        return "";
+    }
+
+    /**
+     * Funcio desenvolupada per poder passar tipus enters a tipus cadena de text
+     * TODO: Possible canvi de nom de la funcio
+     *
+     * @param temps El valor enter que volem canviar a una cadena de text.
+     * @return El valor enter que hem passat per parametres convertit a cadena
+     * de text
+     */
+    private String tractarTemps(int temps) {
+        String tempsActual = String.valueOf(temps);
+        return tempsActual;
+    }
 
     /**
      * Neteja el textField on s'escriu el missatge que es vol enviar

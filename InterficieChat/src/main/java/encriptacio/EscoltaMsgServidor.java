@@ -238,6 +238,7 @@ public class EscoltaMsgServidor extends Thread {
      * @param msg El missatge del servidor
      */
     private void afegirMissatgeTextArea(String msg) {
+        String dataActual = getData();
         String horaActual = getTemps();
         String[] msgGood = msg.split("-/0/u/i/4/9<<z");
         System.out.println("msgGood: " + msgGood[0]);
