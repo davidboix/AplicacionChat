@@ -641,7 +641,7 @@ public class Servidor {
 //    }
     public void enviarContrasenyaEncriptada(InputStream is, OutputStream os) {
 
-        int port = 8080;
+        int port = 1234;
         ServerSocket server = null;
         Socket socket = null;
         try  {

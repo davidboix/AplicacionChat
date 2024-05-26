@@ -627,7 +627,7 @@ public class Registre extends javax.swing.JFrame {
      */
     private String encriptarPassword(String password) {
         final String IP = "localhost";
-        final int PORT = 8080;
+        final int PORT = 1234;
         try ( Socket cs = new Socket(IP, PORT)) {
             DataOutputStream out = new DataOutputStream(cs.getOutputStream());
             DataInputStream dip = new DataInputStream(cs.getInputStream());
