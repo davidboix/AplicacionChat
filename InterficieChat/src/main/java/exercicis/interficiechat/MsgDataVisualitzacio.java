@@ -119,13 +119,11 @@ public class MsgDataVisualitzacio extends javax.swing.JFrame {
 
     private void veureMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_veureMsgActionPerformed
         //Ens connectem a la base de dades
-        String passwordEncriptada = null;
         final String DB_SRV_USR = "grup1";
         final String DB_SRV_PWD = "gat123";
         final String DB_URL = "57.129.5.24";
         final String DB_PORT = "27017";
         String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
-        String nomUser = null;
 
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
 
@@ -153,7 +151,6 @@ public class MsgDataVisualitzacio extends javax.swing.JFrame {
             }
         }
     } catch (Exception e) {
-        System.out.println("Hem entrat al error... \nREVISAR CODI...");
         e.printStackTrace();
     }
     }//GEN-LAST:event_veureMsgActionPerformed

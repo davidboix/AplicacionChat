@@ -214,19 +214,9 @@ public class IniciServidor extends javax.swing.JFrame {
         String titol = "Escriu una IP per al servidor";
 
         if (!ipServidor.isEmpty()) {
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Servidor server = new Servidor();
-//                    server.iniciServidor(ipServidor);
-//                }
-//            }).start();
-//            Servidor server = new Servidor();
-//            server.iniciServidor(ipServidor);
             this.iniciClient(ipServidor);
             this.dispose();
         } else {
-            System.out.println("No pot quedar buit!");
 
             Icon imatge = new ImageIcon(getClass().getResource("/cross.png"));
             String missatgeErroni = "IP no pot estar buida";
@@ -297,31 +287,6 @@ public class IniciServidor extends javax.swing.JFrame {
         VistaPrincipal vp = new VistaPrincipal(ipServidor);
         vp.setVisible(true);
         this.setVisible(false);
-    }
-
-    /**
-     * Funcio desenvolupada per poder mostrar un JOptionPane personalitzat.
-     *
-     * @param jop Objecte JOptionPane que farem servir per mostrar un dialog.
-     * @param opcions Les diferentes opcions de seleccio que podra elegir el
-     * usuari.
-     * @return Retornara l'opcio seleccionada, ja sigui un 1 per quan sigui
-     * 'Aceptar' i un 0 una opcio diferent.
-     */
-    private int missatgeIniciServidor(JOptionPane jop, String[] opcions) {
-
-        int opcioSeleccionada = jop.showOptionDialog(
-                null,
-                "Vols iniciar el servidor?",
-                "Inici servidor",
-                jop.DEFAULT_OPTION,
-                jop.WARNING_MESSAGE,
-                null,
-                opcions,
-                opcions[0]
-        );
-
-        return opcioSeleccionada;
     }
 
     /**

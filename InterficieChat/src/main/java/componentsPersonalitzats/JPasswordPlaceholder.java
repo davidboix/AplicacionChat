@@ -98,8 +98,6 @@ public class JPasswordPlaceholder extends JPasswordField implements FocusListene
             retorn += cadena.charAt(i);
         }
 
-        System.out.println(retorn);
-
         return retorn;
     }
 

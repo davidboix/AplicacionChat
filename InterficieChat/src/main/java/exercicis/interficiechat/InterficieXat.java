@@ -1,27 +1,12 @@
 package exercicis.interficiechat;
 
-import componentsPersonalitzats.ComponentJavaBean;
 import encriptacio.Client;
-import encriptacio.EscoltaMsgServidor;
-import encriptacio.Servidor;
 import java.awt.Font;
 import java.awt.Image;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import funcionsbbdd.CrudMONGO;
@@ -42,8 +27,7 @@ public class InterficieXat extends javax.swing.JFrame {
     String nomUsuari;
     Client cl = new Client();
     JOptionPane jop = new JOptionPane();
-    //CrudMONGO cm = new CrudMONGO("57.129.5.24", 27017, "grup1", "gat123", "comptes");
-    CrudMONGO cm = new CrudMONGO("localhost", 27017, "grup1", "gat123", "comptes");
+    CrudMONGO cm = new CrudMONGO("57.129.5.24", 27017, "grup1", "gat123", "comptes");
 
     /**
      * Definit constructor per poder inicialitzar objectes de tipus
@@ -243,7 +227,6 @@ public class InterficieXat extends javax.swing.JFrame {
         String msgComprovacio = "Escriu el teu missatge...";
 
         if (msg.isEmpty() || msg.equalsIgnoreCase(msgComprovacio)) {
-            System.out.println("NO pots enviar un missatge en blanc!");
             return;
         }
 
@@ -254,7 +237,6 @@ public class InterficieXat extends javax.swing.JFrame {
 
             String[] opcions = {"Acceptar"};
 
-            String pattern = "MM/dd/yyyy";
             int msgEnviat = jop.showOptionDialog(
                     null,
                     "Missatge Enviat",
@@ -338,57 +320,6 @@ public class InterficieXat extends javax.swing.JFrame {
     private void inicialitzarInputs() {
         this.inputMsg.setPlaceHolder("Escriu el teu missatge...");
         this.inputMsg.setText(this.inputMsg.getPlaceHolder());
-    }
-
-    /**
-     * Funcio desenvolupada per poder retornar la data la qual ens trobem en
-     * aquell moment en format cadena de text
-     *
-     * @return La data de avui en format cadena de text.
-     */
-    private String getData() {
-        Calendar cal = Calendar.getInstance();
-        int dia = cal.get(Calendar.DAY_OF_MONTH);
-        int mes = cal.get(Calendar.MONTH) + 1;
-        int any = cal.get(Calendar.YEAR);
-        String data = dia + "/" + mes + "/" + any;
-
-        if (!data.isEmpty()) {
-            return data;
-        }
-
-        return "";
-    }
-
-    /**
-     * Funcio desenvolupada per obtenir la hora, minuts i segons actuals en el
-     * moment que fem la crida de la funcio
-     *
-     * @return Hora, Minuts i Segons com una cadena de text.
-     */
-    private String getTemps() {
-        LocalTime myObj = LocalTime.now();
-        String hora = tractarTemps(myObj.getHour());
-        String minuts = tractarTemps(myObj.getMinute());
-        String segons = tractarTemps(myObj.getSecond());
-        String temps = hora + ":" + minuts + ":" + segons;
-        if (!temps.isEmpty()) {
-            return temps;
-        }
-        return "";
-    }
-
-    /**
-     * Funcio desenvolupada per poder passar tipus enters a tipus cadena de text
-     * TODO: Possible canvi de nom de la funcio
-     *
-     * @param temps El valor enter que volem canviar a una cadena de text.
-     * @return El valor enter que hem passat per parametres convertit a cadena
-     * de text
-     */
-    private String tractarTemps(int temps) {
-        String tempsActual = String.valueOf(temps);
-        return tempsActual;
     }
 
     /**

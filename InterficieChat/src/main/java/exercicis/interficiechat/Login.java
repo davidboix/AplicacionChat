@@ -37,7 +37,6 @@ public class Login extends javax.swing.JFrame {
         inicialitzarTextInputs();
         amagarInfoWarnings();
         inicialitzarInput();
-        //this.setExtendedState(MAXIMIZED_BOTH);
         this.setMinimumSize(new Dimension(300, 300));
         this.inicialitzarIconos();
     }
@@ -245,8 +244,7 @@ public class Login extends javax.swing.JFrame {
         final String DB_SRV_PWD = "gat123";
         final String DB_URL = "57.129.5.24";
         final String DB_PORT = "27017";
-        //String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
-        final String URLCONNEXIO = "mongodb://localhost:27017";
+        String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
         String nomUser = null;
 
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
@@ -264,49 +262,20 @@ public class Login extends javax.swing.JFrame {
                 boolean isTrue = searchPassword(this.usuariText.getText(), password);
 
                 if (isTrue) {
-                    /**
-                     * TODO: Revisar el funcionament de aquesta funcio ja que no
-                     * sabem si ho estem fent correctament i ens ha donat
-                     * problemes.
-                     */
                     passwordEncriptada = getPassword(nomUsuari);
 
-                    /**
-                     * TODO: Revisar aquesta proposta de solucio Ho podem borrar
-                     * ja que no ho fem servir JAJA.
-                     */
-                    //long numContra = cuentasCollection.countDocuments(Filters.eq("contrasenya", password));
-                    //TODO: Consulta realitzada incorrectament i per tant ho podem borrar mes endavant.
-                    //long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
                     long numContra = cuentasCollection.countDocuments(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", passwordEncriptada)));
 
                     if (numContra > 0 && passwordEncriptada != null) {
-                        /**
-                         * TODO: Mes endavant, haurem de borrar les dades que es
-                         * mostren per pantalla, incluida la consulta que estem
-                         * realitzant degut a que es innecessari i nomes ho
-                         * estem fent servir per poder assegurar-nos de que les
-                         * dades son correctes.
-                         */
-                        //TODO: Borrar consulta ja que ho estem fent malament.
-                        //FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", password)));
                         FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("nomUser", nomUsuari), Filters.eq("contrasenyaUsuari", passwordEncriptada)));
                         for (Document infoUsuaris : resultatUsuaris) {
-                            System.out.print("\nNom Usuari: " + infoUsuaris.getString("nomUser"));
                             nomUser = infoUsuaris.getString("nomUser");
-                            System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenyaUsuari"));
                         }
                         InterficieXat interficieXat = new InterficieXat(nomUsuari);
                         this.mostrarFinestra(interficieXat);
                         this.tancarFinestraActual();
                     } else {
-                        /**
-                         * TODO: Mostrar en un JOptionPane el seguent error per
-                         * tal de que el usuari client pugui saber que esta
-                         * passant i pugui solucionar la incidencia ell mateix
-                         * ja que es un problema extern que no podem controlar
-                         * com a programadors.
-                         */
+                        
                         JOptionPane jop = new JOptionPane();
 
                         String[] opcions = {"Acceptar"};
@@ -324,12 +293,7 @@ public class Login extends javax.swing.JFrame {
 
                     }
                 } else {
-                    /**
-                     * TODO: Hem de mostrar un JOptionPane amb el seguent
-                     * missatge per informar al usuari que esta passant en
-                     * aquell moment i per tant tenir-lo informat en tot moment
-                     * de que esta passant.
-                     */
+                    
                     JOptionPane jop = new JOptionPane();
                     Icon imagenLabel = new ImageIcon(getClass().getResource("/passwordErroni.png"));
                     String[] opcions = {"Acceptar"};
@@ -348,11 +312,6 @@ public class Login extends javax.swing.JFrame {
                 }
 
             } else {
-                /**
-                 * TODO: Printar en un JOptionPane el seguent missatge per poder
-                 * informar al usuari del error el qual s'esta produint i per
-                 * tant el erroni funcionament de la nostra aplicacio.
-                 */
                 JOptionPane jop = new JOptionPane();
                 Icon imagenLabel = new ImageIcon(getClass().getResource("/usuariInexistent.png"));
                 String[] opcions = {"Acceptar"};
@@ -414,8 +373,6 @@ public class Login extends javax.swing.JFrame {
      */
     private void inicialitzarInput() {
         String psw = new String(this.inputPassword.getPassword());
-        //this.inputPassword.setPlaceHolder("Introdueix el nom...");
-        //this.inputPassword.setText(this.inputPassword.getPlaceHolder());
     }
 
     /**
@@ -431,8 +388,7 @@ public class Login extends javax.swing.JFrame {
         final String DB_SRV_PWD = "gat123";
         final String DB_URL = "57.129.5.24";
         final String DB_PORT = "27017";
-        //String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
-        final String URLCONNEXIO = "mongodb://localhost:27017";
+        String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
         try ( MongoClient mongoClient = new MongoClient(uri)) {
             MongoDatabase database = mongoClient.getDatabase(DB_SRV_USR);
@@ -473,27 +429,15 @@ public class Login extends javax.swing.JFrame {
         String password = getPassword(nomUsuari);
 
         try {
-            /**
-             * TODO: Codi de exemple per encriptar la password
-             */
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] b2 = searchPassword.getBytes();
             md.update(b2);
             byte[] resum2 = md.digest();
             String base64String = Base64.getEncoder().encodeToString(resum2);
             if (password.equalsIgnoreCase(base64String)) {
-                /**
-                 * TODO: Hem de treure aquest missatge de consola per poder
-                 * continuar amb la desenvolupacio del programa.
-                 */
                 System.out.println("La contrasenya es la mateixa!");
                 return true;
             } else {
-                /**
-                 * TODO: Podem treure aquest else ja que no ens fa falta, nomes
-                 * deixant el return false en tindriam suficient, pero en aquest
-                 * moment ho fem aixi per poder veure si entra en el else o no.
-                 */
                 System.out.println("La contrasenya es diferent!");
                 return false;
             }
@@ -504,49 +448,7 @@ public class Login extends javax.swing.JFrame {
         return false;
     }
 
-    /**
-     * Funcio obsoleta
-     */
-    /*private void consultaAntiga() {
-        String password = new String(this.inputPassword.getPassword());
-
-        MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
-        String username = usuariText.getText();
-
-        Bson query = Filters.and(
-                Filters.eq("usuari", username),
-                Filters.eq("contrasenya", password)
-        );
-        Document result = cuentasCollection.find(query).first();
-
-        if (result != null) {
-            System.out.println("Success");
-        } else {
-            System.out.println("Failure");
-        }
-    }*/
-    /**
-     * Funcio obsoleta
-     */
-    /*private void consultaActual(String nomUsuari) {
-        MongoDatabase database = mongoClient.getDatabase("Cuentas");
-        MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
-
-        long numUsuaris = cuentasCollection.countDocuments(Filters.eq("usuari", nomUsuari));
-
-        if (numUsuaris > 0) {
-            String password = tractarPassword(this.inputPassword);
-//            TODO: Revisar aquesta consulta ja que nomes estem buscant la contrasenya sense tenir en compte el usuari
-            //FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.eq("contrasenya", password));
-            FindIterable<Document> resultatUsuaris = cuentasCollection.find(Filters.and(Filters.eq("usuari", nomUsuari),Filters.eq("contrasenya", password)));
-            for (Document infoUsuaris : resultatUsuaris) {
-                System.out.print("\nNom Usuari: " + infoUsuaris.getString("usuari"));
-                System.out.println("\nContrasenya usuari: " + infoUsuaris.getString("contrasenya"));
-            }
-        } else {
-            System.out.println("El usuari que estas intentant introduir, no existeix en la nostra base de dades");
-        }
-    }*/
+    
     /**
      * Converteix la password de char a String per a poder treballar més
      * facilment amb ella

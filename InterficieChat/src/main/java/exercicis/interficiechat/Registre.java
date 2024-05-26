@@ -285,22 +285,14 @@ public class Registre extends javax.swing.JFrame {
      * utilitzant el ratoli o el teclat
      */
     private void botoAltaUsuariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoAltaUsuariActionPerformed
-        System.out.println(this.inputNom.getText());
-        boolean isNomValid = validarInputs(this.inputNom, this.etiquetaNom);
-        boolean isCognomValid = validarInputs(this.inputCognom, this.etiquetaCognom);
-//        boolean isEdatValid = validarInputs(this.inputEdat, this.etiquetaEdat);
 
         boolean isCorreuValid = validarInputs(this.inputCorreu, this.etiquetaCorreu);
 
         if (isCorreuValid) {
             boolean correuValidat = validarEmail(this.inputCorreu);
             if (correuValidat) {
-                System.out.println("El email es correcte");
+                
             } else {
-                /**
-                 * TODO: Quan el correu sigui invalid, hem de mostrar un
-                 * missatge avisant al usuari en que ha fallat.
-                 */
                 JOptionPane jop = new JOptionPane();
                 Icon imagenLabel = new ImageIcon(getClass().getResource("/passwordErroni.png"));
                 String[] opcions = {"Acceptar"};
@@ -315,27 +307,16 @@ public class Registre extends javax.swing.JFrame {
                         opcions,
                         opcions[0]
                 );
-
-                if (correcte > 0) {
-                    System.out.println("S'ha pulsat aceptar");
-                } else {
-                    System.out.println("S'ha cancelat");
-                }
-
-                System.out.println("El email es incorrecte");
             }
         }
 
-        boolean isUsuariValid = validarInputs(this.inputUsuari, this.etiquetaUsuari);
 
         String password = tractarPassword(this.inputPassword);
         String contrasenyaEncriptada = "";
         if (!password.isEmpty()) {
-            //boolean isPasswordValid = validarPassword(password);
             boolean isPasswordValid = true;
 
             if (isPasswordValid) {
-                System.out.println("Passem per aqui...");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -347,7 +328,7 @@ public class Registre extends javax.swing.JFrame {
                 }).start();
                 contrasenyaEncriptada = encriptarPassword(password);
             } else {
-                System.out.println("Siusplau, introdueix una contraenya que estigui entre 8 caracters i 20 caracters");
+
             }
 
             int edat = tractarEdat();
@@ -357,7 +338,7 @@ public class Registre extends javax.swing.JFrame {
             }
 
         } else {
-            System.out.println("Esta buit");
+
         }
     }//GEN-LAST:event_botoAltaUsuariActionPerformed
     /**
@@ -409,8 +390,6 @@ public class Registre extends javax.swing.JFrame {
     private boolean validarInputs(JTextField jtf, JLabel etiqueta) {
 
         if (jtf.getText().isEmpty()) {
-            //TODO: Faltara afegir un JOptionPane per avisar al usuari de que el input NO pot quedar buit
-            System.out.println("No pot quedar buit -> " + etiqueta.getText());
             return false;
         }
         return true;
@@ -543,17 +522,14 @@ public class Registre extends javax.swing.JFrame {
         final String DB_SRV_PWD = "gat123";
         final String DB_URL = "57.129.5.24";
         final String DB_PORT = "27017";
-//        final String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
-        final String URLCONNEXIO = "mongodb://localhost:27017";
+        final String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
 
-        //MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
 
         try ( MongoClient mongoClient = new MongoClient(uri)) {
             MongoDatabase database = mongoClient.getDatabase("grup1");
             MongoCollection<Document> comptes = database.getCollection("comptes");
 
-            //TODO: Haurem de verificar que poden haver mes de un usuari amb el meu mateix nom i per tant no farem el insert a la base de dades.
             Document nouUsuari = new Document("nomUsuari", nom)
                     .append("cognomUsuari", cognom)
                     .append("edatUsuari", edat)
@@ -586,10 +562,8 @@ public class Registre extends javax.swing.JFrame {
         final String DB_SRV_PWD = "gat123";
         final String DB_URL = "57.129.5.24";
         final String DB_PORT = "27017";
-//        final String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
-        final String URLCONNEXIO = "mongodb://localhost:27017";
+        final String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
 
-        //MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
 
         try ( MongoClient mongoClient = new MongoClient(uri)) {
@@ -609,10 +583,6 @@ public class Registre extends javax.swing.JFrame {
 
             return isExistent;
 
-//            if (confirm) {
-//                this.dispose();
-//                Login login = new Login();
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -657,11 +627,7 @@ public class Registre extends javax.swing.JFrame {
             out.writeInt(msgEncriptat.length);
             out.write(msgEncriptat);
 
-            System.out.println("Missatge encriptat i clau enviats al servidor...");
-            /**
-             * A partir de aqui encriptem rebem la contrasenya encriptada i amb
-             * el hash posat.
-             */
+            
             byte[] keyBytesServ = new byte[dip.readInt()];
             dip.readFully(keyBytesServ);
             SecretKey clauServidor = new SecretKeySpec(keyBytesServ, "AES");
@@ -671,7 +637,6 @@ public class Registre extends javax.swing.JFrame {
             aesCipher2.init(Cipher.DECRYPT_MODE, clau);
             byte[] msgDesencriptat = aesCipher2.doFinal(msgEncriptats);
             String missatge = new String(msgDesencriptat);
-            System.out.println("Aquesta es la contrasenya desencriptada amb el hash: " + missatge);
             return missatge;
 
         } catch (Exception e) {
@@ -691,9 +656,6 @@ public class Registre extends javax.swing.JFrame {
         Calendar cal = Calendar.getInstance();
         Calendar dataActual = Calendar.getInstance();
         cal.setTime(data);
-        int diaSemana = cal.get(Calendar.DAY_OF_WEEK) - 1;
-        int diaCalendari = cal.get(Calendar.DAY_OF_MONTH);
-        int mesCalendari = cal.get(Calendar.MONTH);
         int anyCalendari = cal.get(Calendar.YEAR);
         int anyActual = dataActual.get(Calendar.YEAR);
         return anyActual - anyCalendari;

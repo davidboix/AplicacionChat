@@ -155,10 +155,8 @@ public class CrudMONGO {
         try ( MongoClient mc = new MongoClient(uri)) {
             md = mc.getDatabase(this.getUsuariServidor());
             if (md != null) {
-                System.out.println("Hem fet connexio...");
                 return md;
             }
-            System.out.println("NO hem fet connexio...");
             return md;
         } catch (Exception e) {
             e.printStackTrace();
@@ -178,28 +176,13 @@ public class CrudMONGO {
                 }
                 return comptes;
             } else {
-                System.out.println("No estem dins del MongoDB.");
+
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         return comptes;
-    }
-
-    public void getDades(String nomUsuari) {
-
-        try {
-            MongoCollection mc = this.getColeccio();
-            long numDocuments = mc.countDocuments(Filters.eq("nomUser", nomUsuari));
-            if (numDocuments > 0) {
-                System.out.println("existeixen documents...");
-            }
-        } catch (IllegalStateException ise) {
-            System.out.println("Hi ha hagut un problema ");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void recorrerUsers(MongoCollection<Document> mc, String nomUsuari) {
@@ -236,9 +219,7 @@ public class CrudMONGO {
     }
 
     public boolean setDadesMsg(String nomUser, String msg, String data) {
-        //this.setUrlConnexio(this.inicialitzarServidor());
         
-        //MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
         MongoClientURI mcu = new MongoClientURI("mongodb://localhost:27017");
 
         try ( MongoClient mc = new MongoClient(mcu)) {
@@ -248,8 +229,7 @@ public class CrudMONGO {
             try {
                 System.out.println(mongoC.countDocuments());;
             } catch (Exception e) {
-                System.out.println("La col·lecció no existeix o no es pot accedir-hi.");
-                //return false;
+
             }
 
             Document missatgeNou = new Document("nomUsuari", nomUser)
@@ -257,7 +237,6 @@ public class CrudMONGO {
                     .append("dataMissatge", data);
             mongoC.insertOne(missatgeNou);
 
-            System.out.println("S'ha introduit un nou missatge...");
             return true;
 
         } catch (Exception e) {
@@ -270,9 +249,6 @@ public class CrudMONGO {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
         String data = formatter.format(date);
-        String[] arrData = data.split(" ");
-        String dataFormat = arrData[0];
-        System.out.println("Aquesta es la data actual: " + dataFormat);
         return data;
     }
 
@@ -297,7 +273,6 @@ public class CrudMONGO {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Hi ha hagut un error...");
         }
     }
 

@@ -25,30 +25,25 @@ public class ClassMain extends javax.swing.JFrame {
      * mes gràfica dels botons.
      */
     private void inicialitzarIcons() {
-        //ImageIcon iconoClientAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
         ImageIcon iconoClientAModificar = new ImageIcon(getClass().getResource("/logoXat.png"));
         ImageIcon iconoServidorAModificar = new ImageIcon(getClass().getResource("/iconoServidor.png"));
         ImageIcon iconoNavegarAModificar = new ImageIcon(getClass().getResource("/navegar.png"));
         ImageIcon iconoLogoutAModificar = new ImageIcon(getClass().getResource("/iconoLogout.png"));
-        //ImageIcon iconoPrincipalAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
 
         Image iconoServidorModificat = iconoServidorAModificar.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         Image iconoClientModificat = iconoClientAModificar.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         Image iconoNavegarModificat = iconoNavegarAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         Image iconoLogoutModificat = iconoLogoutAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        //Image iconoPrincipalModificat = iconoPrincipalAModificar.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
 
         ImageIcon iconoServidor = new ImageIcon(iconoServidorModificat);
         ImageIcon iconoClients = new ImageIcon(iconoClientModificat);
         ImageIcon iconoNavegar = new ImageIcon(iconoNavegarModificat);
         ImageIcon iconoLogout = new ImageIcon(iconoLogoutModificat);
-        //ImageIcon iconoPrincipal = new ImageIcon(iconoPrincipalModificat);
 
         this.botoServidor.setIcon(iconoServidor);
         this.botoClient.setIcon(iconoClients);
         this.menuNavegacio.setIcon(iconoNavegar);
         this.menuSortir.setIcon(iconoLogout);
-        //this.jLabel2.setIcon(iconoPrincipal);
     }
 
     /**
@@ -217,12 +212,6 @@ public class ClassMain extends javax.swing.JFrame {
         IniciServidor serv = new IniciServidor();
         this.mostrarInterficie(serv);
         this.tancarFinestra();
-        /**
-         * TODO: En aquest moment ho deixarem comentat perque estem preparant la
-         * interficie
-         *
-         * serv.setExtendedState(MAXIMIZED_BOTH);
-         */
 
     }//GEN-LAST:event_botoServidorActionPerformed
     /**
@@ -236,11 +225,6 @@ public class ClassMain extends javax.swing.JFrame {
         VistaPrincipal vp = new VistaPrincipal();
         this.mostrarInterficie(vp);
         this.tancarFinestra();
-        /**
-         * TODO: En aquest moment ho deixarem comentat perque estem preparant la
-         * interficie
-         *
-         */
         vp.setExtendedState(MAXIMIZED_BOTH);
     }//GEN-LAST:event_botoClientActionPerformed
     private void opcioServidorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcioServidorActionPerformed

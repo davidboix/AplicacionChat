@@ -142,26 +142,21 @@ public class Client {
             Socket socket = new Socket();
             InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
             socket.connect(addr);
-            System.out.println("Ens conectem...");
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
 
             boolean semafor = false;
 
             while (!semafor) {
-                System.out.print("Escriu un missatge que vulguis al servidor: ");
                 String msg = lector.nextLine();
                 os.write(msg.getBytes());
 
-                System.out.println("S'ha enviat el missatge correctament!...");
 
                 if (msg.equalsIgnoreCase("exit")) {
                     os.write(msg.getBytes());
-                    System.out.println("Ens hem desconnectat del servidor...");
                     semafor = true;
                 }
 
-                //llegirArrayList(socket);
             }
             socket.close();
         } catch (SocketException se) {
@@ -187,7 +182,6 @@ public class Client {
         byte[] buffer = new byte[500];
         int intBuffer = is.read(buffer);
         String msgRebut = new String(buffer, 0, intBuffer);
-        System.out.println("Missatge rebut del servidor: " + msgRebut);
     }
 
     /**
@@ -198,16 +192,12 @@ public class Client {
      * @param msgArr Array en concret la qual llegirem
      */
     public static void llegirArrayList(Socket socket, JTextArea msgArr) {
-        //private static void llegirArrayList(ArrayList<Socket> arrSocket) {
         try {
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             ArrayList<String> msgClients = (ArrayList<String>) ois.readObject();
             int j = 0;
-            System.out.println("Entrem");
             for (String row : msgClients) {
-                System.out.println(row);
                 msgArr.append(j + ": " + msgClients.get(j) + "/n");
-                System.out.println("Entrem2");
             }
         } catch (EOFException eof) {
             System.err.println("\nCLIENT: No hi han mes missatges a mostrar...");
@@ -228,9 +218,7 @@ public class Client {
             socket.connect(addr);
 
             Scanner lector = new Scanner(System.in);
-            InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
-            Client cl = new Client();
 
             boolean semafor = enviarMissatgeServidor(lector, os, socket);
 
@@ -264,12 +252,8 @@ public class Client {
     public void crearConnexio(JTextArea textAreaMissatge, String nom, JTextArea clientsConnectats) {
 
         try {
-            Socket socket = new Socket();
             InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
             socket.connect(addr);
-            System.out.println("Ens conectem...");
-            InputStream is = socket.getInputStream();
-            OutputStream os = socket.getOutputStream();
 
             this.setSocket(socket);
             this.setOs(os);
@@ -279,14 +263,9 @@ public class Client {
                 os.write(this.getNomUsuari().getBytes());
             }
             new EscoltaMsgServidor(socket, is, textAreaMissatge, this.getNomUsuari(), clientsConnectats).start();
-            
-            /**
-             * TODO:Posarem un altre fil per poder fer que el client estigui
-             * escoltant tot el rato nous clients que es conecten al nostre
-             * sistema.
-             */
+
         } catch (IOException e) {
-            System.out.println("No s'ha pogut connectar al servidor");
+
         }
     }
 
@@ -300,7 +279,6 @@ public class Client {
     public void crearConnexio(JTextArea textAreaMissatge) {
 
         try {
-            Socket socket = new Socket();
             InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
             socket.connect(addr);
 
@@ -310,14 +288,12 @@ public class Client {
             this.setSocket(socket);
             this.setOs(os);
 
-            System.out.println("Ens conectem...");
             is = socket.getInputStream();
             this.setIs(is);
             enviarMissatgeServidor(this.getOs(), this.getSocket(), this.getNomUsuari());
 
-            //new EscoltaMsgServidor(socket, is, textAreaMissatge).start();
         } catch (IOException e) {
-            System.out.println("No s'ha pogut connectar al servidor");
+
         }
     }
 
@@ -344,7 +320,6 @@ public class Client {
                 String msg = lector.nextLine();
                 if (msg.equalsIgnoreCase("exit")) {
                     os.write(msg.getBytes());
-                    System.out.println("Ens hem desconnectat del servidor correctament...");
                     sortir = true;
                     socket.close();
                     return sortir;
@@ -370,12 +345,10 @@ public class Client {
      * i tancara el socket
      */
     public static boolean enviarMissatgeServidor(OutputStream os, Socket socket, String missatge) {
-        System.out.println("\n\nAquest es el client: " + socket);
         boolean sortir = false;
         try {
             if (missatge.equalsIgnoreCase("exit")) {
                 os.write(missatge.getBytes());
-                System.out.println("Ens hem desconnectat del servidor correctament...");
                 sortir = true;
                 socket.close();
                 return sortir;
@@ -388,16 +361,6 @@ public class Client {
             e.printStackTrace();
         }
         return sortir;
-    }
-
-    /**
-     * Funcio la qual mostrarà els clients connectats per consola
-     */
-    public void mostrarClientsConnectats() {
-        System.out.println("\nAquestos son els clients conectats...");
-        for (String nomClients : Servidor.arrNoms) {
-            System.out.println(nomClients);
-        }
     }
 
     /**

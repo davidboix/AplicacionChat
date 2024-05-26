@@ -179,7 +179,7 @@ public class EscoltaMsgServidor extends Thread {
                 }
             }
         } catch (IOException ioe) {
-            System.out.println("El socket s'ha tancat");
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -238,7 +238,6 @@ public class EscoltaMsgServidor extends Thread {
      * @param msg El missatge del servidor
      */
     private void afegirMissatgeTextArea(String msg) {
-        String dataActual = getData();
         String horaActual = getTemps();
         String[] msgGood = msg.split("-/0/u/i/4/9<<z");
         System.out.println("msgGood: " + msgGood[0]);
@@ -257,7 +256,6 @@ public class EscoltaMsgServidor extends Thread {
      * @param msg El missatge del servidor el qual tractarem per agafar només el nom
      */
     public void afegirClientsConnectats(String msg) {
-        System.out.println("\nPassem per aqui...\n");
         Servidor servidor = new Servidor();
         servidor.augmentarClientsConnectats();
         
@@ -265,19 +263,12 @@ public class EscoltaMsgServidor extends Thread {
             if (!row.equalsIgnoreCase(this.nomUsuari)) {
                 this.arrNomClients.add(this.nomUsuari);        
             }
-            System.out.println("EscoltaMsgServidor: " + row);
-        }
-        
-
-        for (String row : this.arrNomClients) {
-            System.out.println("EscoltaMsgServidor: " + row);
         }
 
         String[] msgGood = msg.split("-/0/u/i/4/9<<z");
         if (msgGood.length > 1) {
             
         } else {
-            System.out.println("Aquestos son els clients conectats: " + msgGood[0]);
             this.clientArr.append(msgGood[0]);
         }
     }

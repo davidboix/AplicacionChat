@@ -20,65 +20,6 @@ public class ComponentJavaBean extends JPanel {
     private String usuari;
     private String contrasenya;
     private String ip;
-
-//    public ComponentJavaBean() {
-//        this.setLayout(new BorderLayout());
-//        JPanel panelHeader = this.personalitzacioPanel(new GridBagLayout());
-//
-//        JPanel panelEsquerra = this.personalitzacioPanel(new BorderLayout());
-//        JPanel panelCentralEsquerra = this.personalitzacioPanel(new GridBagLayout());
-//
-//        JPanel panelMain = this.personalitzacioPanel(new GridBagLayout());
-//        
-//        GridBagConstraints c = new GridBagConstraints();
-//        
-//        JPanel panelDreta = this.personalitzacioPanel(new BorderLayout());
-//        JPanel panelFooter = this.personalitzacioPanel(new GridBagLayout());
-//
-//        JLabel titol = this.personalitzacioTitol();
-//        JTextField text = this.personalitzacioJTextField("Escriu aqui el nom de la coleccio: ");
-//        JButton boto = this.personalitzacioBoto();
-//
-//        JComboBox<String> comboBox = this.personalitzacioComboBox();
-//        
-//        JLabel ipLabel = this.personalitzacioTitol();
-//        JTextField textIp = this.personalitzacioJTextField("Escriu aqui la ip del servidor ");
-//        
-//        JLabel contraLabel = this.personalitzacioTitol();
-//        JTextField textContra = this.personalitzacioJTextField("Escriu aqui la contasenya del servidor ");
-//        
-//        JLabel usuariLabel = this.personalitzacioTitol();
-//        JTextField textUsuari = this.personalitzacioJTextField("Escriu aqui l'usuari del servidor ");
-//
-//        this.setVisible(true);
-//        this.setSize(400, 300);
-//
-//        //Posicio nort
-//        panelHeader.add(titol);
-//        this.add(panelHeader, BorderLayout.NORTH);
-//
-//        //Posicio centre
-//        c.gridx = 20;
-//        c.gridy = 0;
-//        panelMain.add(text);
-//        panelMain.add(textIp, c);
-//        this.add(panelMain, BorderLayout.CENTER);
-//
-//        //Posicio esquerra
-//        panelCentralEsquerra.add(comboBox);
-//        panelEsquerra.add(panelCentralEsquerra, BorderLayout.CENTER);
-//        this.add(panelEsquerra, BorderLayout.WEST);
-//
-//        //Posicio dreta
-//        this.add(panelDreta, BorderLayout.EAST);
-//
-//        //Posicio footer
-//        panelFooter.add(boto);
-//        this.add(panelFooter, BorderLayout.SOUTH);
-//
-//        this.funcionalitatBoto(boto, text, comboBox);
-//        this.realitzarOperacions(comboBox);
-//    }
     
     /**
      * Classe main del component JavaBean
@@ -339,12 +280,10 @@ public class ComponentJavaBean extends JPanel {
             final String DB_PORT = port;
             final String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
 
-            //final String URLCONNEXIO = "mongodb://localhost:27017";
 
             MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
 
             try ( MongoClient mongoClient = new MongoClient(uri)) {
-                //MongoDatabase database = mongoClient.getDatabase(DB_SRV_USR);
                 MongoDatabase database = mongoClient.getDatabase("proves");
                 MongoCollection<Document> comptes = database.getCollection(nomColeccio);
 
@@ -375,12 +314,9 @@ public class ComponentJavaBean extends JPanel {
             final String DB_PORT = port;
             String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
 
-            //final String URLCONNEXIO = "mongodb://localhost:27017";
-
             MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
 
             try ( MongoClient mongoClient = new MongoClient(uri)) {
-                //MongoDatabase database = mongoClient.getDatabase(DB_SRV_USR);
                 MongoDatabase database = mongoClient.getDatabase("proves");
                 MongoCollection<Document> comptes = database.getCollection(nomColeccio);
 

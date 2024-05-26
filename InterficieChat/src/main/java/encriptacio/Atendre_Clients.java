@@ -325,11 +325,6 @@ public class Atendre_Clients extends Thread {
             }
         }
         String msgDesconexio = "\nEl client amb nom: " + nom + " s'ha desconectat satisfactoriament\n";
-        //TODO: Eliminar els souts.
-        System.out.println("Despres de eliminar....");
-        for (String row : arrNomsClients) {
-            System.out.println(row);
-        }
 
         this.enviarMissatge(msgDesconexio);
     }

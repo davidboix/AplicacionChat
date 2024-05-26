@@ -8,9 +8,6 @@ import javax.swing.JFrame;
  *
  * @author David Boix Sanchez i Oleh Plechiy Andriyovech Tupis
  * @version 1.0
- *
- * TODO: Hem de revisar els estils de la interficie grafica per deixar-ho
- * enllestit i acabar definint l'interficie grafica.
  */
 public class VistaPrincipal extends javax.swing.JFrame {
     private String ipServidor;
