@@ -42,7 +42,8 @@ public class InterficieXat extends javax.swing.JFrame {
     String nomUsuari;
     Client cl = new Client();
     JOptionPane jop = new JOptionPane();
-    CrudMONGO cm = new CrudMONGO("57.129.5.24", 27017, "grup1", "gat123", "comptes");
+    //CrudMONGO cm = new CrudMONGO("57.129.5.24", 27017, "grup1", "gat123", "comptes");
+    CrudMONGO cm = new CrudMONGO("localhost", 27017, "grup1", "gat123", "comptes");
 
     /**
      * Definit constructor per poder inicialitzar objectes de tipus
@@ -58,7 +59,9 @@ public class InterficieXat extends javax.swing.JFrame {
 
     /**
      * Definit constructor per poder inicialitzar objectes de tipus
-     * InterficieXat. Aquest s'utilitza principalment per a quan un client es connecta al servidor.
+     * InterficieXat. Aquest s'utilitza principalment per a quan un client es
+     * connecta al servidor.
+     *
      * @param nom Nom que senviarà del client que es connecta
      */
     public InterficieXat(String nom) {
@@ -275,6 +278,7 @@ public class InterficieXat extends javax.swing.JFrame {
     /**
      * Accio que enviarà el missatge exit al servidor, lo qual el desconnectarà
      * del servidor
+     *
      * @param evt
      */
     private void botoLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoLogoutActionPerformed
@@ -317,8 +321,10 @@ public class InterficieXat extends javax.swing.JFrame {
     }//GEN-LAST:event_botoLogoutActionPerformed
 
     /**
-     * Accio la qual mostrarà el JPanel per a poder veure els missatges per la data dels mateixos
-     * @param evt 
+     * Accio la qual mostrarà el JPanel per a poder veure els missatges per la
+     * data dels mateixos
+     *
+     * @param evt
      */
     private void botoCalendariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoCalendariActionPerformed
         GetMissatgeData gmd = new GetMissatgeData();
@@ -415,7 +421,8 @@ public class InterficieXat extends javax.swing.JFrame {
 
     /**
      * Neteja el textField on s'escriu el missatge que es vol enviar
-     * @param msg 
+     *
+     * @param msg
      */
     private void netejarInput(JTextField msg) {
 

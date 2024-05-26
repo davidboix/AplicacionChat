@@ -70,22 +70,24 @@ public class ClassMain extends javax.swing.JFrame {
         opcioSortir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Pagina Principal");
 
         panelGeneral.setLayout(new java.awt.BorderLayout());
 
+        header.setBackground(new java.awt.Color(203, 219, 242));
         header.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Noto Sans", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
         jLabel1.setText("CostaXat");
         header.add(jLabel1, new java.awt.GridBagConstraints());
 
         panelGeneral.add(header, java.awt.BorderLayout.PAGE_START);
 
+        main.setBackground(new java.awt.Color(203, 219, 242));
         main.setLayout(new java.awt.GridBagLayout());
 
         botoClient.setBorder(null);
         botoClient.setContentAreaFilled(false);
-        botoClient.setOpaque(true);
         botoClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botoClientActionPerformed(evt);
@@ -110,8 +112,11 @@ public class ClassMain extends javax.swing.JFrame {
 
         panelGeneral.add(main, java.awt.BorderLayout.CENTER);
 
+        footer.setBackground(new java.awt.Color(203, 219, 242));
         footer.setLayout(new java.awt.GridBagLayout());
 
+        accedirClient.setBackground(new java.awt.Color(125, 165, 221));
+        accedirClient.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         accedirClient.setText("Client");
         accedirClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -122,6 +127,8 @@ public class ClassMain extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 50);
         footer.add(accedirClient, gridBagConstraints);
 
+        accedirServidor.setBackground(new java.awt.Color(125, 165, 221));
+        accedirServidor.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         accedirServidor.setText("Servidor");
         accedirServidor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

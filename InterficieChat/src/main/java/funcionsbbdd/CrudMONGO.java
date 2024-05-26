@@ -236,8 +236,10 @@ public class CrudMONGO {
     }
 
     public boolean setDadesMsg(String nomUser, String msg, String data) {
-        this.setUrlConnexio(this.inicialitzarServidor());
-        MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
+        //this.setUrlConnexio(this.inicialitzarServidor());
+        
+        //MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
+        MongoClientURI mcu = new MongoClientURI("mongodb://localhost:27017");
 
         try ( MongoClient mc = new MongoClient(mcu)) {
             MongoDatabase database = mc.getDatabase(this.getUsuariServidor());
@@ -247,7 +249,7 @@ public class CrudMONGO {
                 System.out.println(mongoC.countDocuments());;
             } catch (Exception e) {
                 System.out.println("La col·lecció no existeix o no es pot accedir-hi.");
-                return false;
+                //return false;
             }
 
             Document missatgeNou = new Document("nomUsuari", nomUser)

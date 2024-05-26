@@ -4,10 +4,13 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import encriptacio.ServidorProvisional;
+import com.mongodb.client.model.Filters;
+import encriptacio.Servidor;
 import java.awt.Image;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,7 +37,6 @@ import org.bson.Document;
  * @version 1.0
  */
 public class Registre extends javax.swing.JFrame {
-
     /**
      * Creates new form Registre
      */
@@ -43,7 +45,6 @@ public class Registre extends javax.swing.JFrame {
         this.inicialitzarTextInputs();
         this.afegirIcono();
         this.setExtendedState(MAXIMIZED_BOTH);
-        //inicialitzarServidor();
     }
 
     /**
@@ -90,6 +91,7 @@ public class Registre extends javax.swing.JFrame {
         footerVista.setToolTipText("Espai que l'usuari fara servir per poder donar-se de alta en ");
 
         botoAltaUsuari.setBackground(new java.awt.Color(125, 165, 221));
+        botoAltaUsuari.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         botoAltaUsuari.setText("Donat d'Alta");
         botoAltaUsuari.setToolTipText("Donar-te de alta en el nostre chat");
         botoAltaUsuari.setPreferredSize(new java.awt.Dimension(180, 26));
@@ -333,13 +335,27 @@ public class Registre extends javax.swing.JFrame {
             boolean isPasswordValid = true;
 
             if (isPasswordValid) {
+                System.out.println("Passem per aqui...");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Servidor servidor = new Servidor();
+                        InputStream is = null;
+                        OutputStream os = null;
+                        servidor.enviarContrasenyaEncriptada(is, os);
+                    }
+                }).start();
                 contrasenyaEncriptada = encriptarPassword(password);
             } else {
                 System.out.println("Siusplau, introdueix una contraenya que estigui entre 8 caracters i 20 caracters");
             }
 
             int edat = tractarEdat();
-            inicialitzarDades(this.inputNom.getText(), this.inputCognom.getText(), edat, this.inputCorreu.getText(), this.inputUsuari.getText(), contrasenyaEncriptada);
+            boolean isUsuariExistent = this.getUserExistent(this.inputUsuari.getText());
+            if (!isUsuariExistent) {
+                inicialitzarDades(this.inputNom.getText(), this.inputCognom.getText(), edat, this.inputCorreu.getText(), this.inputUsuari.getText(), contrasenyaEncriptada);
+            }
+
         } else {
             System.out.println("Esta buit");
         }
@@ -516,8 +532,10 @@ public class Registre extends javax.swing.JFrame {
         final String DB_SRV_PWD = "gat123";
         final String DB_URL = "57.129.5.24";
         final String DB_PORT = "27017";
-        String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
+//        final String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
+        final String URLCONNEXIO = "mongodb://localhost:27017";
 
+        //MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
 
         try ( MongoClient mongoClient = new MongoClient(uri)) {
@@ -528,17 +546,67 @@ public class Registre extends javax.swing.JFrame {
             Document nouUsuari = new Document("nomUsuari", nom)
                     .append("cognomUsuari", cognom)
                     .append("edatUsuari", edat)
-                    .append("edatUsuari", edat)
                     .append("correuUsuari", correuUsuari)
                     .append("nomUser", nomUsuari)
                     .append("contrasenyaUsuari", password);
 
             comptes.insertOne(nouUsuari);
-            System.out.println("uHem introduit un nou usuari...");
+
+            System.out.println("Hem introduit un nou usuari...");
+            String missatge = "Hem introduit un nou usuari!";
+            String titol = "Nou usuari";
+            String[] opcions = {"Acceptar"};
+            boolean confirm = this.missatgePersonalitzat(opcions, missatge, titol, null);
+            if (confirm) {
+                this.dispose();
+                Login login = new Login();
+                login.setVisible(true);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean getUserExistent(String nomUsuari) {
+        boolean isExistent = false;
+        amagarInfoWarnings();
+        final String DB_SRV_USR = "grup1";
+        final String DB_SRV_PWD = "gat123";
+        final String DB_URL = "57.129.5.24";
+        final String DB_PORT = "27017";
+//        final String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
+        final String URLCONNEXIO = "mongodb://localhost:27017";
+
+        //MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
+        MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
+
+        try ( MongoClient mongoClient = new MongoClient(uri)) {
+            MongoDatabase database = mongoClient.getDatabase("grup1");
+            MongoCollection<Document> comptes = database.getCollection("comptes");
+
+            long numDocuments = comptes.countDocuments(Filters.eq("nomUser", nomUsuari));
+
+            if (numDocuments > 0) {
+                String missatge = "El nom de l'usuari: " + nomUsuari + " ja esta en us!";
+                String titol = "Usuari existent!";
+                String[] opcions = {"Acceptar"};
+                Icon imatge = new ImageIcon(getClass().getResource("/cross.png"));
+                this.missatgePersonalitzat(opcions, missatge, titol, imatge);
+                return isExistent = true;
+            }
+
+            return isExistent;
+
+//            if (confirm) {
+//                this.dispose();
+//                Login login = new Login();
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return isExistent;
     }
 
     /**
@@ -559,7 +627,7 @@ public class Registre extends javax.swing.JFrame {
      */
     private String encriptarPassword(String password) {
         final String IP = "localhost";
-        final int PORT = 12345;
+        final int PORT = 8080;
         try ( Socket cs = new Socket(IP, PORT)) {
             DataOutputStream out = new DataOutputStream(cs.getOutputStream());
             DataInputStream dip = new DataInputStream(cs.getInputStream());
@@ -630,6 +698,36 @@ public class Registre extends javax.swing.JFrame {
     private void mostrarFinestra(JFrame jframe) {
         jframe.setVisible(true);
         jframe.setExtendedState(MAXIMIZED_BOTH);
+    }
+
+    /**
+     *
+     * Funcio desenvolupada per poder mostrar un JOptionPane personalitzat.
+     *
+     * @param jop Objecte JOptionPane que farem servir per mostrar un dialog.
+     * @param opcions Les diferentes opcions de seleccio que podra elegir el
+     * usuari.
+     */
+    private boolean missatgePersonalitzat(String[] opcions, String missatge, String titol, Icon icon) {
+        JOptionPane jop = new JOptionPane();
+
+        boolean confirmacio = false;
+        int opcioSeleccionada = jop.showOptionDialog(
+                null,
+                missatge,
+                titol,
+                jop.DEFAULT_OPTION,
+                jop.WARNING_MESSAGE,
+                icon,
+                opcions,
+                opcions[0]
+        );
+
+        if (opcioSeleccionada < 1) {
+            return confirmacio = true;
+        }
+
+        return confirmacio;
     }
 
     /**

@@ -61,9 +61,12 @@ public class VistaPrincipal extends javax.swing.JFrame {
         vistaGeneral.setToolTipText("");
         vistaGeneral.setLayout(new java.awt.BorderLayout());
 
+        headerVista.setBackground(new java.awt.Color(203, 219, 242));
         headerVista.setToolTipText("");
         headerVista.setLayout(new java.awt.GridLayout(1, 0));
 
+        titolVista.setBackground(new java.awt.Color(203, 219, 242));
+        titolVista.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         titolVista.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         titolVista.setText("PRINCIPAL");
         titolVista.setToolTipText("Titol de la vista");
@@ -71,18 +74,22 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
         vistaGeneral.add(headerVista, java.awt.BorderLayout.PAGE_START);
 
+        mainVista.setBackground(new java.awt.Color(203, 219, 242));
         mainVista.setLayout(new java.awt.GridLayout(1, 0));
 
+        iconoImatge.setBackground(new java.awt.Color(203, 219, 242));
         iconoImatge.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mainVista.add(iconoImatge);
 
         vistaGeneral.add(mainVista, java.awt.BorderLayout.CENTER);
 
+        footerVista.setBackground(new java.awt.Color(203, 219, 242));
         java.awt.GridBagLayout footerVistaLayout = new java.awt.GridBagLayout();
         footerVistaLayout.columnWidths = new int[] {0, 50, 0};
         footerVistaLayout.rowHeights = new int[] {0};
         footerVista.setLayout(footerVistaLayout);
 
+        botoIniciSessio.setBackground(new java.awt.Color(125, 165, 221));
         botoIniciSessio.setText("Login");
         botoIniciSessio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -94,6 +101,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         footerVista.add(botoIniciSessio, gridBagConstraints);
 
+        botoRegistre.setBackground(new java.awt.Color(125, 165, 221));
         botoRegistre.setText("Registre");
         botoRegistre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -159,11 +167,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(vistaGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(vistaGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(vistaGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(vistaGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
         );
 
         pack();
@@ -239,6 +247,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
      */
     private void obrirFinestra(JFrame jf) {
         //Login login = new Login();
+        Login login = new Login();
         jf.setVisible(true);
         jf.setExtendedState(MAXIMIZED_BOTH);
     }

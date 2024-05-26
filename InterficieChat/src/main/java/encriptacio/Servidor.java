@@ -1,5 +1,7 @@
 package encriptacio;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -7,9 +9,15 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Servidor {
+
     private static int qtClients;
     public static String ipServidor;
     static ArrayList<Socket> arrSocket = new ArrayList<>();
@@ -178,7 +186,6 @@ public class Servidor {
 //        }
 //        return false;
 //    }
-
     /**
      * TODO: Funcio obsoleta.
      *
@@ -205,7 +212,6 @@ public class Servidor {
 //        arrSockets.add(portClient);
 //        this.getDadesArrayList(arrUsuaris, arrSockets);
 //    }
-
     /**
      * Funcio realitzada per poder mostrar les dades dels ArrayLists creats per
      * veure si s'esta realitzant correctament.
@@ -340,7 +346,6 @@ public class Servidor {
 //        }
 //        System.out.println("Aquest es el ultim client que s'ha connectat al servidor: " + socketClient);
 //    }
-
     /**
      * TODO: Revisar funcio ja que no es crida en cap lloc.
      *
@@ -398,7 +403,6 @@ public class Servidor {
 //
 //        return "";
 //    }
-
     /**
      * Funcio realitzada per poder guardar el nom del client que es conecta en
      * el servidor en un ArrayList de tipus String.
@@ -424,7 +428,6 @@ public class Servidor {
 //            this.arrNomsClients.add(nomClient + ",\n");
 //        }
 //    }
-
     /**
      * Funcio realitzada per poder veure per consola quins clients estan
      * guardats en el ArrayList de tipus String
@@ -456,7 +459,6 @@ public class Servidor {
 //            System.out.println("No hi han clients en el array...");
 //        }
 //    }
-
     /**
      * Funcio que utilitzem per poder borrar els clients que es troben en el
      * ArrayList un cop el client realitzi la operació de sortida.
@@ -539,7 +541,6 @@ public class Servidor {
             e.printStackTrace();
             System.err.println("\nERROR!\nHi ha hagut un error general i per tant el servidor no ha funcionat com toca!");
         }
-
     }
 
     /**
@@ -576,7 +577,6 @@ public class Servidor {
 //            e.printStackTrace();
 //        }
 //    }
-
     /**
      * TODO: Revisar funcio ja que creiem que no la utilitzem per a res. Funcio
      * creada per poder enviar els noms dels clients que es troben guardats en
@@ -592,7 +592,6 @@ public class Servidor {
 //            }
 //        }
 //    }
-
     /**
      * * TODO: Revisar funcio ja que creiem que no la utilitzem per a res.
      *
@@ -609,7 +608,6 @@ public class Servidor {
 //            }
 //        }
 //    }
-
     /**
      * TODO: Revisar funcio ja que creiem que no la utilitzem per a res.
      *
@@ -628,7 +626,6 @@ public class Servidor {
 //        System.out.println(msgDesconexio);
 //        this.enviarMissatge(msgDesconexio, arrClients);
 //    }
-
     /**
      * TODO: Revisar funcio ja que creiem que no la utilitzem per a res.
      *
@@ -642,4 +639,93 @@ public class Servidor {
 //        System.out.println("Ultim client connectat: " + nomUsuari);
 //        this.enviarMissatge(nomUsuari, arrClients);
 //    }
+    public void enviarContrasenyaEncriptada(InputStream is, OutputStream os) {
+
+        int port = 8080;
+        ServerSocket server = null;
+        Socket socket = null;
+        try  {
+            server = new ServerSocket(port);
+            System.out.println("Servidor obert...");
+            socket = server.accept();
+            System.out.println("Client connectat...");
+
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            DataInputStream dip = new DataInputStream(socket.getInputStream());
+
+            byte[] keyBytes = new byte[dip.readInt()];
+            dip.readFully(keyBytes);
+
+            SecretKey clau = new SecretKeySpec(keyBytes, "AES");
+
+            int msgLength = dip.readInt();
+            byte[] msgEncriptat = new byte[msgLength];
+            dip.readFully(msgEncriptat);
+
+            Cipher aesCipher = Cipher.getInstance("AES");
+            aesCipher.init(Cipher.DECRYPT_MODE, clau);
+            byte[] msgDesencriptat = aesCipher.doFinal(msgEncriptat);
+
+            String missatge = new String(msgDesencriptat);
+            System.out.println("Missatge desencriptat: " + missatge);
+
+            this.encriptarPassword(missatge, socket, clau, msgEncriptat, aesCipher, out);
+            //socket.close();
+            System.out.println("Servidor tornant a escoltar...");
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (socket != null && !socket.isClosed()) {
+                try {
+                    socket.close();
+                    System.out.println("Socket tancat.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (server != null && !server.isClosed()) {
+                try {
+                    server.close();
+                    System.out.println("Servidor tancat.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void encriptarPassword(String missatge, Socket socket, SecretKey clau, byte[] msgEncriptat, Cipher aesCipher, DataOutputStream out) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] b1 = missatge.getBytes();
+            md.update(b1);
+            byte[] resum = md.digest();
+            String contrasenyaHash = Base64.getEncoder().encodeToString(resum);
+            /**
+             * Funcio que cridem per a que el servidor envii al client la
+             * contrasenya encriptada
+             */
+            this.enviarMsgClient(contrasenyaHash, clau, msgEncriptat, aesCipher, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void enviarMsgClient(String missatge, SecretKey clau, byte[] msgEncriptat, Cipher aesCipher, DataOutputStream out) {
+        try {
+            byte[] keyByte = clau.getEncoded();
+            out.writeInt(keyByte.length);
+            out.write(keyByte);
+            aesCipher.init(Cipher.ENCRYPT_MODE, clau);
+            byte[] msgAEncriptar = aesCipher.doFinal(missatge.getBytes());
+            out.writeInt(msgAEncriptar.length);
+            out.write(msgAEncriptar);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }

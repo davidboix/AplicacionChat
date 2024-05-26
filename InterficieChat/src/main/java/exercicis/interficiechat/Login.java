@@ -7,6 +7,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -30,6 +31,7 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     private String ipServidor;
+
     public Login() {
         initComponents();
         inicialitzarTextInputs();
@@ -37,16 +39,7 @@ public class Login extends javax.swing.JFrame {
         inicialitzarInput();
         //this.setExtendedState(MAXIMIZED_BOTH);
         this.setMinimumSize(new Dimension(300, 300));
-    }
-
-    public Login(String ipServidor) {
-        initComponents();
-        inicialitzarTextInputs();
-        amagarInfoWarnings();
-        inicialitzarInput();
-        //this.setExtendedState(MAXIMIZED_BOTH);
-        this.setMinimumSize(new Dimension(300, 300));
-        this.ipServidor = ipServidor;
+        this.inicialitzarIconos();
     }
 
     /**
@@ -139,6 +132,8 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel2.add(usuariText, gridBagConstraints);
+
+        inputPassword.setPreferredSize(new java.awt.Dimension(200, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -158,7 +153,7 @@ public class Login extends javax.swing.JFrame {
         footerVista.setToolTipText("Espai del boto de login");
 
         botoLogin.setBackground(new java.awt.Color(125, 165, 221));
-        botoLogin.setFont(new java.awt.Font("Noto Sans", 0, 12)); // NOI18N
+        botoLogin.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
         botoLogin.setText("Login");
         botoLogin.setToolTipText("Boto del login");
         botoLogin.addActionListener(new java.awt.event.ActionListener() {
@@ -250,7 +245,8 @@ public class Login extends javax.swing.JFrame {
         final String DB_SRV_PWD = "gat123";
         final String DB_URL = "57.129.5.24";
         final String DB_PORT = "27017";
-        String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
+        //String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
+        final String URLCONNEXIO = "mongodb://localhost:27017";
         String nomUser = null;
 
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
@@ -435,8 +431,8 @@ public class Login extends javax.swing.JFrame {
         final String DB_SRV_PWD = "gat123";
         final String DB_URL = "57.129.5.24";
         final String DB_PORT = "27017";
-        String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
-
+        //String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
+        final String URLCONNEXIO = "mongodb://localhost:27017";
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
         try ( MongoClient mongoClient = new MongoClient(uri)) {
             MongoDatabase database = mongoClient.getDatabase(DB_SRV_USR);
@@ -506,16 +502,6 @@ public class Login extends javax.swing.JFrame {
         }
 
         return false;
-
-//      todo: 1.hauras de agafar la password que esta encriptada del mongodb tal qual,
-//      2.agafaras la password del JPasswordField
-//      3.encriptaras la password
-//      4.compararas la password encriptada que has agafat del mongo amb la que has encriptat del JPasswordField
-//        if (Arrays.equals(resum, resum2)) {
-//            System.out.println("Les contrasenyes son iguasl");
-//        } else {
-//            System.out.println("Diferents!");
-//        }
     }
 
     /**
@@ -614,6 +600,13 @@ public class Login extends javax.swing.JFrame {
      */
     private void tancarFinestraActual() {
         this.setVisible(false);
+    }
+
+    private void inicialitzarIconos() {
+        ImageIcon iconoBuscarAModificar = new ImageIcon(getClass().getResource("/iconoIniciSessio.png"));
+        Image iconoBuscarModificat = iconoBuscarAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        ImageIcon iconoBuscar = new ImageIcon(iconoBuscarModificat);
+        this.botoLogin.setIcon(iconoBuscar);
     }
 
     /**

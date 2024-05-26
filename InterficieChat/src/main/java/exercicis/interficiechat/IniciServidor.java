@@ -1,8 +1,10 @@
 package exercicis.interficiechat;
 
 import encriptacio.Servidor;
+import static java.awt.Frame.MAXIMIZED_BOTH;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -43,14 +45,21 @@ public class IniciServidor extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         inputServidor = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        menuGeneral = new javax.swing.JMenuBar();
+        menuNavegacio = new javax.swing.JMenu();
+        menuOpcioVistaPrincipal = new javax.swing.JMenuItem();
+        menuOpcioLogin = new javax.swing.JMenuItem();
+        menuSortir = new javax.swing.JMenu();
+        menuOpcioSortir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
+        jPanel2.setBackground(new java.awt.Color(203, 219, 242));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Noto Sans", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Noto Sans", 0, 36)); // NOI18N
         jLabel1.setText("Creació del servidor");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -61,8 +70,11 @@ public class IniciServidor extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_START);
 
+        jPanel3.setBackground(new java.awt.Color(203, 219, 242));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
+        jButton1.setBackground(new java.awt.Color(125, 165, 221));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton1.setText("Inici Servidor");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -73,6 +85,8 @@ public class IniciServidor extends javax.swing.JFrame {
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
+        jPanel4.setBackground(new java.awt.Color(203, 219, 242));
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -81,10 +95,12 @@ public class IniciServidor extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 245, Short.MAX_VALUE)
+            .addGap(0, 203, Short.MAX_VALUE)
         );
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.LINE_END);
+
+        jPanel5.setBackground(new java.awt.Color(203, 219, 242));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -94,16 +110,17 @@ public class IniciServidor extends javax.swing.JFrame {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 245, Short.MAX_VALUE)
+            .addGap(0, 203, Short.MAX_VALUE)
         );
 
         jPanel1.add(jPanel5, java.awt.BorderLayout.LINE_START);
 
+        jPanel6.setBackground(new java.awt.Color(203, 219, 242));
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
         inputServidor.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         inputServidor.setMinimumSize(new java.awt.Dimension(150, 22));
-        inputServidor.setPreferredSize(new java.awt.Dimension(150, 22));
+        inputServidor.setPreferredSize(new java.awt.Dimension(150, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -111,6 +128,7 @@ public class IniciServidor extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel6.add(inputServidor, gridBagConstraints);
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("IP Servidor");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -121,6 +139,52 @@ public class IniciServidor extends javax.swing.JFrame {
 
         jPanel1.add(jPanel6, java.awt.BorderLayout.CENTER);
 
+        menuGeneral.setBackground(new java.awt.Color(203, 219, 242));
+        menuGeneral.setOpaque(true);
+
+        menuNavegacio.setText("Navegació");
+
+        menuOpcioVistaPrincipal.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioVistaPrincipal.setBackground(new java.awt.Color(203, 219, 242));
+        menuOpcioVistaPrincipal.setText("Vista Principal");
+        menuOpcioVistaPrincipal.setOpaque(true);
+        menuOpcioVistaPrincipal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioVistaPrincipalActionPerformed(evt);
+            }
+        });
+        menuNavegacio.add(menuOpcioVistaPrincipal);
+
+        menuOpcioLogin.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioLogin.setBackground(new java.awt.Color(203, 219, 242));
+        menuOpcioLogin.setText("Inici Sessió");
+        menuOpcioLogin.setOpaque(true);
+        menuOpcioLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioLoginActionPerformed(evt);
+            }
+        });
+        menuNavegacio.add(menuOpcioLogin);
+
+        menuGeneral.add(menuNavegacio);
+
+        menuSortir.setText("Sortir");
+
+        menuOpcioSortir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioSortir.setBackground(new java.awt.Color(203, 219, 242));
+        menuOpcioSortir.setText("Sortir");
+        menuOpcioSortir.setOpaque(true);
+        menuOpcioSortir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioSortirActionPerformed(evt);
+            }
+        });
+        menuSortir.add(menuOpcioSortir);
+
+        menuGeneral.add(menuSortir);
+
+        setJMenuBar(menuGeneral);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -129,7 +193,7 @@ public class IniciServidor extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
         );
 
         pack();
@@ -146,11 +210,19 @@ public class IniciServidor extends javax.swing.JFrame {
         String ipServidor = this.inputServidor.getText();
         String[] unicaOpcio = {"Acceptar"};
         String titol = "Escriu una IP per al servidor";
-        
+
         if (!ipServidor.isEmpty()) {
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Servidor server = new Servidor();
+//                    server.iniciServidor(ipServidor);
+//                }
+//            }).start();
+//            Servidor server = new Servidor();
+//            server.iniciServidor(ipServidor);
             this.iniciClient(ipServidor);
             this.dispose();
-            System.exit(0);
         } else {
             System.out.println("No pot quedar buit!");
 
@@ -160,6 +232,41 @@ public class IniciServidor extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void menuOpcioVistaPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioVistaPrincipalActionPerformed
+        VistaPrincipal vistaPrincipal = new VistaPrincipal();
+        this.mostrarFinestra(vistaPrincipal);
+        this.tancarFinestraActual();
+    }//GEN-LAST:event_menuOpcioVistaPrincipalActionPerformed
+
+    private void menuOpcioLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioLoginActionPerformed
+        Login login = new Login();
+        this.mostrarFinestra(login);
+        this.tancarFinestraActual();
+    }//GEN-LAST:event_menuOpcioLoginActionPerformed
+
+    private void menuOpcioSortirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioSortirActionPerformed
+        this.dispose();
+        System.exit(0);
+    }//GEN-LAST:event_menuOpcioSortirActionPerformed
+    /**
+     * Funcio desenvolupada per poder realitzar l'operacio pertinent que es
+     * mostrar la finestra en questio que li passarem per parametres.
+     *
+     *
+     * @param jframe JFrame que li passarem per obrir la finestra en questio.
+     */
+    private void mostrarFinestra(JFrame jframe) {
+        jframe.setVisible(true);
+        jframe.setExtendedState(MAXIMIZED_BOTH);
+    }
+
+    /**
+     * Funcio que utilitzarem per poder tancar la finestra de la interficie
+     * grafica de Registre amb la qual estem treballant.
+     */
+    private void tancarFinestraActual() {
+        this.setVisible(false);
+    }
     /**
      * Funcio realitzada per poder mostrar la interficie grafica on el client
      * podra elegir entre iniciar sessio o registrar-se en el nostre sistema
@@ -272,5 +379,11 @@ public class IniciServidor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JMenuBar menuGeneral;
+    private javax.swing.JMenu menuNavegacio;
+    private javax.swing.JMenuItem menuOpcioLogin;
+    private javax.swing.JMenuItem menuOpcioSortir;
+    private javax.swing.JMenuItem menuOpcioVistaPrincipal;
+    private javax.swing.JMenu menuSortir;
     // End of variables declaration//GEN-END:variables
 }

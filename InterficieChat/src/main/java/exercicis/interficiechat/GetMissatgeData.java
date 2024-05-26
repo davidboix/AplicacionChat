@@ -3,8 +3,10 @@ package exercicis.interficiechat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import funcionsbbdd.CrudMONGO;
+import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 /**
  *
@@ -42,6 +44,12 @@ public class GetMissatgeData extends javax.swing.JFrame {
         dataElegida = new com.toedter.calendar.JDateChooser();
         botoConsulta = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        menuGeneral = new javax.swing.JMenuBar();
+        menuNavegacio = new javax.swing.JMenu();
+        menuOpcioVistaPrincipal = new javax.swing.JMenuItem();
+        menuOpcioLogin = new javax.swing.JMenuItem();
+        menuSortir = new javax.swing.JMenu();
+        menuOpcioSortir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Mostrar missatges per data");
@@ -51,7 +59,8 @@ public class GetMissatgeData extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(203, 219, 242));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Mostrar missatges");
         jPanel2.add(jLabel1, new java.awt.GridBagConstraints());
 
@@ -108,6 +117,52 @@ public class GetMissatgeData extends javax.swing.JFrame {
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
+        menuGeneral.setBackground(new java.awt.Color(203, 219, 242));
+        menuGeneral.setOpaque(true);
+
+        menuNavegacio.setText("Navegació");
+
+        menuOpcioVistaPrincipal.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioVistaPrincipal.setBackground(new java.awt.Color(203, 219, 242));
+        menuOpcioVistaPrincipal.setText("Vista Principal");
+        menuOpcioVistaPrincipal.setOpaque(true);
+        menuOpcioVistaPrincipal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioVistaPrincipalActionPerformed(evt);
+            }
+        });
+        menuNavegacio.add(menuOpcioVistaPrincipal);
+
+        menuOpcioLogin.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioLogin.setBackground(new java.awt.Color(203, 219, 242));
+        menuOpcioLogin.setText("Inici Sessió");
+        menuOpcioLogin.setOpaque(true);
+        menuOpcioLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioLoginActionPerformed(evt);
+            }
+        });
+        menuNavegacio.add(menuOpcioLogin);
+
+        menuGeneral.add(menuNavegacio);
+
+        menuSortir.setText("Sortir");
+
+        menuOpcioSortir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuOpcioSortir.setBackground(new java.awt.Color(203, 219, 242));
+        menuOpcioSortir.setText("Sortir");
+        menuOpcioSortir.setOpaque(true);
+        menuOpcioSortir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpcioSortirActionPerformed(evt);
+            }
+        });
+        menuSortir.add(menuOpcioSortir);
+
+        menuGeneral.add(menuSortir);
+
+        setJMenuBar(menuGeneral);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -116,7 +171,7 @@ public class GetMissatgeData extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
         );
 
         pack();
@@ -139,6 +194,43 @@ public class GetMissatgeData extends javax.swing.JFrame {
             System.out.println("La data es NULL!");
         }
     }//GEN-LAST:event_botoConsultaActionPerformed
+
+    private void menuOpcioVistaPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioVistaPrincipalActionPerformed
+        VistaPrincipal vistaPrincipal = new VistaPrincipal();
+        this.mostrarFinestra(vistaPrincipal);
+        this.tancarFinestraActual();
+    }//GEN-LAST:event_menuOpcioVistaPrincipalActionPerformed
+
+    private void menuOpcioLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioLoginActionPerformed
+        Login login = new Login();
+        this.mostrarFinestra(login);
+        this.tancarFinestraActual();
+    }//GEN-LAST:event_menuOpcioLoginActionPerformed
+
+    private void menuOpcioSortirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioSortirActionPerformed
+        this.dispose();
+        System.exit(0);
+    }//GEN-LAST:event_menuOpcioSortirActionPerformed
+    /**
+     * Funcio desenvolupada per poder realitzar l'operacio pertinent que es
+     * mostrar la finestra en questio que li passarem per parametres.
+     *
+     *
+     * @param jframe JFrame que li passarem per obrir la finestra en questio.
+     */
+    private void mostrarFinestra(JFrame jframe) {
+        jframe.setVisible(true);
+        jframe.setExtendedState(MAXIMIZED_BOTH);
+    }
+
+    /**
+     * Funcio que utilitzarem per poder tancar la finestra de la interficie
+     * grafica de Registre amb la qual estem treballant.
+     */
+    private void tancarFinestraActual() {
+        this.setVisible(false);
+    }
+
     /**
      * Funcio realitzada per poder tractar la data que rebem del component
      * JCalendar amb el format espanyol, es a dir, dia/mes/any ja que en la base
@@ -216,6 +308,12 @@ public class GetMissatgeData extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenuBar menuGeneral;
+    private javax.swing.JMenu menuNavegacio;
+    private javax.swing.JMenuItem menuOpcioLogin;
+    private javax.swing.JMenuItem menuOpcioSortir;
+    private javax.swing.JMenuItem menuOpcioVistaPrincipal;
+    private javax.swing.JMenu menuSortir;
     private javax.swing.JTextArea textArea;
     // End of variables declaration//GEN-END:variables
 }
