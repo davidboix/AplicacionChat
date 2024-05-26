@@ -134,85 +134,39 @@ public class IniciServidor extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Funcio desenvolupada per poder inicialitzar el servidor amb una IP
+     * definida per el usuari.
+     *
+     * @param evt Event que li passem per parametres que activara la funcio ja
+     * sigui utilitzant el ratoli o el teclat.
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String [] i = {};
+
         String ipServidor = this.inputServidor.getText();
-        Servidor servidor = new Servidor();
-        servidor.setIpServidor(ipServidor);
-        servidor.iniciServidor(servidor.getIpServidor());
+        String[] unicaOpcio = {"Acceptar"};
+        String titol = "Escriu una IP per al servidor";
         
         if (!ipServidor.isEmpty()) {
-            
-            //this.comprovacioIP(ipServidor);
+            this.iniciClient(ipServidor);
+            this.dispose();
+            System.exit(0);
         } else {
             System.out.println("No pot quedar buit!");
-            JOptionPane jop = new JOptionPane();
-            Icon imagenLabel = new ImageIcon(getClass().getResource("/cross.png"));
-            String[] opcions = {"Acceptar"};
 
-            jop.showOptionDialog(
-                    null,
-                    "IP no pot estar buida",
-                    "Escribiu una ip per al servidor",
-                    jop.DEFAULT_OPTION,
-                    jop.WARNING_MESSAGE,
-                    imagenLabel,
-                    opcions,
-                    opcions[0]
-            );
+            Icon imatge = new ImageIcon(getClass().getResource("/cross.png"));
+            String missatgeErroni = "IP no pot estar buida";
+            this.missatgeServidorErroni(unicaOpcio, missatgeErroni, titol, imatge);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-    /**
-     * TODO: Funcio provisional per poder validar que les IP's son correctes
-     *
-     * @param ipServidor
-     */
-    private void comprovacioIP(String ipServidor) {
-        final String IPSERVIDOR = "57.129.5.24";
-
-        if (ipServidor.equalsIgnoreCase(IPSERVIDOR)) {
-            System.out.println("Les IP's son iguals.");
-            /**
-             * TODO: Afegirem un JOptionPane
-             */
-            JOptionPane jop = new JOptionPane();
-            String[] opcions = {"Cancelar", "Acceptar"};
-            /**
-             * TODO: Aqui estarem agafant l'opcio seleccionada que apareixera
-             * dins del JOptionPane.
-             */
-            int opcioSeleccionada = this.missatgeIniciServidor(jop, opcions);
-
-            if (opcioSeleccionada > 0) {
-                /**
-                 * TODO: En aquest punt, haurem de inicialitzar el servidor i
-                 * iniciar la vista de la interficie grafica del Login.
-                 *
-                 * POSSIBLE PROBLEMA: Quan iniciem el servidor, el servidor
-                 * haura de esperar a que es connecti un client i per tant, fins
-                 * que no passi el esmentat, no arrencara la interficie
-                 */
-                iniciClient();
-            } else {
-                /**
-                 * TODO: Aquest missatge apareixera quan el usuari seleccioni el
-                 * boto de cancelar.
-                 */
-                this.missatgeServidorErroni(jop, opcions);
-            }
-        } else {
-            System.out.println("Aquesta IP no existeix, per tant, no podrem utilitzar-la.");
-        }
-    }
 
     /**
      * Funcio realitzada per poder mostrar la interficie grafica on el client
      * podra elegir entre iniciar sessio o registrar-se en el nostre sistema
      * gestor de base de dades.
      */
-    private void iniciClient() {
-        VistaPrincipal vp = new VistaPrincipal();
+    private void iniciClient(String ipServidor) {
+        VistaPrincipal vp = new VistaPrincipal(ipServidor);
         vp.setVisible(true);
         this.setVisible(false);
     }
@@ -243,7 +197,6 @@ public class IniciServidor extends javax.swing.JFrame {
     }
 
     /**
-     * TODO: Canviar descripcio de la funcio.
      *
      * Funcio desenvolupada per poder mostrar un JOptionPane personalitzat.
      *
@@ -251,17 +204,26 @@ public class IniciServidor extends javax.swing.JFrame {
      * @param opcions Les diferentes opcions de seleccio que podra elegir el
      * usuari.
      */
-    private void missatgeServidorErroni(JOptionPane jop, String[] opcions) {
-        jop.showOptionDialog(
+    private boolean missatgeServidorErroni(String[] opcions, String missatge, String titol, Icon icon) {
+        JOptionPane jop = new JOptionPane();
+
+        boolean confirmacio = false;
+        int opcioSeleccionada = jop.showOptionDialog(
                 null,
-                "No s'ha aixecat el servidor!",
-                "Inici servidor",
+                missatge,
+                titol,
                 jop.DEFAULT_OPTION,
                 jop.WARNING_MESSAGE,
-                null,
+                icon,
                 opcions,
                 opcions[0]
         );
+
+        if (opcioSeleccionada < 0) {
+            return confirmacio = true;
+        }
+
+        return confirmacio;
     }
 
     /**

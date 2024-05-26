@@ -29,6 +29,7 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
+    private String ipServidor;
     public Login() {
         initComponents();
         inicialitzarTextInputs();
@@ -36,10 +37,16 @@ public class Login extends javax.swing.JFrame {
         inicialitzarInput();
         //this.setExtendedState(MAXIMIZED_BOTH);
         this.setMinimumSize(new Dimension(300, 300));
+    }
 
-        //mongoClient = new MongoClient("localhost", 27017);
-        //database = mongoClient.getDatabase("Cuentas");
-        //MongoCollection<Document> cuentasCollection = database.getCollection("comptes");
+    public Login(String ipServidor) {
+        initComponents();
+        inicialitzarTextInputs();
+        amagarInfoWarnings();
+        inicialitzarInput();
+        //this.setExtendedState(MAXIMIZED_BOTH);
+        this.setMinimumSize(new Dimension(300, 300));
+        this.ipServidor = ipServidor;
     }
 
     /**
@@ -332,7 +339,7 @@ public class Login extends javax.swing.JFrame {
                     String[] opcions = {"Acceptar"};
 
                     jop.showOptionDialog(
-                             null,
+                            null,
                             "La contrasenya no es correcta.",
                             "La contrasenya es erronea",
                             jop.DEFAULT_OPTION,

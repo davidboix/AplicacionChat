@@ -121,14 +121,33 @@ public class GetMissatgeData extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Funcio realitzada per poder fer la consulta que farem per poder mostrar
+     * TOTS els missatges que es troben en aquell moment en la base de dades
+     * MongoDB passant per parametres la data.
+     *
+     * @param evt Event generat per poder activar la funcio a traves del ratoli
+     * o teclat.F
+     */
     private void botoConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoConsultaActionPerformed
         String data = this.tractarDataJCalendar();
         CrudMONGO cm = new CrudMONGO("57.129.5.24", 27017, "grup1", "gat123", "comptes");
         cm.setNomColeccio("missatges");
-        cm.getMsgData(data, this.textArea);
+        if (data != null) {
+            cm.getMsgData(data, this.textArea);
+        } else {
+            System.out.println("La data es NULL!");
+        }
     }//GEN-LAST:event_botoConsultaActionPerformed
-
+    /**
+     * Funcio realitzada per poder tractar la data que rebem del component
+     * JCalendar amb el format espanyol, es a dir, dia/mes/any ja que en la base
+     * de dades ho guardem de aquesta manera.
+     *
+     * @return En cas de que la data s'hagui formatejat correctament enviarem la
+     * data formatejada, en cas contrari, retornara NULL i no podrem fer la
+     * consulta correctament.
+     */
     private String tractarDataJCalendar() {
         Date data = this.dataElegida.getDate();
 
@@ -140,6 +159,10 @@ public class GetMissatgeData extends javax.swing.JFrame {
         return null;
     }
 
+    /**
+     * Funcio creada per poder inicialitzar les icones que apareixeran en la
+     * interficie grafica que es visualitzara
+     */
     private void inicialitzarIconos() {
         ImageIcon iconoBuscarAModificar = new ImageIcon(getClass().getResource("/iconoBuscarBD.png"));
         Image iconoBuscarModificat = iconoBuscarAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);

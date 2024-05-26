@@ -20,7 +20,9 @@ public class ClassMain extends javax.swing.JFrame {
     }
 
     /**
-     *
+     * Funcio que farem servir per poder inicialitzar les icones en la
+     * interficie grafica per a que el usuari que ho utilitzi tingui una idea
+     * mes gràfica dels botons.
      */
     private void inicialitzarIcons() {
         //ImageIcon iconoClientAModificar = new ImageIcon("src\\main\\java\\img\\logoXat.png");
@@ -193,7 +195,8 @@ public class ClassMain extends javax.swing.JFrame {
      * Event creat per poder mostrar la interficie grafica que servira per poder
      * aixecar el servidor,es a dir, encendre el servidor.
      *
-     * @param evt
+     * @param evt Event que activara la funcio ja sigui utilitzant el ratoli o
+     * el teclat.
      */
     private void botoServidorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoServidorActionPerformed
         IniciServidor serv = new IniciServidor();
@@ -211,7 +214,8 @@ public class ClassMain extends javax.swing.JFrame {
      * Event creat per a que quan es pulsi el boto del client per poder
      * inicialitzar.
      *
-     * @param evt
+     * @param evt Event que activara la funcio ja sigui utilitzant el ratoli o
+     * el teclat.
      */
     private void botoClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoClientActionPerformed
         VistaPrincipal vp = new VistaPrincipal();
@@ -233,30 +237,54 @@ public class ClassMain extends javax.swing.JFrame {
      * Event creat per poder inicialitzar una accio en concret que nosaltres
      * especificarem.
      *
-     * @param evt
+     * @param evt Event que activara la funcio ja sigui utilitzant el ratoli o
+     * el teclat.
      */
     private void opcioClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcioClientActionPerformed
         VistaPrincipal vp = new VistaPrincipal();
         this.mostrarInterficie(vp);
         this.tancarFinestra();
     }//GEN-LAST:event_opcioClientActionPerformed
-
+    /**
+     * Funcio realitzada per poder tancar la finestra a traves del menu o
+     * utilitzant la drecera del teclat la qual ens trobem en aquell moment i a
+     * més, tancarem la execució del programa.
+     *
+     * @param evt Event que activara la funcio ja sigui utilitzant el ratoli o
+     * el teclat.
+     */
     private void opcioSortirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcioSortirActionPerformed
         this.dispose();
+        System.exit(0);
     }//GEN-LAST:event_opcioSortirActionPerformed
-
+    /**
+     * Funcio creada per poder accedir a la interficie grafica anomenada
+     * VistaPrincipal a traves de un boto.
+     *
+     * @param evt Event que activara la funcio ja sigui utilitzant el ratoli o
+     * el teclat.
+     */
     private void accedirClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accedirClientActionPerformed
         VistaPrincipal vp = new VistaPrincipal();
         this.mostrarInterficie(vp);
         this.tancarFinestra();
     }//GEN-LAST:event_accedirClientActionPerformed
-
+    /**
+     * Funcio creada per poder iniciar la interficie grafica que utilitzarem per
+     * poder inicialitzar un servidor en concret.
+     *
+     * @param evt Event que activara la funcio ja sigui utilitzant el ratoli o
+     * el teclat.
+     */
     private void accedirServidorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accedirServidorActionPerformed
         IniciServidor is = new IniciServidor();
         this.mostrarInterficie(is);
         this.tancarFinestra();
     }//GEN-LAST:event_accedirServidorActionPerformed
-
+    /**
+     * Funcio creada per poder tancar la finestra la qual ens trobem en aquest
+     * moment.
+     */
     private void tancarFinestra() {
         this.setVisible(false);
     }

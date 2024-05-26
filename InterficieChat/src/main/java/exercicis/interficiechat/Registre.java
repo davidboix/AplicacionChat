@@ -45,7 +45,6 @@ public class Registre extends javax.swing.JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);
         //inicialitzarServidor();
     }
-// /u0000
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -334,25 +333,23 @@ public class Registre extends javax.swing.JFrame {
             boolean isPasswordValid = true;
 
             if (isPasswordValid) {
-//                En aquest punt la contrasenya sera encriptada
                 contrasenyaEncriptada = encriptarPassword(password);
             } else {
                 System.out.println("Siusplau, introdueix una contraenya que estigui entre 8 caracters i 20 caracters");
             }
 
-//            if (isCognomValid && isNomValid && isEdatValid && isCorreuValid && isUsuariValid) {
             int edat = tractarEdat();
             inicialitzarDades(this.inputNom.getText(), this.inputCognom.getText(), edat, this.inputCorreu.getText(), this.inputUsuari.getText(), contrasenyaEncriptada);
-//            System.out.println("Hem introduit un nou usuari!");
-//            }
         } else {
             System.out.println("Esta buit");
         }
     }//GEN-LAST:event_botoAltaUsuariActionPerformed
     /**
-     * TODO: Falta afegir la documentacio JavaDoc.
+     * Funcio desenvolupada per poder obrir la interficie grafica anomenada
+     * VistaPrincipal a traves del JMenuBar afegit.
      *
-     * @param evt
+     * @param evt Event afegit per poder cridar a la funció ja sigui a traves
+     * del ratoli i del teclat.
      */
     private void menuOpcioVistaPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioVistaPrincipalActionPerformed
         VistaPrincipal vistaPrincipal = new VistaPrincipal();
@@ -360,9 +357,12 @@ public class Registre extends javax.swing.JFrame {
         this.tancarFinestraActual();
     }//GEN-LAST:event_menuOpcioVistaPrincipalActionPerformed
     /**
-     * TODO: Falta afegir la documentacio JavaDoc.
+     * Funcio desenvolupada per poder obrir la finestra de la interficie grafica
+     * que se'n diu Login i aixi poder tenir una alternativa per poder navegar
+     * fins al Login a traves del JMenuBar afegit en la interficie.
      *
-     * @param evt
+     * @param evt Event afegit per poder cridar a la funció ja sigui a traves
+     * del ratoli i del teclat.
      */
     private void menuOpcioLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioLoginActionPerformed
         Login login = new Login();
@@ -370,20 +370,23 @@ public class Registre extends javax.swing.JFrame {
         this.tancarFinestraActual();
     }//GEN-LAST:event_menuOpcioLoginActionPerformed
     /**
-     * TODO: Falta afegir la documentacio JavaDoc.
+     * Funcio desenvolupada per poder tancar la finestra en la que ens trobem
+     * actualment i aixi poder sortir de la execucio del programa.
      *
-     * @param evt
+     * @param evt Event afegit per poder cridar a la funció ja sigui a traves
+     * del ratoli i del teclat.
      */
     private void menuOpcioSortirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioSortirActionPerformed
         this.dispose();
+        System.exit(0);
     }//GEN-LAST:event_menuOpcioSortirActionPerformed
     /**
      * Funcio desenvolupada per poder validar que un JTextField no pugui quedar
-     * buit
+     * buit.
      *
-     * @param jtf Textfield que validarem per comprovar si esta buit o no
+     * @param jtf Textfield que validarem per comprovar si esta buit o no.
      * @param etiqueta Etiqueta que ens mostrara la informacio del JTextField
-     * que ha quedat buit
+     * que ha quedat buit.
      * @return Retornara fals si hi ha un JTextField buit i per tant mostrara un
      * missatge i retornara cert si el JTextField ha quedat emplenat.
      */
@@ -399,7 +402,7 @@ public class Registre extends javax.swing.JFrame {
 
     /**
      * Funcio que utilitzarem per inicialitzar els inputs amb un text
-     * personalitzat per cada un de ells
+     * personalitzat per cada un de ells.
      */
     private void inicialitzarTextInputs() {
 
@@ -422,11 +425,11 @@ public class Registre extends javax.swing.JFrame {
     /**
      * Funcio que utilitzarem per poder validar el email utilitzant una
      * expressio regular per a que, d'aquesta manera el email compleixi unes
-     * condicions
+     * condicions.
      *
-     * @param email El email que farem servir per validar
+     * @param email El email que farem servir per validar.
      * @return Retornarem cert si el email compleix amb les condicions de la
-     * expressio regular, si es el cas contrari retornarem fals
+     * expressio regular, si es el cas contrari retornarem fals.
      */
     private boolean validarEmail(JTextField email) {
         String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z.-]+\\.[a-zA-Z]{2,}$";
@@ -509,7 +512,6 @@ public class Registre extends javax.swing.JFrame {
      */
     private void inicialitzarDades(String nom, String cognom, int edat, String correuUsuari, String nomUsuari, String password) {
         amagarInfoWarnings();
-//        DavidBoix1234!
         final String DB_SRV_USR = "grup1";
         final String DB_SRV_PWD = "gat123";
         final String DB_URL = "57.129.5.24";
@@ -548,16 +550,6 @@ public class Registre extends javax.swing.JFrame {
         Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
         mongoLogger.setLevel(Level.WARNING);
         mongoLogger.setUseParentHandlers(false);
-    }
-
-    /**
-     * Funcio obsoleta
-     */
-    private void inicialitzarServidor() {
-        final String IP = "localhost";
-        final int PORT = 12345;
-        ServidorProvisional servidor = new ServidorProvisional(IP, PORT);
-        servidor.iniciServidor(servidor.getIpServidor(), servidor.getPortServidor());
     }
 
     /**
@@ -629,19 +621,22 @@ public class Registre extends javax.swing.JFrame {
     }
 
     /**
-     * TODO: Faltar afegir la documentacio JavaDoc.
+     * Funcio desenvolupada per poder realitzar l'operacio pertinent que es
+     * mostrar la finestra en questio que li passarem per parametres.
      *
      *
-     * @param jframe
+     * @param jframe JFrame que li passarem per obrir la finestra en questio.
      */
     private void mostrarFinestra(JFrame jframe) {
         jframe.setVisible(true);
         jframe.setExtendedState(MAXIMIZED_BOTH);
     }
+
     /**
-     * TODO: Falta afegir documentacio JavaDoc.
+     * Funcio que utilitzarem per poder tancar la finestra de la interficie
+     * grafica de Registre amb la qual estem treballant.
      */
-    private void tancarFinestraActual () {
+    private void tancarFinestraActual() {
         this.setVisible(false);
     }
 

@@ -8,50 +8,42 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * Solucio Alternativa:
- *
- * Guardar el socket en la BD de MongoDB.
- *
- * Quan un client es desonnecti, el borrarem tant de la MongoBD, com de memoria
- * i del servidor.
- *
- * O inserirem tot el ArrayList a MongoDB, i quan un usuari es desconnecti,
- * borrarem tot el ArrayList i el tornarem a inserir sense aquell client que
- * s'ha desconnectat.
- *
- */
-//public class Servidor implements enDesconnexio{
 public class Servidor {
-    // IP MongoDB al nuvol: 57.129.5.24
-    //Port MongodBD al nuvol: 27017
-
-    // Estructura MongoDB
-    // Usuari de la BD: grup1
-    // Password: gat123
     private static int qtClients;
     public static String ipServidor;
     static ArrayList<Socket> arrSocket = new ArrayList<>();
     public static ArrayList<String> arrNoms = new ArrayList<>();
-    //public static CopyOnWriteArrayList<String> arrNoms = new CopyOnWriteArrayList<>();
     private ArrayList<String> arrMsg = new ArrayList<>();
     static ArrayList<String> arrMsg2 = new ArrayList<>();
     public static ArrayList<String> arrNomsClients = new ArrayList<>();
     private static ArrayList<OutputStream> arrNomsOS = new ArrayList<>();
 
+    /**
+     * Creat constructor buit per poder crear instancies de la classe Servidor.
+     */
     public Servidor() {
 
     }
 
+    /**
+     * Constructor creat per poder inicialitzar el servidor amb el atribut IP
+     * que el usuari passara per parametres.
+     *
+     * @param ipServidor Atribut de tipus String que utilitzarem per
+     * inicialitzar la IP.
+     */
     public Servidor(String ipServidor) {
         this.ipServidor = ipServidor;
     }
 
     /**
+     * Constructor desenvolupat per poder realitzar instancies de la classe
+     * Servidor passant per parametres el numero de clients conectats en aquell
+     * moment.
      *
-     * @param qtClients
+     * @param qtClients Atribut anomenat qtClients de tipus int per poder
+     * inicialitzar la quantitat de clients conectats.
      */
     public Servidor(int qtClients) {
         this.qtClients = qtClients;
@@ -77,13 +69,6 @@ public class Servidor {
         this.qtClients = qtClients;
     }
 
-//    public static ArrayList<Socket> getArrNoms() {
-//        return arrNoms;
-//    }
-//
-//    public static void setArrNoms(ArrayList<Socket> arrNoms) {
-//        Servidor.arrNoms = arrNoms;
-//    }
     public ArrayList<Socket> getArrSocket() {
         return arrSocket;
     }
@@ -132,11 +117,9 @@ public class Servidor {
     }
 
     /**
-     * TODO: Hem de utilitzar aquesta funcio per deixar la funcio general lo mes
-     * simplificada possible.
      *
-     * Funcio provisional creada per poder augmentar les connexions que es
-     * realitzen en el servidor i portar un control sobre elles
+     * Funcio creada per poder augmentar les connexions que es realitzen en el
+     * servidor i portar un control sobre elles
      *
      * @param qtClients La quantitat de clients el qual ens trobem en aquell
      * moment.
@@ -146,6 +129,17 @@ public class Servidor {
         return qtClients;
     }
 
+    /**
+     * Funcio desenvolupada per guardar els sockets dels clients que es conecten
+     * en el servidor en un ArrayList de tipus Socket.
+     *
+     * @param arrSocket ArrayList de tipus Socket on estaran guardats tots els
+     * sockets dels clients conectats.
+     * @param socket Socket del client que s'ha conectat en el servidor que
+     * guardarem en el ArrayList de tipus Socket.
+     * @return Retornarem el ArrayList de tipus Socket amb els sockets dels
+     * clients guardats dins.
+     */
     private ArrayList guardarClientsArrayList(ArrayList<Socket> arrSocket, Socket socket) {
         if (!socket.isClosed()) {
             arrSocket.add(socket);
@@ -154,8 +148,8 @@ public class Servidor {
     }
 
     /**
-     * TODO: Funcio que haurem de desenvolupar mes tard per poder saber si estem
-     * fent un tractament correcte
+     * TODO: Funcio obsoleta Funcio que haurem de desenvolupar mes tard per
+     * poder saber si estem fent un tractament correcte
      *
      * @param socket
      * @param is
@@ -165,27 +159,30 @@ public class Servidor {
      * @return
      * @throws Exception
      */
-    private static boolean llegirDesconnexio(Socket socket, InputStream is, OutputStream os, String msgDesconnexio, int i) throws Exception {
-        try {
-            byte[] msg = new byte[500];
-            is.read(msg);
-            String desconnexio = new String(msg);
-            System.out.println(desconnexio);
-            if (msgDesconnexio.equalsIgnoreCase(desconnexio)) {
-                i--;
-                return true;
-            } else {
-                System.out.println("NO TANQUEM CONNEXIO");
-            }
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("\nERROR!\n El metode valoraNom ha petat :( ");
-        }
-        return false;
-    }
+//    private static boolean llegirDesconnexio(Socket socket, InputStream is, OutputStream os, String msgDesconnexio, int i) throws Exception {
+//        try {
+//            byte[] msg = new byte[500];
+//            is.read(msg);
+//            String desconnexio = new String(msg);
+//            System.out.println(desconnexio);
+//            if (msgDesconnexio.equalsIgnoreCase(desconnexio)) {
+//                i--;
+//                return true;
+//            } else {
+//                System.out.println("NO TANQUEM CONNEXIO");
+//            }
+//            return false;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.err.println("\nERROR!\n El metode valoraNom ha petat :( ");
+//        }
+//        return false;
+//    }
 
     /**
+     * TODO: Funcio obsoleta.
+     *
+     *
      * TODO: Hem de revisar que el nom del client que fem servir actualment, es
      * unicament el numero de client que li ha tocat a aquell client, l'haurem
      * de modificar per el nom que fa servir per poder logejar-se.
@@ -203,11 +200,11 @@ public class Servidor {
      * @param nomClient Nom del client que farem servir per poder afegir-lo a un
      * ArrayList.
      */
-    private void inserirDadesMemoria(ArrayList<String> arrUsuaris, ArrayList<Integer> arrSockets, int portClient, String nomClient) {
-        arrUsuaris.add(nomClient);
-        arrSockets.add(portClient);
-        this.getDadesArrayList(arrUsuaris, arrSockets);
-    }
+//    private void inserirDadesMemoria(ArrayList<String> arrUsuaris, ArrayList<Integer> arrSockets, int portClient, String nomClient) {
+//        arrUsuaris.add(nomClient);
+//        arrSockets.add(portClient);
+//        this.getDadesArrayList(arrUsuaris, arrSockets);
+//    }
 
     /**
      * Funcio realitzada per poder mostrar les dades dels ArrayLists creats per
@@ -257,6 +254,17 @@ public class Servidor {
         }
     }
 
+    /**
+     * Funcio realitzada per poder eliminar el socket del ArrayList on tenim
+     * guardats els sockets dels clients conectats.
+     *
+     * @param arrSocket ArrayList de tipus Socket que tractarem per poder
+     * eliminar el socket del client en questio.
+     * @param socket Socket del client que volem eliminar del ArrayList.
+     * @return Retornara TRUE si es el cas de que el socket que hem passat per
+     * parametres es troba en el ArrayList i per tant es borri, en cas contrari,
+     * retornara FALSE si el client NO s'ha eliminat del ArrayList.
+     */
     public boolean eliminarSocket(ArrayList<Socket> arrSocket, Socket socket) {
         try {
             socket.close();
@@ -275,6 +283,19 @@ public class Servidor {
         return false;
     }
 
+    /**
+     * Funcio realitzada per poder llegir els missatges que envia el client al
+     * servidor per aixi poder mostrar-los en la interficie.
+     *
+     * @param is InputStream que utilitzarem per poder llegir els missatges del
+     * client.
+     * @return Retornarem el missatge que ens ha enviat el client si es el cas
+     * que el client ha enviat un missatge, en cas contrari, retornarem un
+     * String buit.
+     * @throws IOException Llançarem la excepcio de error si ha sigut el cas de
+     * que hi hagui hagut un error en el moment de llegir un missatge del
+     * client.
+     */
     private String llegirMissatgeClient(InputStream is) throws IOException {
         byte[] buffer = new byte[500];
         int intBuffer = is.read(buffer);
@@ -288,6 +309,15 @@ public class Servidor {
         return "";
     }
 
+    /**
+     * Funcio realitzada per poder assignar el missatge que ha enviat el client
+     * a un ArrayList de tipus String i aixi tenir un control dels missatges
+     * dels missatges enviats per el client.
+     *
+     * @param msg El missatge en format String que ens ha enviat el client.
+     * @param arrMsg ArrayList de tipus String que guardarem els missatges del
+     * client.
+     */
     private void setMsgClients(String msg, ArrayList<String> arrMsg) {
         if (!msg.isEmpty()) {
             arrMsg.add(msg);
@@ -295,19 +325,29 @@ public class Servidor {
     }
 
     /**
+     * TODO: Revisar funcio ja que no es crida en cap lloc.
+     *
+     *
      * Funcio que ens mostra el ultim client que s'ha conectat en el nostre
      * servidor i que haura d'enviar al client quan es conecta...
      *
      * @param arrSocket ArrayList amb tots els clients conectats...
      */
-    private void getUltimClientConectat(ArrayList<Socket> arrSocket) {
-        Socket socketClient = null;
-        for (Socket socket : arrSocket) {
-            socketClient = socket;
-        }
-        System.out.println("Aquest es el ultim client que s'ha connectat al servidor: " + socketClient);
-    }
+//    private void getUltimClientConectat(ArrayList<Socket> arrSocket) {
+//        Socket socketClient = null;
+//        for (Socket socket : arrSocket) {
+//            socketClient = socket;
+//        }
+//        System.out.println("Aquest es el ultim client que s'ha connectat al servidor: " + socketClient);
+//    }
 
+    /**
+     * TODO: Revisar funcio ja que no es crida en cap lloc.
+     *
+     * @param arrNomsClients
+     * @param is
+     * @return
+     */
     public static String setNomClients(ArrayList<String> arrNomsClients, InputStream is) {
         String nomUsuari = null;
         try {
@@ -329,44 +369,69 @@ public class Servidor {
         return "";
     }
 
-    public String setNomClients(InputStream is) {
-        String nomUsuari = null;
-        try {
-            byte[] buffer = new byte[1024];
-            int intBuffer = is.read(buffer);
-            nomUsuari = new String(buffer, 0, intBuffer);
+    /**
+     * TODO:Revisar funcio ja que no es crida en cap lloc.
+     *
+     * @param is
+     * @return
+     */
+//    public String setNomClients(InputStream is) {
+//        String nomUsuari = null;
+//        try {
+//            byte[] buffer = new byte[1024];
+//            int intBuffer = is.read(buffer);
+//            nomUsuari = new String(buffer, 0, intBuffer);
+//
+//            if (!nomUsuari.isEmpty()) {
+//                this.setNomClients(nomUsuari);
+//            }
+//
+//            if (nomUsuari != null) {
+//                return nomUsuari;
+//            }
+//
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return "";
+//    }
 
-            if (!nomUsuari.isEmpty()) {
-                this.setNomClients(nomUsuari);
-            }
-
-            if (nomUsuari != null) {
-                return nomUsuari;
-            }
-
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return "";
-    }
-
+    /**
+     * Funcio realitzada per poder guardar el nom del client que es conecta en
+     * el servidor en un ArrayList de tipus String.
+     *
+     * @param arrNomsClients ArrayList de tipus String que utilitzarem per
+     * guardar els noms dels clients que es conectin en el servidor.
+     * @param nomClient Nom del client que guardarem dins del ArrayList.
+     */
     private static void setNomArrClients(ArrayList<String> arrNomsClients, String nomClient) {
         if (!nomClient.isEmpty()) {
             arrNomsClients.add(nomClient + "\n");
-            //arrNomsClients.add(nomClient + ",\n");
         }
     }
 
-    private void setNomClients(String nomClient) {
-        if (!nomClient.isEmpty()) {
-            //arrNomsClients.add(nomClient + "\n");
-            this.arrNomsClients.add(nomClient + ",\n");
-        }
-    }
+    /**
+     * TODO: Revisar funcio ja que no es crida en cap lloc.
+     *
+     * @param nomClient
+     */
+//    private void setNomClients(String nomClient) {
+//        if (!nomClient.isEmpty()) {
+//            //arrNomsClients.add(nomClient + "\n");
+//            this.arrNomsClients.add(nomClient + ",\n");
+//        }
+//    }
 
+    /**
+     * Funcio realitzada per poder veure per consola quins clients estan
+     * guardats en el ArrayList de tipus String
+     *
+     * @param arrNomsClients ArrayList de tipus String on estan guardats els
+     * clients.
+     */
     public static void getNomArrClients(ArrayList<String> arrNomsClients) {
         if (arrNomsClients.size() > 0) {
             System.out.println("Noms clients: ");
@@ -378,17 +443,28 @@ public class Servidor {
         }
     }
 
-    public void getNomArrClients() {
-        if (this.arrNomsClients.size() > 0) {
-            System.out.println("Noms clients: ");
-            for (String row : this.arrNomsClients) {
-                System.out.println(row);
-            }
-        } else {
-            System.out.println("No hi han clients en el array...");
-        }
-    }
+    /**
+     * TODO: Revisar funcio ja que no
+     */
+//    public void getNomArrClients() {
+//        if (this.arrNomsClients.size() > 0) {
+//            System.out.println("Noms clients: ");
+//            for (String row : this.arrNomsClients) {
+//                System.out.println(row);
+//            }
+//        } else {
+//            System.out.println("No hi han clients en el array...");
+//        }
+//    }
 
+    /**
+     * Funcio que utilitzem per poder borrar els clients que es troben en el
+     * ArrayList un cop el client realitzi la operació de sortida.
+     *
+     * @param arrNomsClients ArrayList de tipus String on estan guardats els
+     * clients conectats.
+     * @param nom Nom del client que estem buscant en el ArrayList.
+     */
     public static void deleteNomClient(ArrayList<String> arrNomsClients, String nom) {
         for (int i = 0; i < arrNomsClients.size(); i++) {
             if (arrNomsClients.get(i).trim().equalsIgnoreCase(nom)) {
@@ -399,36 +475,29 @@ public class Servidor {
         getNomArrClients(arrNomsClients);
     }
 
+    /**
+     * Funcio realitzada per poder aixecar el servidor amb una IP definida per
+     * el usuari.
+     *
+     * @param ipServidor Parametre que utilitzem per inicialitzar el servidor
+     * amb una IP definida.
+     */
     public void iniciServidor(String ipServidor) {
         Servidor servidor = new Servidor();
         try {
             System.out.println("Creem el socket servidor");
             ServerSocket serverSocket = new ServerSocket();
-
-            //Adreça utilitzada per fer les proves.
             InetSocketAddress addr = new InetSocketAddress(ipServidor, 5556);
-
-            //Adreça utilitzada per aixecar el servidor utilitzant interficie grafica.
-            //InetSocketAddress addr = new InetSocketAddress(ipServidor, 5556);
             serverSocket.bind(addr);
-
             boolean semafor = false;
-
             System.out.println("Servidor preparat per escoltar!");
             while (true) {
                 Socket newSocket = serverSocket.accept();
                 InputStream is = newSocket.getInputStream();
-
                 servidor.augmentarClientsConnectats();
                 servidor.guardarClientsArrayList(servidor.arrSocket, newSocket);
-
-                //servidor.guardarNomClients(servidor.arrNoms,cl.getNomUsuari());
-                //servidor.mostrarClientsConectats(servidor.arrSocket);
-                //servidor.getUltimClientConectat(servidor.arrSocket);
-                //new Atendre_Clients(newSocket, servidor.arrSocket, servidor.arrNomClients).start();
-                new Atendre_Clients(newSocket, servidor.arrSocket).start();
+                new Atendre_Clients(newSocket, servidor.arrSocket, servidor.arrNomsClients).start();
             }
-
         } catch (SocketException se) {
             se.printStackTrace();
             System.err.println("\nERROR!\nLa connexio ha sigut detinguda inesperadament!");
@@ -441,31 +510,25 @@ public class Servidor {
         }
     }
 
+    /**
+     * TODO: Eliminar funcio un cop hem acabat de realitzar totes les proves...
+     */
     public static void iniciServidor() {
         Servidor servidor = new Servidor();
-
         try {
             System.out.println("Creem el socket servidor");
             ServerSocket serverSocket = new ServerSocket();
-
             InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
             serverSocket.bind(addr);
-
             boolean semafor = false;
-
             System.out.println("Servidor preparat per escoltar!");
             while (true) {
                 Socket newSocket = serverSocket.accept();
                 InputStream is = newSocket.getInputStream();
-
-                //servidor.getNomClient(is);
                 servidor.augmentarClientsConnectats();
                 servidor.guardarClientsArrayList(servidor.arrSocket, newSocket);
-
                 new Atendre_Clients(newSocket, servidor.arrSocket, servidor.arrNomsClients).start();
-
             }
-
         } catch (SocketException se) {
             se.printStackTrace();
             System.err.println("\nERROR!\nLa connexio ha sigut detinguda inesperadament!");
@@ -479,65 +542,104 @@ public class Servidor {
 
     }
 
-    //private void guardarNomsClients(Servidor servidor, String nomUsuari) {
+    /**
+     * Funcio realitzada per poder guardar els noms dels clients en un ArrayList
+     * de tipus String.
+     *
+     * @param nomUsuari Nom del client que s'ha conectat en el servidor.
+     */
     private void guardarNomsClients(String nomUsuari) {
         this.arrNomsClients.add(nomUsuari);
     }
 
-    private void getNomClient(InputStream is) {
-        try {
-            byte[] buffer = new byte[1024];
-            int intBuffer = is.read(buffer);
-            String nomClient = new String(buffer, 0, intBuffer);
-            this.guardarNomsClients(nomClient);
-            for (String row : this.arrNomsClients) {
-                System.out.println("Nom clients..." + row);
-            }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    /**
+     * TODO: Revisar funcio ja que creiem que no la cridem en lloc.
+     *
+     * Funcio realitzada per poder inserir els clients en el ArrayList de tipus
+     * String per despres mostrar per consola els clients que estan guardats en
+     * el ArrayList.
+     *
+     * @param is InputStream que u
+     */
+//    private void getNomClient(InputStream is) {
+//        try {
+//            byte[] buffer = new byte[1024];
+//            int intBuffer = is.read(buffer);
+//            String nomClient = new String(buffer, 0, intBuffer);
+//            this.guardarNomsClients(nomClient);
+//            for (String row : this.arrNomsClients) {
+//                System.out.println("Nom clients..." + row);
+//            }
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    public void enviarNomsClientsConectats(CopyOnWriteArrayList<OutputStream> OS) {
-        if (this.arrNomsClients.size() > 0) {
-            for (String row : this.arrNomsClients) {
-                this.enviarMissatge(row, OS);
-            }
-        }
-    }
+    /**
+     * TODO: Revisar funcio ja que creiem que no la utilitzem per a res. Funcio
+     * creada per poder enviar els noms dels clients que es troben guardats en
+     * el ArrayList a tots els clients conectats en aquell moment en el
+     * servidor.
+     *
+     * @param OS O
+     */
+//    public void enviarNomsClientsConectats(CopyOnWriteArrayList<OutputStream> OS) {
+//        if (this.arrNomsClients.size() > 0) {
+//            for (String row : this.arrNomsClients) {
+//                this.enviarMissatge(row, OS);
+//            }
+//        }
+//    }
 
-    private void enviarMissatge(String msg, CopyOnWriteArrayList<OutputStream> arrClients) {
-        for (OutputStream os : arrClients) {
-            try {
-                os.write(msg.getBytes());
-                os.flush();
-            } catch (Exception e) {
+    /**
+     * * TODO: Revisar funcio ja que creiem que no la utilitzem per a res.
+     *
+     * @param msg
+     * @param arrClients
+     */
+//    private void enviarMissatge(String msg, CopyOnWriteArrayList<OutputStream> arrClients) {
+//        for (OutputStream os : arrClients) {
+//            try {
+//                os.write(msg.getBytes());
+//                os.flush();
+//            } catch (Exception e) {
+//
+//            }
+//        }
+//    }
 
-            }
-        }
-    }
+    /**
+     * TODO: Revisar funcio ja que creiem que no la utilitzem per a res.
+     *
+     * @param nom
+     * @param arrClients
+     */
+//    public void deleteNomClient(String nom, CopyOnWriteArrayList<OutputStream> arrClients) {
+//        if (this.arrNomsClients.size() > 0) {
+//            for (int i = 0; i < this.arrNomsClients.size(); i++) {
+//                if (this.arrNomsClients.get(i).equalsIgnoreCase(nom)) {
+//                    this.arrNomsClients.remove(i);
+//                }
+//            }
+//        }
+//        String msgDesconexio = "\nEl client amb nom: " + nom + " s'ha desconectat satisfactoriament\n";
+//        System.out.println(msgDesconexio);
+//        this.enviarMissatge(msgDesconexio, arrClients);
+//    }
 
-    public void deleteNomClient(String nom, CopyOnWriteArrayList<OutputStream> arrClients) {
-        if (this.arrNomsClients.size() > 0) {
-            for (int i = 0; i < this.arrNomsClients.size(); i++) {
-                if (this.arrNomsClients.get(i).equalsIgnoreCase(nom)) {
-                    this.arrNomsClients.remove(i);
-                }
-            }
-        }
-        String msgDesconexio = "\nEl client amb nom: " + nom + " s'ha desconectat satisfactoriament\n";
-        System.out.println(msgDesconexio);
-        this.enviarMissatge(msgDesconexio, arrClients);
-    }
- 
-    public void coneixerUltimConectat(CopyOnWriteArrayList<OutputStream> arrClients) {
-        String nomUsuari = null;
-        for (String row : this.arrNomsClients) {
-            nomUsuari = row;
-        }
-        System.out.println("Ultim client connectat: " + nomUsuari);
-        this.enviarMissatge(nomUsuari, arrClients);
-    }
+    /**
+     * TODO: Revisar funcio ja que creiem que no la utilitzem per a res.
+     *
+     * @param arrClients
+     */
+//    public void coneixerUltimConectat(CopyOnWriteArrayList<OutputStream> arrClients) {
+//        String nomUsuari = null;
+//        for (String row : this.arrNomsClients) {
+//            nomUsuari = row;
+//        }
+//        System.out.println("Ultim client connectat: " + nomUsuari);
+//        this.enviarMissatge(nomUsuari, arrClients);
+//    }
 }

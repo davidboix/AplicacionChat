@@ -13,7 +13,7 @@ import javax.swing.JFrame;
  * enllestit i acabar definint l'interficie grafica.
  */
 public class VistaPrincipal extends javax.swing.JFrame {
-
+    private String ipServidor;
     /**
      * Creates new form VistaPrincipal
      */
@@ -21,6 +21,13 @@ public class VistaPrincipal extends javax.swing.JFrame {
         this.initComponents();
         this.inicialitzarIconos();
         this.setExtendedState(MAXIMIZED_BOTH);
+    }
+
+    public VistaPrincipal(String ipServidor) {
+        this.initComponents();
+        this.inicialitzarIconos();
+        this.setExtendedState(MAXIMIZED_BOTH);
+        this.ipServidor = ipServidor;
     }
 
     /**
