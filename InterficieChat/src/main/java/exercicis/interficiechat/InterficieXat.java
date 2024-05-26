@@ -24,7 +24,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import metatron.CrudMONGO;
+import funcionsbbdd.CrudMONGO;
 
 /**
  *
@@ -77,7 +77,7 @@ public class InterficieXat extends javax.swing.JFrame {
         headerVista = new javax.swing.JPanel();
         espaiSeleccioXat = new javax.swing.JPanel();
         botoXatPrivat = new javax.swing.JButton();
-        botoXatGrupal = new javax.swing.JButton();
+        botoCalendari = new javax.swing.JButton();
         espaiTitolXat = new javax.swing.JPanel();
         titolXat = new javax.swing.JLabel();
         mainVista = new javax.swing.JPanel();
@@ -109,10 +109,15 @@ public class InterficieXat extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 15);
         espaiSeleccioXat.add(botoXatPrivat, gridBagConstraints);
 
-        botoXatGrupal.setBackground(new java.awt.Color(125, 165, 221));
+        botoCalendari.setBackground(new java.awt.Color(125, 165, 221));
+        botoCalendari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botoCalendariActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 15);
-        espaiSeleccioXat.add(botoXatGrupal, gridBagConstraints);
+        espaiSeleccioXat.add(botoCalendari, gridBagConstraints);
 
         headerVista.add(espaiSeleccioXat, java.awt.BorderLayout.LINE_START);
 
@@ -120,8 +125,9 @@ public class InterficieXat extends javax.swing.JFrame {
         espaiTitolXat.setLayout(new java.awt.GridLayout(1, 0));
 
         titolXat.setBackground(new java.awt.Color(203, 219, 242));
+        titolXat.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         titolXat.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        titolXat.setText("COSTAXAT (NOM PROVISIONAL)");
+        titolXat.setText("COSTAXAT");
         titolXat.setToolTipText("");
         espaiTitolXat.add(titolXat);
 
@@ -190,7 +196,8 @@ public class InterficieXat extends javax.swing.JFrame {
         llistatVista.setBackground(new java.awt.Color(203, 219, 242));
         llistatVista.setLayout(new java.awt.BorderLayout());
 
-        textLlistatUsuarisConectats.setFont(new Font("Segoe UI",Font.PLAIN,12));
+        textLlistatUsuarisConectats.setFont(new Font("Segoe UI",Font.PLAIN,14));
+        textLlistatUsuarisConectats.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         textLlistatUsuarisConectats.setText("Llistat usuaris connectats");
         llistatVista.add(textLlistatUsuarisConectats, java.awt.BorderLayout.PAGE_START);
 
@@ -235,19 +242,18 @@ public class InterficieXat extends javax.swing.JFrame {
             cl.enviarMissatgeServidor(cl.getOs(), cl.getSocket(), msgG);
             JOptionPane jop = new JOptionPane();
             Icon imagenLabel = new ImageIcon(getClass().getResource("/check.png"));
+
             String[] opcions = {"Acceptar"};
-            String pattern = "MM/dd/yyyy HH:mm:ss";
+            //String pattern = "MM/dd/yyyy HH:mm:ss";
 
-            DateFormat df = new SimpleDateFormat(pattern);
+            String pattern = "MM/dd/yyyy";
 
-            Date today = Calendar.getInstance().getTime();        
-            String todayAsString = df.format(today);
-            String todayCollection[] = todayAsString.split(" ");
-                
+            //DateFormat df = new SimpleDateFormat(pattern);
+            //Date today = Calendar.getInstance().getTime();        
+            //String todayAsString = df.format(today);
+            //String todayCollection[] = todayAsString.split(" ");
             //Anomenem la coleccio amb la data actual
-            cm.setNomColeccio(todayCollection[0]);
-            String data = cm.tractarData();
-            cm.setDadesMsg(this.nomUsuari, msg, data);
+            //cm.setNomColeccio(todayCollection[0]);
             int msgEnviat = jop.showOptionDialog(
                     null,
                     "Missatge Enviat",
@@ -260,13 +266,12 @@ public class InterficieXat extends javax.swing.JFrame {
             );
 
             if (msgEnviat < 1) {
-                
+
                 //cm.setNomColeccio(todayCollection[0]);
                 /**
                  * TODO: Aquesta funcio lha realitzara el servidor en ves del
                  * client degut a que son funcions del servidor....
                  */
-
 //                ComponentJavaBean cj = new ComponentJavaBean();
 //                boolean visible = cm.setDadesMsg(this.nomUsuari, msg, data);
 //                if(visible == false){
@@ -277,6 +282,9 @@ public class InterficieXat extends javax.swing.JFrame {
 //                    frame.setVisible(true);
 //                }
                 //System.out.println(cm.setDadesMsg(this.nomUsuari, msg, data));
+                cm.setNomColeccio("missatges");
+                String data = cm.tractarData();
+                cm.setDadesMsg(this.nomUsuari, msg, data);
                 this.netejarInput(this.inputMsg);
             }
 
@@ -370,6 +378,11 @@ public class InterficieXat extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_botoLogoutActionPerformed
+
+    private void botoCalendariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoCalendariActionPerformed
+        GetMissatgeData gmd = new GetMissatgeData();
+        gmd.setVisible(true);
+    }//GEN-LAST:event_botoCalendariActionPerformed
     /**
      * Funcio creada per inicialitzar el JTextField amb un missatge per defecte
      * per a que el usuari sapigui on ha de escriure un missatge que enviara per
@@ -441,22 +454,23 @@ public class InterficieXat extends javax.swing.JFrame {
     private void inicialitzarIconos() {
 
         ImageIcon iconoXatPrivatAModificar = new ImageIcon(getClass().getResource("/iconoXatPrivat.png"));
-        ImageIcon iconoXatGrupalAModificar = new ImageIcon(getClass().getResource("/iconoXatGrupal.png"));
+        //ImageIcon iconoXatGrupalAModificar = new ImageIcon(getClass().getResource("/iconoXatGrupal.png"));
+        ImageIcon iconoCalendariAModificar = new ImageIcon(getClass().getResource("/iconoCalendari.png"));
         ImageIcon iconoSettingAModificar = new ImageIcon(getClass().getResource("/iconoLogout.png"));
         ImageIcon iconoEnviarModificar = new ImageIcon(getClass().getResource("/iconoEnviar.png"));
 
         Image iconoXatPrivatModificat = iconoXatPrivatAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        Image iconoXatGrupalModificat = iconoXatGrupalAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        Image iconoCalendariModificat = iconoCalendariAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         Image iconoSettingsModificat = iconoSettingAModificar.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
         Image iconoEnviarModificat = iconoEnviarModificar.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
 
         ImageIcon iconoXatPrivat = new ImageIcon(iconoXatPrivatModificat);
-        ImageIcon iconoXatGrupal = new ImageIcon(iconoXatGrupalModificat);
+        ImageIcon iconoCalendari = new ImageIcon(iconoCalendariModificat);
         ImageIcon iconoSettings = new ImageIcon(iconoSettingsModificat);
         ImageIcon iconoEnviar = new ImageIcon(iconoEnviarModificat);
 
         this.botoXatPrivat.setIcon(iconoXatPrivat);
-        this.botoXatGrupal.setIcon(iconoXatGrupal);
+        this.botoCalendari.setIcon(iconoCalendari);
         this.botoLogout.setIcon(iconoSettings);
         this.botoEnviarMsg.setIcon(iconoEnviar);
     }
@@ -509,9 +523,9 @@ public class InterficieXat extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botoCalendari;
     private javax.swing.JButton botoEnviarMsg;
     private javax.swing.JButton botoLogout;
-    private javax.swing.JButton botoXatGrupal;
     private javax.swing.JButton botoXatPrivat;
     private javax.swing.JTextArea clientsConnectats;
     private javax.swing.JPanel espaiControlMissatge;

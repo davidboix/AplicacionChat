@@ -1,4 +1,4 @@
-package metatron;
+package funcionsbbdd;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
+import javax.swing.JTextArea;
 import org.bson.Document;
 
 /**
@@ -129,7 +130,7 @@ public class CrudMONGO {
         this.passwordServidor = passwordServidor;
         this.portServidor = portServidor;
     }
-    
+
     public CrudMONGO(String ipServidor, int portServidor, String usuariServidor, String passwordServidor) {
         this.ipServidor = ipServidor;
         this.portServidor = portServidor;
@@ -196,7 +197,6 @@ public class CrudMONGO {
             }
         } catch (IllegalStateException ise) {
             System.out.println("Hi ha hagut un problema ");
-            //ise.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -233,84 +233,70 @@ public class CrudMONGO {
         MongoDatabase db = mc.getDatabase(this.getUsuariServidor());
         MongoCollection<Document> mongoC = db.getCollection(nomColeccio);
         return mongoC;
-
     }
-    
-//    public boolean collectionExists(final String collectionName) {
-//        Set<String> collectionNames = getCollectionNames();
-//        for (final String name : collectionNames) {
-//            if (name.equalsIgnoreCase(collectionName)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
-//    public void setDadesMsg(String nomUser, String msg, String data) {
-//
-//        this.setUrlConnexio(this.inicialitzarServidor());
-//        MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
-//        try ( MongoClient mc = new MongoClient(mcu)) {
-//            //var collectionExists = database.ListCollectionNames().ToList().Contains("cap2");
-//            MongoCollection<Document> mongoC = this.accedirColeccions(mc, this.getNomColeccio());
-//
-//            Document missatgeNou = new Document("nomUsuari", nomUser)
-//                    .append("missatgeUsuari", msg)
-//                    .append("dataMissatge", data);
-//            mongoC.insertOne(missatgeNou);
-//
-//            System.out.println("S'ha introduit un nou missatge...");
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-    
     public boolean setDadesMsg(String nomUser, String msg, String data) {
-    this.setUrlConnexio(this.inicialitzarServidor());
-    MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
+        this.setUrlConnexio(this.inicialitzarServidor());
+        MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
 
-    try (MongoClient mc = new MongoClient(mcu)) {
-        MongoDatabase database = mc.getDatabase(this.getUsuariServidor());
-        MongoCollection<Document> mongoC = database.getCollection(this.getNomColeccio());
+        try ( MongoClient mc = new MongoClient(mcu)) {
+            MongoDatabase database = mc.getDatabase(this.getUsuariServidor());
+            MongoCollection<Document> mongoC = database.getCollection(this.getNomColeccio());
 
-        try {
-            System.out.println(mongoC.countDocuments());;
-//            if(mongoC.countDocuments() < 3){
-//                System.out.println("Col·leccio no existeix");
-//                mongoC.drop();
-//                return false;
-//            }
+            try {
+                System.out.println(mongoC.countDocuments());;
+            } catch (Exception e) {
+                System.out.println("La col·lecció no existeix o no es pot accedir-hi.");
+                return false;
+            }
+
+            Document missatgeNou = new Document("nomUsuari", nomUser)
+                    .append("missatgeUsuari", msg)
+                    .append("dataMissatge", data);
+            mongoC.insertOne(missatgeNou);
+
+            System.out.println("S'ha introduit un nou missatge...");
+            return true;
+
         } catch (Exception e) {
-            System.out.println("La col·lecció no existeix o no es pot accedir-hi.");
+            e.printStackTrace();
             return false;
         }
-
-        Document missatgeNou = new Document("nomUsuari", nomUser)
-                               .append("missatgeUsuari", msg)
-                               .append("dataMissatge", data);
-        mongoC.insertOne(missatgeNou);
-
-        System.out.println("S'ha introduit un nou missatge...");
-        return true;
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        return false;
     }
-}
-
-
 
     public String tractarData() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
         String data = formatter.format(date);
         String[] arrData = data.split(" ");
         String dataFormat = arrData[0];
         System.out.println("Aquesta es la data actual: " + dataFormat);
         return data;
+    }
+
+    public void getMsgData(String data, JTextArea jta) {
+        this.setUrlConnexio(this.inicialitzarServidor());
+        MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
+        try ( MongoClient mc = new MongoClient(mcu)) {
+            MongoDatabase database = mc.getDatabase(this.getUsuariServidor());
+            MongoCollection<Document> mongoC = database.getCollection(this.getNomColeccio());
+
+            long numDocuments = mongoC.countDocuments(Filters.eq("dataMissatge", data));
+
+            if (numDocuments > 0) {
+                FindIterable<Document> resUsuaris = mongoC.find(Filters.eq("dataMissatge", data));
+                for (Document row : resUsuaris) {
+                    String nomUsuari = row.getString("nomUsuari");
+                    String msg = row.getString("missatgeUsuari");
+                    String dataMsg = row.getString("dataMissatge");
+                    jta.append(nomUsuari + ": [" + dataMsg + "] " + msg);
+                    jta.append("\n");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Hi ha hagut un error...");
+        }
     }
 
 }
