@@ -20,46 +20,89 @@ public class Client {
     private String nomUsuari;
     public static String missatgeClient;
 
+    /**
+     * Definit constructor buit per poder inicialitzar objectes de tipus
+     * Client.
+     */
     public Client() {
 
     }
 
+    /**
+     * Getter per a agafar el socket del client
+     * @return Retorna el socket del client
+     */
     public Socket getSocket() {
         return socket;
     }
-
+    /**
+     * Setter per definir el socket del client
+     * @param socket Socket que es definirà a l'objecte
+     */
     public void setSocket(Socket socket) {
         this.socket = socket;
     }
 
+    /**
+     * Getter per a agafar el inputStream del client
+     * @return Retorna el inputStream del client
+     */
     public InputStream getIs() {
         return is;
     }
 
+    /**
+     * Setter per definir el socket del client
+     * @param is InputStream que es definirà a l'objecte
+     */
     public void setIs(InputStream is) {
         this.is = is;
     }
 
+    /**
+     * Getter per a agafar el outputStream del client
+     * @return Retorna el outputStream del client
+     */
     public OutputStream getOs() {
         return os;
     }
 
+    /**
+     * Setter per definir el socket del client
+     * @param os OutputStream que es definirà a l'objecte
+     */
     public void setOs(OutputStream os) throws IOException {
         this.os = os;
     }
 
+    /**
+     * Getter per a agafar el missatge del client
+     * @return Retorna el missatge del client
+     */
     public static String getMissatgeClient() {
         return missatgeClient;
     }
 
+    /**
+     * Setter per definir el socket del client
+     * @param missatgeClient Missatge del client que es definirà a l'objecte
+     */
     public static void setMissatgeClient(String missatgeClient) {
         Client.missatgeClient = missatgeClient;
     }
 
+    /**
+     * Getter per a agafar el nom del client
+     * @return Retorna el nom del client
+     */
     public String getNomUsuari() {
         return nomUsuari;
     }
 
+    /**
+     * Setter per definir el socket del client
+     * @param nomUsuari Nom del client que es definirà a l'objecte
+     */
     public void setNomUsuari(String nomUsuari) {
         this.nomUsuari = nomUsuari;
     }
@@ -77,6 +120,11 @@ public class Client {
         setConnexio();
     }
 
+    /**
+     * Main el qual s'utilitza per fer les proves de la classe per la consola, no s'utilitza 
+     * en la interficie
+     * @param args 
+     */
     public static void main2(String[] args) {
         Scanner lector = new Scanner(System.in);
         try {
@@ -118,11 +166,10 @@ public class Client {
     }
 
     /**
-     * TODO: Revisar logica de la funcio ja i separar-ho per capes per no
-     * tenir-ho tot en una classe.
-     *
      * Funcio creada per poder llegirs els diferents missatges que ens envien
      * desde el servidor.
+     * @param is
+     * @param msgArr
      */
     public static void llegirMissatgeServidor(InputStream is, JTextArea msgArr) throws IOException {
         byte[] buffer = new byte[500];
@@ -132,10 +179,11 @@ public class Client {
     }
 
     /**
-     * Funcio creada provisionalment per poder rebre tot el ArrayList que conte
+     * Funcio creada per poder rebre tot el ArrayList que conte
      * tots els missatges enviats per un client en questio.
      *
-     * @param socket
+     * @param socket Objecte socket per a poder saber de qui son els missatges
+     * @param msgArr Array en concret la qual llegirem
      */
     public static void llegirArrayList(Socket socket, JTextArea msgArr) {
         //private static void llegirArrayList(ArrayList<Socket> arrSocket) {
@@ -158,9 +206,7 @@ public class Client {
     }
 
     /**
-     * TODO: Afegir una descripcio mes objectiva, es a dir, mes extensa.
-     *
-     * Funcio creada per poder fer la connexio en el servidor utilitzant el
+     * Funcio per poder fer la connexio en el servidor utilitzant el
      * metode en questio.
      */
     public static void setConnexio() {
@@ -173,9 +219,7 @@ public class Client {
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
             Client cl = new Client();
-//            new EscoltaMsgServidor(socket, is, cl).start();
-
-            //boolean semafor = enviarMissatgeServidor(os, socket);
+            
             boolean semafor = enviarMissatgeServidor(lector, os, socket);
 
             if (!semafor) {
@@ -193,7 +237,15 @@ public class Client {
             System.out.println("\nERROR!\nHi ha hagut un problema general en el client");
         }
     }
-
+    
+    /**
+     * Funcio que s'utilitza quan es connecta un client, enviar el nom del client al servidor
+     * @param textAreaMissatge textArea que senviara al fil EscoltaMsgServidor per moder ficar 
+     * els missatges enviats i que es reben
+     * @param nom El nom del client connectat
+     * @param clientsConnectats textArea el qual s'enviara al fil EscoltaMsgServidor per a poder tractar el nom
+     * del client i informar quan es connecti o desconnecti
+     */
     public void crearConnexio(JTextArea textAreaMissatge, String nom, JTextArea clientsConnectats) {
 
         try {
@@ -216,7 +268,6 @@ public class Client {
             }
             
             System.out.println("Ens conectem...");
-            //new FilUsuarisConectats(socket, is, clientsConnectats, this.getNomUsuari()).start();
             new EscoltaMsgServidor(socket, is, textAreaMissatge, this.getNomUsuari(), clientsConnectats).start();
 
             /**
@@ -230,9 +281,9 @@ public class Client {
     }
 
     /**
-     * Funcio diferent parametrizada.
+     * Funcio la qual s'utilitzar per rebre els missatges i enviar-los al servidor.
      *
-     * @param textAreaMissatge
+     * @param textAreaMissatge textArea per a poder posar els missatges enviats a la interficie
      */
     public void crearConnexio(JTextArea textAreaMissatge) {
 
@@ -295,7 +346,15 @@ public class Client {
         }
         return sortir;
     }
-
+    
+    /**
+     * Funcio la qual enviarà el missatge rebut del textField al servidor
+     * @param os OutputStream per a poder escriure el missatge al servidor
+     * @param socket Objecte socket per a saber de que es el missatge enviat
+     * @param missatge El missatge en concret que s'enviara
+     * @return Es retornara un true si es detecta que el missatge enviat es un exit, el qual donara
+     * la confirmacio de que el client vol desconnectar-se i tancara el socket
+     */
     public static boolean enviarMissatgeServidor(OutputStream os, Socket socket, String missatge) {
         System.out.println("\n\nAquest es el client: " + socket);
         boolean sortir = false;
@@ -317,6 +376,9 @@ public class Client {
         return sortir;
     }
 
+    /**
+     * Funcio la qual mostrarà els clients connectats per consola
+     */
     public void mostrarClientsConnectats() {
         System.out.println("\nAquestos son els clients conectats...");
         for (String nomClients : Servidor.arrNoms) {
@@ -324,6 +386,10 @@ public class Client {
         }
     }
 
+    /**
+     * Funcio per posar el nom del client a la variable global
+     * @param nomUsuari El qual s'utilitzarà per posar el nom del client
+     */
     public void setNomClients(String nomUsuari) {
         if (!nomUsuari.isEmpty()) {
             Servidor.arrNoms.add(nomUsuari);

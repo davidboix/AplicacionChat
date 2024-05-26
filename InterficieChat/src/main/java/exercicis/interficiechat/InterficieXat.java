@@ -45,7 +45,8 @@ public class InterficieXat extends javax.swing.JFrame {
     CrudMONGO cm = new CrudMONGO("57.129.5.24", 27017, "grup1", "gat123", "comptes");
 
     /**
-     * Creates new form InterficieXat
+     * Definit constructor per poder inicialitzar objectes de tipus
+     * InterficieXat.
      */
     public InterficieXat() {
         initComponents();
@@ -55,6 +56,11 @@ public class InterficieXat extends javax.swing.JFrame {
         cl.crearConnexio(this.textAreaMissatge);
     }
 
+    /**
+     * Definit constructor per poder inicialitzar objectes de tipus
+     * InterficieXat. Aquest s'utilitza principalment per a quan un client es connecta al servidor.
+     * @param nom Nom que senviarà del client que es connecta
+     */
     public InterficieXat(String nom) {
         initComponents();
         inicialitzarInputs();
@@ -244,16 +250,8 @@ public class InterficieXat extends javax.swing.JFrame {
             Icon imagenLabel = new ImageIcon(getClass().getResource("/check.png"));
 
             String[] opcions = {"Acceptar"};
-            //String pattern = "MM/dd/yyyy HH:mm:ss";
 
             String pattern = "MM/dd/yyyy";
-
-            //DateFormat df = new SimpleDateFormat(pattern);
-            //Date today = Calendar.getInstance().getTime();        
-            //String todayAsString = df.format(today);
-            //String todayCollection[] = todayAsString.split(" ");
-            //Anomenem la coleccio amb la data actual
-            //cm.setNomColeccio(todayCollection[0]);
             int msgEnviat = jop.showOptionDialog(
                     null,
                     "Missatge Enviat",
@@ -266,84 +264,23 @@ public class InterficieXat extends javax.swing.JFrame {
             );
 
             if (msgEnviat < 1) {
-
-                //cm.setNomColeccio(todayCollection[0]);
-                /**
-                 * TODO: Aquesta funcio lha realitzara el servidor en ves del
-                 * client degut a que son funcions del servidor....
-                 */
-//                ComponentJavaBean cj = new ComponentJavaBean();
-//                boolean visible = cm.setDadesMsg(this.nomUsuari, msg, data);
-//                if(visible == false){
-//                    JFrame frame = new JFrame("My Component");
-//                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//                    frame.getContentPane().add(cj); 
-//                    frame.pack(); 
-//                    frame.setVisible(true);
-//                }
-                //System.out.println(cm.setDadesMsg(this.nomUsuari, msg, data));
                 cm.setNomColeccio("missatges");
                 String data = cm.tractarData();
                 cm.setDadesMsg(this.nomUsuari, msg, data);
                 this.netejarInput(this.inputMsg);
             }
-
-//            String[] opcions = {"Acceptar"};
-//            jop.showOptionDialog(
-//                    null,
-//                    "El missatge s'ha enviat correctamnet a TOTS els usuaris!",
-//                    "Dades erronees",
-//                    jop.DEFAULT_OPTION,
-//                    jop.WARNING_MESSAGE,
-//                    null,
-//                    opcions,
-//                    opcions[0]
-//            );
         }
-
-        //aquest try agafara els misstages del textarea i els enviara al servidor
-//            try {
-////                InputStream is = socket.getInputStream();
-////                OutputStream os = socket.getOutputStream();
-//                  //is = socket.getInputStream();
-//                  //os = socket.getOutputStream();
-////                if (msg.equalsIgnoreCase("exit")) {
-////                    os.write(msg.getBytes());
-////                    System.out.println("Ens hem desonnectat del servidor...");
-////                    //socket.close();
-////                }
-////                os.write(msg.getBytes());
-//                //Client.setMissatgeClient(msg);
-//                //Client.enviarMissatgeServidor(os, socket);
-//                
-//                //String dataActual = getData();
-////                String horaActual = getTemps();
-////                this.textAreaMissatge.append("[" + dataActual + " || " + horaActual + "]: " + msg);
-////                this.inputMsg.setText(null);
-//                //Client.llegirMissatgeServidor(is,this.textAreaMissatge);
-//            } catch (IOException e) {
-//                System.out.println("Missatge no enviat al servidor");
-//            }
-//            String missatge = this.textAreaMissatge.getText();
-//            ArrayList<String> arrayListMsg = new ArrayList<>();
-//            arrayListMsg.add(msg);
-//            for (String misg : arrayListMsg) {
-//                resFinal += misg;
-//            }
 
     }//GEN-LAST:event_botoEnviarMsgActionPerformed
     /**
-     *
+     * Accio que enviarà el missatge exit al servidor, lo qual el desconnectarà
+     * del servidor
      * @param evt
      */
     private void botoLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoLogoutActionPerformed
         try {
             String msg = "exit";
             if (msg.equalsIgnoreCase("exit")) {
-                /**
-                 * TODO: Crear un metode per el JOptionPane pasant els missatge
-                 * que volem que aparegui, i les opcions.s
-                 */
                 String[] opcions = {"Acceptar", "Rebutjar"};
                 int resposta = jop.showOptionDialog(
                         null,
@@ -379,6 +316,10 @@ public class InterficieXat extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botoLogoutActionPerformed
 
+    /**
+     * Accio la qual mostrarà el JPanel per a poder veure els missatges per la data dels mateixos
+     * @param evt 
+     */
     private void botoCalendariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoCalendariActionPerformed
         GetMissatgeData gmd = new GetMissatgeData();
         gmd.setVisible(true);
@@ -417,9 +358,6 @@ public class InterficieXat extends javax.swing.JFrame {
      * Funcio desenvolupada per obtenir la hora, minuts i segons actuals en el
      * moment que fem la crida de la funcio
      *
-     * TODO: Hem de revisar que el temps que apareix en el xat, aparegui de
-     * forma correcta
-     *
      * @return Hora, Minuts i Segons com una cadena de text.
      */
     private String getTemps() {
@@ -449,7 +387,7 @@ public class InterficieXat extends javax.swing.JFrame {
 
     /**
      * Funcio creada per poder inicialitzar les icones que apareixeran en la
-     * interficie grafica que es visualitzara
+     * interficie grafica
      */
     private void inicialitzarIconos() {
 
@@ -475,6 +413,10 @@ public class InterficieXat extends javax.swing.JFrame {
         this.botoEnviarMsg.setIcon(iconoEnviar);
     }
 
+    /**
+     * Neteja el textField on s'escriu el missatge que es vol enviar
+     * @param msg 
+     */
     private void netejarInput(JTextField msg) {
 
         if (!msg.getText().isEmpty()) {
@@ -482,6 +424,9 @@ public class InterficieXat extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Tanca la finestra de la interficie de xat
+     */
     private void tancarFinestra() {
         this.dispose();
         System.exit(0);

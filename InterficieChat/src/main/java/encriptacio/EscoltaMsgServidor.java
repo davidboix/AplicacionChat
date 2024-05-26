@@ -36,55 +36,32 @@ public class EscoltaMsgServidor extends Thread {
 
     }
 
-    public EscoltaMsgServidor(ArrayList<String> arrNoms) {
-        this.arrNoms = arrNoms;
-    }
-
+    /**
+     * Getter per agafar el array dels noms del clients connectats.
+     * @return Retorna el array dels clients connectats
+     */
     public static ArrayList<String> getArrNoms() {
         return arrNoms;
     }
 
+    /**
+     * Setter per definir l'array del clients connectats
+     * @param arrNoms Array que es difinira dels clients connectats
+     */
     public static void setArrNoms(ArrayList<String> arrNoms) {
         EscoltaMsgServidor.arrNoms = arrNoms;
     }
 
     /**
-     * Definit constructor que utilitzarem per poder inicialitzar objectes de
-     * tipus EscoltaMsgServidor i que es podra utilitzar per poder crear nous
-     * Threads.
-     *
-     * @param socket Passarem un socket per parametres el qual sera el socket de
-     * un client en questio.
-     * @param inputStream Passarem un InputStream per poder rebre els missatges
-     * que ens enviara el servidor.
+     * Definit constructor per poder inicialitzar objectes de tipus
+     * EscoltaMsgServidor. Aquest s'utilitza principalment per tractar els missatges que enviarà el client
+     * al servidor
+     * @param socket Objecte Socket per saber qui envia el missatge
+     * @param inputStream InputStream del client per a que sigui possible enviar el missatge al servidor
+     * @param msgArr Array del missatges per poder guardar els missatges del client
+     * @param nomUsuari El nom del usuari que envia el missatge
+     * @param clientArr Array de tots els clients connectats
      */
-    public EscoltaMsgServidor(Socket socket, InputStream inputStream) {
-        this.socket = socket;
-        this.inputStream = inputStream;
-    }
-
-    public EscoltaMsgServidor(Socket socket, InputStream inputStream, JTextArea msgArr) {
-        this.socket = socket;
-        this.inputStream = inputStream;
-        this.msgArr = msgArr;
-    }
-
-    public EscoltaMsgServidor(Socket socket, InputStream inputStream, JTextArea msgArr, String nomUsuari) {
-        this.socket = socket;
-        this.inputStream = inputStream;
-        this.msgArr = msgArr;
-        this.nomUsuari = nomUsuari;
-    }
-
-    public EscoltaMsgServidor(JTextArea msgArr, JTextArea clientArr, Socket socket, InputStream inputStream, String nomUsuari, Client client) {
-        this.msgArr = msgArr;
-        this.clientArr = clientArr;
-        this.socket = socket;
-        this.inputStream = inputStream;
-        this.nomUsuari = nomUsuari;
-        this.client = client;
-    }
-
     public EscoltaMsgServidor(Socket socket, InputStream inputStream, JTextArea msgArr, String nomUsuari, JTextArea clientArr) {
         this.socket = socket;
         this.inputStream = inputStream;
@@ -93,27 +70,18 @@ public class EscoltaMsgServidor extends Thread {
         this.clientArr = clientArr;
     }
 
-    public EscoltaMsgServidor(JTextArea msgArr) {
-        this.msgArr = msgArr;
-    }
-
-    public EscoltaMsgServidor(JTextArea msgArr, Socket socket, InputStream inputStream, String nomUsuari) {
-        this.msgArr = msgArr;
-        this.socket = socket;
-        this.inputStream = inputStream;
-
-    }
-
-    public EscoltaMsgServidor(Socket socket, InputStream inputStream, Client client) {
-        this.socket = socket;
-        this.inputStream = inputStream;
-        this.client = client;
-    }
-
+    /**
+     * Getter per agafar el numero de clients connectats
+     * @return El numero de clients connectats
+     */
     public static int getIntClientsConectats() {
         return intClientsConectats;
     }
 
+    /**
+     * Setter per definir el numero de clients connectats
+     * @param intClientsConectats Numero de clients connectats que es definira
+     */
     public static void setIntClientsConectats(int intClientsConectats) {
         EscoltaMsgServidor.intClientsConectats = intClientsConectats;
     }
@@ -159,18 +127,36 @@ public class EscoltaMsgServidor extends Thread {
         this.inputStream = is;
     }
 
+    /**
+     * Getter que utilitzarem per poder agafar el Array dels missatges.
+     *
+     * @return Array dels missatges enviats.
+     */
     public JTextArea getMsgArr() {
         return msgArr;
     }
 
+    /**
+     * Setter per poder definir l'array dels missatges enviats
+     * @param msgArr Array dels missatges que es definiran
+     */
     public void setMsgArr(JTextArea msgArr) {
         this.msgArr = msgArr;
     }
 
+    /**
+     * Getter que utilitzarem per poder agafar el nom del usuari.
+     *
+     * @return El nom de l'usuari.
+     */
     public String getNomUsuari() {
         return nomUsuari;
     }
 
+    /**
+     * Setter per poder definir el nom de l'usuari
+     * @param nomUsuari El nom de l'usuari que es definira
+     */
     public void setNomUsuari(String nomUsuari) {
         this.nomUsuari = nomUsuari;
     }
@@ -189,15 +175,10 @@ public class EscoltaMsgServidor extends Thread {
                 if (intBytes != -1) {
                     String msg = new String(buffer, 0, intBytes);
                     this.afegirMissatgeTextArea(msg);
-                    //TODO: if per provar de borrar el textfield de clients connectats per a que no s'acumulin els clients
-//                    if(!msg.contains("-/0/u/i/4/9<<z")){
-//                        netejarTextArea();
-//                    }
                     this.afegirClientsConnectats(msg);
                 }
             }
         } catch (IOException ioe) {
-            //ioe.printStackTrace();
             System.out.println("El socket s'ha tancat");
         } catch (Exception e) {
             e.printStackTrace();
@@ -228,9 +209,6 @@ public class EscoltaMsgServidor extends Thread {
      * Funcio desenvolupada per obtenir la hora, minuts i segons actuals en el
      * moment que fem la crida de la funcio
      *
-     * TODO: Hem de revisar que el temps que apareix en el xat, aparegui de
-     * forma correcta
-     *
      * @return Hora, Minuts i Segons com una cadena de text.
      */
     private String getTemps() {
@@ -245,31 +223,39 @@ public class EscoltaMsgServidor extends Thread {
         return "";
     }
 
+    /**
+     * Convertirà el temps del LocaTime a String
+     * @param temps El temps del LocalTemps
+     * @return El temps convertit a String
+     */
     private String tractarTemps(int temps) {
         String tempsActual = String.valueOf(temps);
         return tempsActual;
     }
 
+    /**
+     * Funcio per afegir els missatges del servidor al textArea per a poder-los visualitzar
+     * @param msg El missatge del servidor
+     */
     private void afegirMissatgeTextArea(String msg) {
-        //System.out.println("msg: "+msg);
         String dataActual = getData();
         String horaActual = getTemps();
         String[] msgGood = msg.split("-/0/u/i/4/9<<z");
         System.out.println("msgGood: " + msgGood[0]);
-        //msgArr.append(msg);
         String nomClient = this.getNomClient(msgGood);
         String msgClient = this.getMsgClient(msgGood);
         if (msgGood.length > 1) {
-            //msgArr.append("[" + msgGood[1] + ": " + dataActual + " || " + horaActual + "]: " + msgGood[0] + "\n");
-            //msgArr.append("[" + nomClient + ": " + dataActual + " || " + horaActual + "]: " + msgClient + "\n");
             this.msgArr.append(nomClient + ": [" + horaActual + "]: " + msgClient);
             this.saltLiniaTextArea(this.msgArr);
         } else {
-            //this.msgArr.append("[" + dataActual + " || " + horaActual + "]: " + msgGood[0] + "\n");
-            //this.msgArr.append("Clients conectats: " + msgGood[0]);
+            
         }
     }
 
+    /**
+     * Funcio que afegirà els clients que es vagin connectant al servidor i els mostrara al TextArea de la esquerra
+     * @param msg El missatge del servidor el qual tractarem per agafar només el nom
+     */
     public void afegirClientsConnectats(String msg) {
         System.out.println("\nPassem per aqui...\n");
         Servidor servidor = new Servidor();
@@ -286,50 +272,20 @@ public class EscoltaMsgServidor extends Thread {
         for (String row : this.arrNomClients) {
             System.out.println("EscoltaMsgServidor: " + row);
         }
-//        if (EscoltaMsgServidor.arrNoms.size() > 0) {
-//            for (String row: EscoltaMsgServidor.arrNoms) {
-//                System.out.println("EscoltaMsgServidor: " + row);
-//            }
-//        } else {
-//            System.out.println("EscoltaMsgServidor: No hi han dades!");
-//        }
-
-//        System.out.println("EscoltaMsgServidor: Clients conectats: ");
-//        Servidor.getNomArrClients(Servidor.arrNoms);
 
         String[] msgGood = msg.split("-/0/u/i/4/9<<z");
-        //System.out.println("msgGood: " + msgGood[0]);
-        //msgArr.append(msg);
-        String nomClient = this.getNomClient(msgGood);
-        String msgClient = this.getMsgClient(msgGood);
         if (msgGood.length > 1) {
-            //this.clientArr.append(nomClient);
-            //this.saltLiniaTextArea(this.msgArr);
+            
         } else {
-
-//            if (EscoltaMsgServidor.getArrNoms().size() > 0) {
-//                for (String row : EscoltaMsgServidor.getArrNoms()) {
-//                    System.out.println("EscoltaMsgServidor: " + row);
-//                }
-//            } else {
-//                System.out.println("EscoltaMsgServidor: El arraylist esta buit...");
-//            }
-            //this.mostrarArray();
-
-//            String nomsClients = msgGood[0];
-//            String[] arrNomsClients = nomsClients.split(",");
-//            //this.clientArr.setText("");
-//            for (int i = 0; i < arrNomsClients.length; i++) {
-//                System.out.println(i + ": " + arrNomsClients[i]);
-//                this.clientArr.append(arrNomsClients[i]);
-//            }
-//           
-            //this.netejarTextArea();
             System.out.println("Aquestos son els clients conectats: " + msgGood[0]);
             this.clientArr.append(msgGood[0]);
-            //this.saltLiniaTextArea(clientArr);
         }
     }
+    
+    /**
+     * Funcio que fa un salt de linia en el TextArea
+     * @param jta El TextArea on es farà el salt de linia
+     */
     private void saltLiniaTextArea(JTextArea jta) {
         String saltLinia = "\n";
         if (jta.isVisible()) {
@@ -337,6 +293,11 @@ public class EscoltaMsgServidor extends Thread {
         }
     }
 
+    /**
+     * Agafe el nom del client del missatge enviat pel servidor
+     * @param arrInfoClient el missatge del servidor
+     * @return El nom del client que ha enviat el missatge
+     */
     private String getNomClient(String[] arrInfoClient) {
         if (arrInfoClient.length > 1) {
             String nomClient = arrInfoClient[1];
@@ -351,6 +312,11 @@ public class EscoltaMsgServidor extends Thread {
         return "";
     }
 
+    /**
+     * Agafe el missatge del client del missatge del servidor
+     * @param arrInfoClient Missatge del servidor
+     * @return El missatge final que ha enviat el client.
+     */
     private String getMsgClient(String[] arrInfoClient) {
         if (arrInfoClient.length > 1) {
             String msgClient = arrInfoClient[0];
@@ -358,38 +324,4 @@ public class EscoltaMsgServidor extends Thread {
         }
         return "";
     }
-
-    private void comprovarClientsConectats(String[] msgGood, String clientsConectats) {
-        if (msgGood.length < 1) {
-            this.clientArr.append(clientsConectats);
-        }
-    }
-
-    public void netejarTextArea() {
-        int infoTextArea = this.clientArr.getText().length();
-
-        if (infoTextArea > 0) {
-            this.clientArr.setText(null);
-        }
-    }
-
-    public static void rebreArray(ArrayList<String> llista) {
-        arrNoms = llista;
-    }
-
-    private void mostrarArray() {
-        if (this.arrNoms != null) {
-            for (String row : this.arrNoms) {
-                System.out.println("EscoltaMsgServidor: " + row);
-            }
-        } else {
-            System.out.println("EscoltaMsgServidor: Arraylist buit...");
-        }
-    }
-
-//    private void guardarNomClients(ArrayList<String> arrNom, String nomClient) {
-//        if (!nomClient.isEmpty()) {
-//            arrNom.add(nomClient);
-//        }
-//    }
 }
