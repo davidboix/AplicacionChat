@@ -220,7 +220,9 @@ public class CrudMONGO {
 
     public boolean setDadesMsg(String nomUser, String msg, String data) {
         
-        MongoClientURI mcu = new MongoClientURI("mongodb://localhost:27017");
+        this.setUrlConnexio(this.inicialitzarServidor());
+        
+        MongoClientURI mcu = new MongoClientURI(this.getUrlConnexio());
 
         try ( MongoClient mc = new MongoClient(mcu)) {
             MongoDatabase database = mc.getDatabase(this.getUsuariServidor());
