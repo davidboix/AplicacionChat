@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -19,6 +20,7 @@ public class Client {
     private OutputStream os;
     private String nomUsuari;
     public static String missatgeClient;
+    private String ipServidor;
 
     /**
      * Definit constructor buit per poder inicialitzar objectes de tipus Client.
@@ -151,7 +153,6 @@ public class Client {
                 String msg = lector.nextLine();
                 os.write(msg.getBytes());
 
-
                 if (msg.equalsIgnoreCase("exit")) {
                     os.write(msg.getBytes());
                     semafor = true;
@@ -214,7 +215,20 @@ public class Client {
     public static void setConnexio() {
         try {
             Socket socket = new Socket();
-            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+            // Step 1: Get the local host address
+            InetAddress localHost = InetAddress.getLocalHost();
+
+            InetSocketAddress socketAddress = new InetSocketAddress(localHost, 0);
+
+            // Step 3: Extract the IP address from the InetSocketAddress
+            InetAddress inetAddress = socketAddress.getAddress();
+            String ipAddress = inetAddress.getHostAddress();
+
+            // Print the IP address
+            System.out.println("IP Address: " + ipAddress);
+
+            InetSocketAddress addr = new InetSocketAddress(ipAddress, 5556);
+
             socket.connect(addr);
 
             Scanner lector = new Scanner(System.in);
@@ -249,11 +263,23 @@ public class Client {
      * EscoltaMsgServidor per a poder tractar el nom del client i informar quan
      * es connecti o desconnecti
      */
-    public void crearConnexio(JTextArea textAreaMissatge, String nom, JTextArea clientsConnectats) {
+    public void crearConnexio(String ipServidor, JTextArea textAreaMissatge, String nom, JTextArea clientsConnectats) {
 
         try {
             Socket socket = new Socket();
-            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+//            // Step 1: Get the local host address
+//            InetAddress localHost = InetAddress.getLocalHost();
+//
+//            InetSocketAddress socketAddress = new InetSocketAddress(localHost, 0);
+//
+//            // Step 3: Extract the IP address from the InetSocketAddress
+//            InetAddress inetAddress = socketAddress.getAddress();
+//            String ipAddress = inetAddress.getHostAddress();
+//
+//            // Print the IP address
+//            System.out.println("IP Address: " + ipAddress);
+
+            InetSocketAddress addr = new InetSocketAddress(ipServidor, 5556);
             socket.connect(addr);
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();

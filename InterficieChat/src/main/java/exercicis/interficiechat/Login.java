@@ -47,6 +47,9 @@ public class Login extends javax.swing.JFrame {
     private void inicialitzarTextInputs() {
         this.usuariText.setPlaceHolder("Introdueix el nom de l'usuari");
         this.usuariText.setText(this.usuariText.getPlaceHolder());
+        
+        this.textIpServidor.setPlaceHolder("Introdueix l'IP del servidor");
+        this.textIpServidor.setText(this.textIpServidor.getPlaceHolder());
     }
 
     /**
@@ -68,6 +71,8 @@ public class Login extends javax.swing.JFrame {
         etiquetaUsuari = new javax.swing.JLabel();
         usuariText = new componentsPersonalitzats.JTextFieldPersonalitzat();
         inputPassword = new javax.swing.JPasswordField();
+        textIpServidor = new componentsPersonalitzats.JTextFieldPersonalitzat();
+        ipServidorTitol = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         footerVista = new javax.swing.JPanel();
         botoLogin = new javax.swing.JButton();
@@ -140,6 +145,26 @@ public class Login extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel2.add(inputPassword, gridBagConstraints);
+
+        textIpServidor.setToolTipText("IP Servidor");
+        textIpServidor.setPreferredSize(new java.awt.Dimension(200, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        jPanel2.add(textIpServidor, gridBagConstraints);
+
+        ipServidorTitol.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+        ipServidorTitol.setText("IP Servidor");
+        ipServidorTitol.setToolTipText("IP Servidor");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        jPanel2.add(ipServidorTitol, gridBagConstraints);
 
         mainVista.add(jPanel2, java.awt.BorderLayout.CENTER);
 
@@ -218,7 +243,7 @@ public class Login extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
         );
 
         pack();
@@ -246,7 +271,7 @@ public class Login extends javax.swing.JFrame {
         final String DB_PORT = "27017";
         String URLCONNEXIO = "mongodb://" + DB_SRV_USR + ":" + DB_SRV_PWD + "@" + DB_URL + ":" + DB_PORT;
         String nomUser = null;
-
+        String ipServidor = this.textIpServidor.getText().trim();
         MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
 
         try ( MongoClient mongoClient = new MongoClient(uri)) {
@@ -271,7 +296,7 @@ public class Login extends javax.swing.JFrame {
                         for (Document infoUsuaris : resultatUsuaris) {
                             nomUser = infoUsuaris.getString("nomUser");
                         }
-                        InterficieXat interficieXat = new InterficieXat(nomUsuari);
+                        InterficieXat interficieXat = new InterficieXat(nomUsuari,ipServidor);
                         this.mostrarFinestra(interficieXat);
                         this.tancarFinestraActual();
                     } else {
@@ -542,6 +567,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPanel footerVista;
     private javax.swing.JPanel headerVista;
     private javax.swing.JPasswordField inputPassword;
+    private javax.swing.JLabel ipServidorTitol;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel1;
@@ -552,6 +578,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuOpcioRegistre;
     private javax.swing.JMenuItem menuOpcioSortir;
     private javax.swing.JMenuItem menuOpcioVistaPrincipal;
+    private componentsPersonalitzats.JTextFieldPersonalitzat textIpServidor;
     private javax.swing.JLabel titolVista;
     private componentsPersonalitzats.JTextFieldPersonalitzat usuariText;
     // End of variables declaration//GEN-END:variables

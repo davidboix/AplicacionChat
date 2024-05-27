@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -151,6 +152,7 @@ public class Servidor {
         }
         return arrSocket;
     }
+
     /**
      * Funcio realitzada per poder mostrar les dades dels ArrayLists creats per
      * veure si s'esta realitzant correctament.
@@ -296,12 +298,13 @@ public class Servidor {
 
         return "";
     }
-    
+
     private static void setNomArrClients(ArrayList<String> arrNomsClients, String nomClient) {
         if (!nomClient.isEmpty()) {
             arrNomsClients.add(nomClient + "\n");
         }
     }
+
     /**
      * Funcio realitzada per poder veure per consola quins clients estan
      * guardats en el ArrayList de tipus String
@@ -319,6 +322,7 @@ public class Servidor {
             System.out.println("No hi han clients en el array...");
         }
     }
+
     /**
      * Funcio que utilitzem per poder borrar els clients que es troben en el
      * ArrayList un cop el client realitzi la operació de sortida.
@@ -377,7 +381,15 @@ public class Servidor {
         Servidor servidor = new Servidor();
         try {
             ServerSocket serverSocket = new ServerSocket();
-            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+            InetAddress localHost = InetAddress.getLocalHost();
+
+            InetSocketAddress socketAddress = new InetSocketAddress(localHost, 0);
+
+            InetAddress inetAddress = socketAddress.getAddress();
+            String ipAddress = inetAddress.getHostAddress();
+            System.out.println(ipAddress);
+            //InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
+            InetSocketAddress addr = new InetSocketAddress(ipAddress, 5556);
             serverSocket.bind(addr);
             while (true) {
                 Socket newSocket = serverSocket.accept();
@@ -407,13 +419,13 @@ public class Servidor {
     private void guardarNomsClients(String nomUsuari) {
         this.arrNomsClients.add(nomUsuari);
     }
-    
+
     public void enviarContrasenyaEncriptada(InputStream is, OutputStream os) {
 
         int port = 1234;
         ServerSocket server = null;
         Socket socket = null;
-        try  {
+        try {
             server = new ServerSocket(port);
             System.out.println("Servidor obert...");
             socket = server.accept();

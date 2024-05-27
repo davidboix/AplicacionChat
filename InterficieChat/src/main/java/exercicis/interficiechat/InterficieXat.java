@@ -48,12 +48,12 @@ public class InterficieXat extends javax.swing.JFrame {
      *
      * @param nom Nom que senviarà del client que es connecta
      */
-    public InterficieXat(String nom) {
+    public InterficieXat(String nom, String ipServidor) {
         initComponents();
         inicialitzarInputs();
         inicialitzarIconos();
         this.nomUsuari = nom;
-        cl.crearConnexio(this.textAreaMissatge, nom, this.clientsConnectats);
+        cl.crearConnexio(ipServidor,this.textAreaMissatge, nom, this.clientsConnectats);
     }
 
     /**
@@ -349,7 +349,7 @@ public class InterficieXat extends javax.swing.JFrame {
         this.botoLogout.setIcon(iconoSettings);
         this.botoEnviarMsg.setIcon(iconoEnviar);
     }
-    
+
     /**
      * Funcio desenvolupada per poder retornar la data la qual ens trobem en
      * aquell moment en format cadena de text
