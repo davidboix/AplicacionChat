@@ -321,10 +321,13 @@ public class InterficieXat extends javax.swing.JFrame {
     }//GEN-LAST:event_botoCalendariActionPerformed
 
     private void botoXatPrivatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoXatPrivatActionPerformed
-        ComponentJavaBean cjb = new ComponentJavaBean();
-        JFrame jf = new JFrame();
-        jf.add(cjb);
-        jf.setVisible(true);
+                ComponentJavaBean cj = new ComponentJavaBean();
+                JFrame frame = new JFrame("My Component");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.getContentPane().add(cj); 
+                frame.pack(); 
+                frame.setVisible(true);
+                
         
         
     }//GEN-LAST:event_botoXatPrivatActionPerformed

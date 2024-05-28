@@ -286,7 +286,7 @@ public class ComponentJavaBean extends JPanel {
             try ( MongoClient mongoClient = new MongoClient(uri)) {
                 MongoDatabase database = mongoClient.getDatabase(usuari);
                 MongoCollection<Document> comptes = database.getCollection(nomColeccio);
-
+                comptes.insertOne(new Document("prova", "prova"));
                 System.out.println("Hem creat una nova coleccio amb el nom de: " + nomColeccio);
 
             } catch (Exception e) {
