@@ -1,5 +1,6 @@
 package exercicis.interficiechat;
 
+import componentsPersonalitzats.ComponentJavaBean;
 import encriptacio.Client;
 import java.awt.Font;
 import java.awt.Image;
@@ -10,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import funcionsbbdd.CrudMONGO;
+import javax.swing.JFrame;
 
 /**
  *
@@ -98,6 +100,11 @@ public class InterficieXat extends javax.swing.JFrame {
 
         botoXatPrivat.setBackground(new java.awt.Color(125, 165, 221));
         botoXatPrivat.setToolTipText("");
+        botoXatPrivat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botoXatPrivatActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 15);
         espaiSeleccioXat.add(botoXatPrivat, gridBagConstraints);
@@ -312,6 +319,15 @@ public class InterficieXat extends javax.swing.JFrame {
         GetMissatgeData gmd = new GetMissatgeData();
         gmd.setVisible(true);
     }//GEN-LAST:event_botoCalendariActionPerformed
+
+    private void botoXatPrivatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoXatPrivatActionPerformed
+        ComponentJavaBean cjb = new ComponentJavaBean();
+        JFrame jf = new JFrame();
+        jf.add(cjb);
+        jf.setVisible(true);
+        
+        
+    }//GEN-LAST:event_botoXatPrivatActionPerformed
     /**
      * Funcio creada per inicialitzar el JTextField amb un missatge per defecte
      * per a que el usuari sapigui on ha de escriure un missatge que enviara per

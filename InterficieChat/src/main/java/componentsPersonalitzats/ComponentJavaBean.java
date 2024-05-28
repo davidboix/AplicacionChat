@@ -284,7 +284,7 @@ public class ComponentJavaBean extends JPanel {
             MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
 
             try ( MongoClient mongoClient = new MongoClient(uri)) {
-                MongoDatabase database = mongoClient.getDatabase("proves");
+                MongoDatabase database = mongoClient.getDatabase(usuari);
                 MongoCollection<Document> comptes = database.getCollection(nomColeccio);
 
                 System.out.println("Hem creat una nova coleccio amb el nom de: " + nomColeccio);
@@ -317,7 +317,7 @@ public class ComponentJavaBean extends JPanel {
             MongoClientURI uri = new MongoClientURI(URLCONNEXIO);
 
             try ( MongoClient mongoClient = new MongoClient(uri)) {
-                MongoDatabase database = mongoClient.getDatabase("proves");
+                MongoDatabase database = mongoClient.getDatabase(usuari);
                 MongoCollection<Document> comptes = database.getCollection(nomColeccio);
 
                 comptes.drop();
