@@ -387,8 +387,6 @@ public class Servidor {
 
             InetAddress inetAddress = socketAddress.getAddress();
             String ipAddress = inetAddress.getHostAddress();
-            System.out.println(ipAddress);
-            //InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
             InetSocketAddress addr = new InetSocketAddress(ipAddress, 5556);
             serverSocket.bind(addr);
             while (true) {
@@ -433,25 +431,18 @@ public class Servidor {
 
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             DataInputStream dip = new DataInputStream(socket.getInputStream());
-
             byte[] keyBytes = new byte[dip.readInt()];
             dip.readFully(keyBytes);
-
             SecretKey clau = new SecretKeySpec(keyBytes, "AES");
-
             int msgLength = dip.readInt();
             byte[] msgEncriptat = new byte[msgLength];
             dip.readFully(msgEncriptat);
-
             Cipher aesCipher = Cipher.getInstance("AES");
             aesCipher.init(Cipher.DECRYPT_MODE, clau);
             byte[] msgDesencriptat = aesCipher.doFinal(msgEncriptat);
-
             String missatge = new String(msgDesencriptat);
             System.out.println("Missatge desencriptat: " + missatge);
-
             this.encriptarPassword(missatge, socket, clau, msgEncriptat, aesCipher, out);
-            //socket.close();
             System.out.println("Servidor tornant a escoltar...");
         } catch (IOException ioe) {
             ioe.printStackTrace();

@@ -37,6 +37,7 @@ import org.bson.Document;
  * @version 1.0
  */
 public class Registre extends javax.swing.JFrame {
+
     /**
      * Creates new form Registre
      */
@@ -293,7 +294,7 @@ public class Registre extends javax.swing.JFrame {
         if (isCorreuValid) {
             boolean correuValidat = validarEmail(this.inputCorreu);
             if (correuValidat) {
-                
+
             } else {
                 JOptionPane jop = new JOptionPane();
                 Icon imagenLabel = new ImageIcon(getClass().getResource("/passwordErroni.png"));
@@ -316,8 +317,7 @@ public class Registre extends javax.swing.JFrame {
         String password = tractarPassword(this.inputPassword);
         String contrasenyaEncriptada = "";
         if (!password.isEmpty()) {
-            boolean isPasswordValid = true;
-
+            boolean isPasswordValid = this.validarPassword(password);
             if (isPasswordValid) {
                 new Thread(new Runnable() {
                     @Override
@@ -330,9 +330,13 @@ public class Registre extends javax.swing.JFrame {
                 }).start();
                 contrasenyaEncriptada = encriptarPassword(password);
             } else {
+                String[] opcio = {"Acceptar"};
+                String msg = "Siusplau, introdueix una contrasenya que estigui entre 8 i 20 caracters,contingui 1 minusuca i 1 majuscula, que aparegui almenys 1 numero i a més 1 simbol especial!";
+                String titol = "Contrasenya erronia";
 
+                this.missatgePersonalitzat(opcio, msg, titol, null);
+                return;
             }
-
             int edat = tractarEdat();
             boolean isUsuariExistent = this.getUserExistent(this.inputUsuari.getText());
             if (!isUsuariExistent) {
@@ -415,8 +419,6 @@ public class Registre extends javax.swing.JFrame {
         this.inputUsuari.setPlaceHolder("Introdueix el nom de l'usuari");
         this.inputUsuari.setText(this.inputUsuari.getPlaceHolder());
 
-        this.inputPassword.setPlaceHolder("Introdueix la contrasenya");
-        this.inputPassword.setText(this.inputPassword.getPlaceHolder());
     }
 
     /**
@@ -449,7 +451,6 @@ public class Registre extends javax.swing.JFrame {
      * s'introduira la contrasenya correctament
      */
     private boolean validarPassword(String password) {
-        //String expressioRegular = "^[a-zA-Z0-9._!?-]{8,20}$";
         String expressioRegular = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
         Pattern pattern = Pattern.compile(expressioRegular);
         Matcher matcher = pattern.matcher(password);
@@ -467,15 +468,15 @@ public class Registre extends javax.swing.JFrame {
         ImageIcon iconoUsuari = new ImageIcon(getClass().getResource("/altaUsuari.png"));
         ImageIcon iconoNavegarAModificar = new ImageIcon(getClass().getResource("/navegar.png"));
         ImageIcon iconoLogoutAModificar = new ImageIcon(getClass().getResource("/iconoLogout.png"));
-        
+
         Image iconoUsuariModificar = iconoUsuari.getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
         Image iconoNavegarModificat = iconoNavegarAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         Image iconoLogoutModificat = iconoLogoutAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        
+
         ImageIcon iconoBuscar = new ImageIcon(iconoUsuariModificar);
         ImageIcon iconoNavegar = new ImageIcon(iconoNavegarModificat);
         ImageIcon iconoLogout = new ImageIcon(iconoLogoutModificat);
-        
+
         this.botoAltaUsuari.setIcon(iconoBuscar);
         this.menuNavegacio.setIcon(iconoNavegar);
         this.menuSortir.setIcon(iconoLogout);
@@ -629,7 +630,6 @@ public class Registre extends javax.swing.JFrame {
             out.writeInt(msgEncriptat.length);
             out.write(msgEncriptat);
 
-            
             byte[] keyBytesServ = new byte[dip.readInt()];
             dip.readFully(keyBytesServ);
             SecretKey clauServidor = new SecretKeySpec(keyBytesServ, "AES");
@@ -722,7 +722,7 @@ public class Registre extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        /*try {
+ /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());

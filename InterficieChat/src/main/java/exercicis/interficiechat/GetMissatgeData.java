@@ -185,6 +185,7 @@ public class GetMissatgeData extends javax.swing.JFrame {
      * o teclat.F
      */
     private void botoConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoConsultaActionPerformed
+        this.netejarTextArea();
         String data = this.tractarDataJCalendar();
         CrudMONGO cm = new CrudMONGO("57.129.5.24", 27017, "grup1", "gat123", "comptes");
         cm.setNomColeccio("missatges");
@@ -209,7 +210,6 @@ public class GetMissatgeData extends javax.swing.JFrame {
 
     private void menuOpcioSortirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcioSortirActionPerformed
         this.dispose();
-        System.exit(0);
     }//GEN-LAST:event_menuOpcioSortirActionPerformed
     /**
      * Funcio desenvolupada per poder realitzar l'operacio pertinent que es
@@ -260,6 +260,12 @@ public class GetMissatgeData extends javax.swing.JFrame {
         Image iconoBuscarModificat = iconoBuscarAModificar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         ImageIcon iconoBuscar = new ImageIcon(iconoBuscarModificat);
         this.botoConsulta.setIcon(iconoBuscar);
+    }
+
+    private void netejarTextArea() {
+        if (this.textArea.getText().length() > 0) {
+            this.textArea.setText(null);
+        }
     }
 
     /**

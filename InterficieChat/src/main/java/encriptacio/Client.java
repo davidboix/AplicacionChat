@@ -215,31 +215,14 @@ public class Client {
     public static void setConnexio() {
         try {
             Socket socket = new Socket();
-            // Step 1: Get the local host address
-            InetAddress localHost = InetAddress.getLocalHost();
-
-            InetSocketAddress socketAddress = new InetSocketAddress(localHost, 0);
-
-            // Step 3: Extract the IP address from the InetSocketAddress
-            InetAddress inetAddress = socketAddress.getAddress();
-            String ipAddress = inetAddress.getHostAddress();
-
-            // Print the IP address
-            System.out.println("IP Address: " + ipAddress);
-
-            InetSocketAddress addr = new InetSocketAddress(ipAddress, 5556);
-
+            InetSocketAddress addr = new InetSocketAddress("localhost", 5556);
             socket.connect(addr);
-
             Scanner lector = new Scanner(System.in);
             OutputStream os = socket.getOutputStream();
-
             boolean semafor = enviarMissatgeServidor(lector, os, socket);
-
             if (!semafor) {
                 socket.close();
             }
-
         } catch (SocketException se) {
             se.printStackTrace();
             System.out.println("\nERROR!\nHi ha hagut un error en la connexio del client cap al servidor.");
@@ -267,23 +250,10 @@ public class Client {
 
         try {
             Socket socket = new Socket();
-//            // Step 1: Get the local host address
-//            InetAddress localHost = InetAddress.getLocalHost();
-//
-//            InetSocketAddress socketAddress = new InetSocketAddress(localHost, 0);
-//
-//            // Step 3: Extract the IP address from the InetSocketAddress
-//            InetAddress inetAddress = socketAddress.getAddress();
-//            String ipAddress = inetAddress.getHostAddress();
-//
-//            // Print the IP address
-//            System.out.println("IP Address: " + ipAddress);
-
             InetSocketAddress addr = new InetSocketAddress(ipServidor, 5556);
             socket.connect(addr);
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
-
             this.setSocket(socket);
             this.setOs(os);
             this.setNomUsuari(nom);
@@ -292,7 +262,6 @@ public class Client {
                 os.write(this.getNomUsuari().getBytes());
             }
             new EscoltaMsgServidor(socket, is, textAreaMissatge, this.getNomUsuari(), clientsConnectats).start();
-
         } catch (IOException e) {
 
         }
